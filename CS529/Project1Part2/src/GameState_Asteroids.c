@@ -18,12 +18,15 @@
 
 #define SHIP_INITIAL_NUM			3			// initial number of ship lives
 #define SHIP_SIZE					20.0f		// ship size
-#define SHIP_ACCEL_FORWARD			 50.0f		// ship forward acceleration (in m/s^2)
+#define SHIP_ACCEL_FORWARD			50.0f		// ship forward acceleration (in m/s^2)
 #define SHIP_ACCEL_BACKWARD			 10.0f		// ship backward acceleration (in m/s^2)
 #define SHIP_ROT_SPEED				(2.0f * PI)	// ship rotation speed (degree/second)
 
 #define BULLET_SPEED				15.0f		// bullet speed (m/s)
+#define BULLET_SIZE					10
 
+#define INI_ASTEROID_CNT			8			// number of initial asteroids
+#define ASTEROID_SIZE				50			// asteroid size
 // ---------------------------------------------------------------------------
 enum TYPE
 {
@@ -141,15 +144,15 @@ void GameStateAsteroidsLoad(void)
 	AEGfxTriStart();
 	AEGfxTriAdd
 	(
-		0.5f, 0.25f, 0xFF5F00FF, 0.0f, 0.0f,
-		0.5f, -0.25f, 0xFF00FFFF, 0.0f, 0.0f,
-		-0.5f, -0.25f, 0xFF052F00F, 0.0f, 0.0f
+		0.25f, 0.25f, 0xFF5F00FF, 0.0f, 0.0f,
+		0.25f, -0.25f, 0xFF00FFFF, 0.0f, 0.0f,
+		-0.25f, -0.25f, 0xFF052F00F, 0.0f, 0.0f
 	);
 	AEGfxTriAdd
 	(
-		0.5f, 0.25f,  0xFFF00FFF, 0.0f, 0.0f,
-		-0.5f, 0.25f, 0xFFF64F0F, 0.0f, 0.0f,
-		-0.5f, -0.25f,0xFFAF45FF, 0.0f, 0.0f
+		0.25f, 0.25f,  0xFFF00FFF, 0.0f, 0.0f,
+		-0.25f, 0.25f, 0xFFF64F0F, 0.0f, 0.0f,
+		-0.25f, -0.25f,0xFFAF45FF, 0.0f, 0.0f
 	);
 	pObj->pMesh = AEGfxTriEnd();
 	AE_ASSERT_MESG(pObj->pMesh, "Failed to create object!!");
@@ -164,14 +167,14 @@ void GameStateAsteroidsLoad(void)
 	AEGfxTriAdd
 	(
 		0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
-		0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
-		-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 0.0f
+		0.5f, -0.5f, 0xFFFF00FF, 0.0f, 0.0f,
+		-0.5f, -0.5f, 0xFF00FFFF, 0.0f, 0.0f
 	);
 	AEGfxTriAdd
 	(
-		0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
-		-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
-		-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 0.0f
+		0.5f, 0.5f, 0xFF0000FF, 0.0f, 0.0f,
+		-0.5f, 0.5f, 0xFF0000FF, 0.0f, 0.0f,
+		-0.5f, -0.5f, 0xFF0000FF, 0.0f, 0.0f
 	);
 	pObj->pMesh = AEGfxTriEnd();
 	AE_ASSERT_MESG(pObj->pMesh, "Failed to create object!!");
@@ -196,10 +199,22 @@ void GameStateAsteroidsInit(void)
 	AE_ASSERT(spShip);
 	
 	// CREATE THE INITIAL ASTEROIDS INSATNCES USING THE "GAMEOBJINSTCREATE" FUNCTION
+	Vector2D aVel;
+	Vector2D aPos;
+	float dir;
 
-	//gameObjInstCreate(TYPE_ASTEROID, 
+	srand(time(NULL));
 
+	for (int i = 0; i < INI_ASTEROID_CNT; i++)
+	{
+		Vector2DSet(&aPos, rand()%1024, -rand()%768);
+		Vector2DSet(&aVel, (rand() % 4) - 2, (rand() % 4) - 2);
+		dir = rand() % 360;
 
+		GameObjInst * spAsteroid = gameObjInstCreate(TYPE_ASTEROID, (rand() % ASTEROID_SIZE) + ASTEROID_SIZE/2, &aPos, &aVel, dir);
+		printf("Asteroid %i : %p  Pos:(%f, %f)  Vel:(%f %f)\n", i, spAsteroid, spAsteroid->posCurr.x, spAsteroid->posCurr.y, spAsteroid->velCurr.x, spAsteroid->velCurr.y);
+		AE_ASSERT(spAsteroid);
+	}
 	// reset the score and the number of ship
 	sScore      = 0;
 	sShipLives  = SHIP_INITIAL_NUM;
@@ -278,13 +293,30 @@ void GameStateAsteroidsUpdate(void)
 	// Shoot a bullet if space is triggered (Create a new object instance)
 	if (AEInputCheckTriggered(' '))
 	{
+		printf("pew pew");
 		Vector2D bPos = spShip->posCurr;
 		Vector2D bVel = {cosf(spShip->dirCurr) * BULLET_SPEED, sinf(spShip->dirCurr)* BULLET_SPEED};
 		//Vector2DScale(&bVel, &bVel,BULLET_SPEED);
 
-		GameObjInst * spBullet = gameObjInstCreate(TYPE_BULLET,5, &bPos, &bVel, spShip->dirCurr);
+		GameObjInst * spBullet = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE , &bPos, &bVel, spShip->dirCurr);
+		printf("Bullet pointer: %p\n", spBullet);
 	}
 	
+
+	if (AEInputCheckTriggered(0x41))
+	{
+		Vector2D aPos;
+		Vector2D aVel;
+		float dir;
+		
+		Vector2DSet(&aPos, 0, 0);
+		Vector2DSet(&aVel, (rand() % 4) - 2.1, (rand() % 4) - 2.1);
+		dir = rand() % 360;
+
+		GameObjInst * spAsteroid = gameObjInstCreate(TYPE_ASTEROID, (rand() % ASTEROID_SIZE) + ASTEROID_SIZE/2, &aPos, &aVel, dir);
+		//printf("Asteroid %i : %p  Pos:(%f, %f)  Vel:(%f %f)\n", i, spAsteroid, spAsteroid->posCurr.x, spAsteroid->posCurr.y, spAsteroid->velCurr.x, spAsteroid->velCurr.y);
+		AE_ASSERT(spAsteroid);
+	}
 	// Shoot a homing missle if 'm' is triggered (Create a new object instance)
 	//if (AEInputCheckTriggered(DIK_M))
 
@@ -303,15 +335,7 @@ void GameStateAsteroidsUpdate(void)
 		
 		Vector2DAdd(&pInst->posCurr, &pInst->velCurr, &pInst->posCurr);
 
-		// check if the object is a ship
-		if (pInst->pObject->type == TYPE_BULLET)
-		{
-		}
-
-
-
 	}
-
 
 	// ===================================
 	// update active game object instances
@@ -338,9 +362,21 @@ void GameStateAsteroidsUpdate(void)
 		}
 
 		// Wrap asteroids here
+		if (pInst->pObject->type == TYPE_ASTEROID)
+		{
+			// warp the ship from one end of the screen to the other
+			pInst->posCurr.x = AEWrap(pInst->posCurr.x, winMinX - SHIP_SIZE, winMaxX + SHIP_SIZE);
+			pInst->posCurr.y = AEWrap(pInst->posCurr.y, winMinY - SHIP_SIZE, winMaxY + SHIP_SIZE);
+		}
 
 
 		// Remove bullets that go out of bounds
+		if (pInst->pObject->type == TYPE_BULLET)
+		{
+			//gameObjInstDestroy(pInst);
+			if(pInst->posCurr.x < winMinX || pInst->posCurr.x > winMaxX || pInst->posCurr.y < winMinY || pInst->posCurr.y > winMaxY)
+				gameObjInstDestroy(pInst);
+		}
 
 
 		// Update missile (Check if previous target is still alive, ajudst angle, find new target etc..)
@@ -350,12 +386,16 @@ void GameStateAsteroidsUpdate(void)
 	// ====================
 	// check for collision
 	// ====================
-	
-	/*
-	for each object instance: oi1
-		if oi1 is not active
-			skip
+	for ( int i = 0; i < GAME_OBJ_INST_NUM_MAX; i ++)
+	{
 
+		GameObjInst * pInst = sGameObjInstList + 1;
+
+		// if instance is inactive, ignore
+		if ((pInst->flag & FLAG_ACTIVE) == 0)
+			continue;
+		
+	/*
 		if oi1 is an asteroid
 			for each object instance oi2
 				if(oi2 is not active or oi2 is an asteroid)
@@ -376,7 +416,7 @@ void GameStateAsteroidsUpdate(void)
 					Update game behavior accordingly
 					Update "Object instances array"
 	*/
-
+	}
 	// =====================================
 	// calculate the matrix for all objects
 	// =====================================
@@ -440,9 +480,6 @@ void GameStateAsteroidsDraw(void)
 
 		// Draw the shape used by the current object instance using "AEGfxTriDraw"
 		AEGfxTriDraw(pInst->pObject->pMesh);
-
-
-
 	}
 	
 	frameTime = AEFrameRateControllerGetFrameTime();
