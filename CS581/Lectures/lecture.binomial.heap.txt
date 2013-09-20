@@ -1,0 +1,117 @@
+As we saw previously the best data structure that supports priority queue API
+is a binary heap:
+minimum          O(1)
+insert           O(log N)
+delete minimum   O(log N)
+decrease key     O(log N)  (move element "closer" to minimum, so 
+                            effectively "inclrease priority"
+
+Suppose we need to be able to efficiently merge to priority queues. Notice
+that binary heap will require a linear time for the operation - we'll have to
+build a new binary heap from scratch.
+
+Binomial heap
+=============
+
+Binomial tree: 
+- a binomial tree of order 0 is a single node
+- a binomial tree of order k is a union of 2 binomial trees of order k-1, 
+  where one is connected as a left-most child to the other.
+
+k=0 *
+
+k=1 *
+    |
+    *
+
+k=2    *2  
+     / | 
+    *1 *2
+    |  
+    *1
+
+k=3       +--- *2  
+         /   /  | 
+       *1   *2 *2
+      / |   |  
+     *1 *1  *2
+     |  
+     *1
+
+Notes:
+1) BT of order k has 2^k elements
+2) BT of order k has height k
+3) children of a root node of a BT of order k are BT of orders 
+   k-1,k-2,...,2,1,0 (traversed left to right)
+
+Definition: a binomial is a collection of binomial trees that
+1) satisfy the heap property - child values are no smaller then parent
+2) all trees in the collection are have different orders (sizes)
+
+Example:
+heap -------2----------------- 10 
+          / |              _ / / |
+         11 3             /   /  | 
+         |              41   11 12
+         50            / |   |  
+                      51 42  100
+                      |  
+                      81
+
+Notes:
+1) a heap of size N contains a binomial tree of order k iff there is 1 at 
+   position k in the binary representation of N. In the above example N=12
+   12 = 1100, so there is 1 at positions 2,3 and 0 at 0,1, thus heap contains
+   tree of orders 2,3 (size 4,8 correspondingly)
+2) a heap of size N contains at most log_2(N) trees (consequence of the above)
+3) usually heap is implemented using a linked list of root nodes
+
+API for binomial heap (also referred to as "mergable", "meldable"):
+-- minimum - return a minimum among the roots, complexity O(logN)
+-- decrease key - implemented similar to binary heap by swapping decreased key 
+    element with the parent till heap property is restored
+-- merge: given 2 heaps, walk them simultaneously right to left 
+   (from smaller to bigger trees) and combine trees of the same order, when
+   combining, make sure to connect tree with a bigger root as a child of a tree
+   with a smaller:
+       heap1: ---4---2---1---0   (list of orders, so tree sizes are 16,4,2,1
+       heap2: ---3---2---0
+   start by combining 2 trees of order 0 into a tree of order 1
+       heap1: ---4---2---1--1(new)
+       heap2: ---3---2
+
+       heap1: ---4---2--2(new)
+       heap2: ---3---2
+
+       heap1: ---4---3(new)
+       heap2: ---3---2
+
+       heap1: ---4---4(new)
+       heap2: ---2
+
+       heap1: ---5(new)
+       heap2: ---2
+
+   final step - join 2 heaps:
+       final heap: ---5---2
+   Run-time complexity O(logN)
+
+-- delete - find and remove smallest element, merge orphans to the heap:
+       heap: ---5---2, assume minimum is the root of BT of order 5.
+   remember that children of the root of BT of order 5 are BTs of orders 4,3,2,1,0
+   merge       
+       ---2 (original heap without BT 5)
+       ---4--3--2--1--0   (orphans of 5)
+
+       ---3(new)
+       ---4--3--1--0
+
+       ---4(new)
+       ---4--1--0
+
+       ---5(new)
+       ---1--0
+
+       final:  ---5---1--0
+
+-- insert - form a heap from the new element and merge with the original heap

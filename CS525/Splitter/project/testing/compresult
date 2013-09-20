@@ -1,0 +1,117 @@
+
+E:\Homework\CS525\Splitter\project\testing>make clean 
+rm -f *.o *.obj *.manifest *.tds *.exe
+
+E:\Homework\CS525\Splitter\project\testing>make gcc_c 
+echo Compile all with C
+Compile all with C
+gcc -c splitter.c -Wall -Wextra -ansi -pedantic
+gcc -c driver.c -Wall -Wextra -ansi -pedantic
+gcc -o gcc0.exe splitter.o driver.o -Wall -Wextra -ansi -pedantic
+
+E:\Homework\CS525\Splitter\project\testing>make gcc_c_cpp 
+echo Compile with C and C++
+Compile with C and C++
+gcc -c splitter.c -Wall -Wextra -ansi -pedantic
+g++ -c driver.cpp -Wall -Wextra  -ansi -pedantic
+g++ -o gcc1.exe splitter.o driver.o -Wl,--enable-auto-import -Wall -Wextra  -ansi -pedantic
+
+E:\Homework\CS525\Splitter\project\testing>make gcc_cpp 
+echo Compile all with C++
+Compile all with C++
+g++ -c splitter.c -Wall -Wextra -ansi -pedantic
+g++ -c driver.cpp -Wall -Wextra -ansi -pedantic
+g++ -o gcc2.exe splitter.o driver.o -Wl,--enable-auto-import -Wall -Wextra -ansi -pedantic
+
+E:\Homework\CS525\Splitter\project\testing>make msc_c 
+echo compile all with C
+compile all with C
+cl /D  "_CRT_SECURE_NO_DEPRECATE" /W4 /Za /TC splitter.c /c
+splitter.c
+C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\INCLUDE\sal.h(109) : warning C4001: nonstandard extension 'single line comment' was used
+cl /D  "_CRT_SECURE_NO_DEPRECATE" /W4 /Za /TC driver.c /c
+driver.c
+C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\INCLUDE\sal.h(109) : warning C4001: nonstandard extension 'single line comment' was used
+e:\homework\cs525\splitter\project\testing\driver.c(80) : warning C4701: potentially uninitialized local variable 'list_start' used
+cl /W4 /Femsc0.exe splitter.obj driver.obj
+Microsoft (R) Incremental Linker Version 10.00.40219.01
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+/out:msc0.exe 
+splitter.obj 
+driver.obj 
+
+E:\Homework\CS525\Splitter\project\testing>make msc_c_cpp 
+echo compile with C and C++
+compile with C and C++
+cl /D  "_CRT_SECURE_NO_DEPRECATE" /W4 /Za /TC splitter.c /c
+splitter.c
+C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\INCLUDE\sal.h(109) : warning C4001: nonstandard extension 'single line comment' was used
+cl /D  "_CRT_SECURE_NO_DEPRECATE" /W4 /Za /TP /EHsc driver.cpp /c
+driver.cpp
+e:\homework\cs525\splitter\project\testing\driver.cpp(80) : warning C4701: potentially uninitialized local variable 'list_start' used
+cl /W4 /Femsc1.exe splitter.obj driver.obj
+Microsoft (R) Incremental Linker Version 10.00.40219.01
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+/out:msc1.exe 
+splitter.obj 
+driver.obj 
+
+E:\Homework\CS525\Splitter\project\testing>make msc_cpp 
+echo compile all with C++
+compile all with C++
+cl /D  "_CRT_SECURE_NO_DEPRECATE" /W4 /Za /TP splitter.c /c
+splitter.c
+cl /D  "_CRT_SECURE_NO_DEPRECATE" /W4 /Za /TP /EHsc driver.cpp /c
+driver.cpp
+e:\homework\cs525\splitter\project\testing\driver.cpp(80) : warning C4701: potentially uninitialized local variable 'list_start' used
+cl /W4 /Femsc2.exe splitter.obj driver.obj
+Microsoft (R) Incremental Linker Version 10.00.40219.01
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+/out:msc2.exe 
+splitter.obj 
+driver.obj 
+
+E:\Homework\CS525\Splitter\project\testing>make bcc_c 
+echo Compile all with C
+Compile all with C
+bcc32 -c -w -tWC driver.c
+Embarcadero C++ 6.60 for Win32 Copyright (c) 1993-2013 Embarcadero Technologies, Inc.
+driver.c:
+Warning W8004 driver.c 110: 'list_done' is assigned a value that is never used in function main
+bcc32 -c -w splitter.c
+Embarcadero C++ 6.60 for Win32 Copyright (c) 1993-2013 Embarcadero Technologies, Inc.
+splitter.c:
+bcc32 -ebcc0.exe driver.obj splitter.obj
+Embarcadero C++ 6.60 for Win32 Copyright (c) 1993-2013 Embarcadero Technologies, Inc.
+Turbo Incremental Link 6.50 Copyright (c) 1997-2013 Embarcadero Technologies, Inc.
+
+E:\Homework\CS525\Splitter\project\testing>make bcc_c_cpp 
+echo Compile with C and C++
+Compile with C and C++
+bcc32 -c -w -P -tWC driver.cpp
+Embarcadero C++ 6.60 for Win32 Copyright (c) 1993-2013 Embarcadero Technologies, Inc.
+driver.cpp:
+Warning W8004 driver.cpp 110: 'list_done' is assigned a value that is never used in function main(int,char * *)
+bcc32 -c -w splitter.c
+Embarcadero C++ 6.60 for Win32 Copyright (c) 1993-2013 Embarcadero Technologies, Inc.
+splitter.c:
+bcc32 -ebcc1.exe driver.obj splitter.obj
+Embarcadero C++ 6.60 for Win32 Copyright (c) 1993-2013 Embarcadero Technologies, Inc.
+Turbo Incremental Link 6.50 Copyright (c) 1997-2013 Embarcadero Technologies, Inc.
+
+E:\Homework\CS525\Splitter\project\testing>make bcc_cpp 
+echo Compile all with C++
+Compile all with C++
+bcc32 -c -w -P -tWC driver.cpp
+Embarcadero C++ 6.60 for Win32 Copyright (c) 1993-2013 Embarcadero Technologies, Inc.
+driver.cpp:
+Warning W8004 driver.cpp 110: 'list_done' is assigned a value that is never used in function main(int,char * *)
+bcc32 -c -w -P splitter.c
+Embarcadero C++ 6.60 for Win32 Copyright (c) 1993-2013 Embarcadero Technologies, Inc.
+splitter.c:
+bcc32 -ebcc2.exe driver.obj splitter.obj
+Embarcadero C++ 6.60 for Win32 Copyright (c) 1993-2013 Embarcadero Technologies, Inc.
+Turbo Incremental Link 6.50 Copyright (c) 1997-2013 Embarcadero Technologies, Inc.

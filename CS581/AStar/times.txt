@@ -1,0 +1,63 @@
+================
+test 0
+solution cost 7
+
+================
+test 1
+solution cost 14
+
+real    0m0.003s
+
+================
+test 2
+Solution cost 198
+
+real    0m0.075s
+
+================
+test 3
+Solution cost 198
+
+real    0m0.026s
+
+================
+test 4
+Solution cost 198
+
+real    0m0.013s
+
+================
+test 5
+Solution cost 198
+
+real    0m0.180s
+
+================
+test 6
+Solution cost 198
+
+real    0m0.028s
+
+================
+test 7
+Solution cost 198
+
+real    0m0.015s
+
+================
+test 8
+Solution cost 378
+
+real    0m0.032s
+
+================
+test 9
+Solution cost 1404
+
+real    0m1.389s
+
+================
+test 10
+Solution cost 3830
+
+real    0m7.191s

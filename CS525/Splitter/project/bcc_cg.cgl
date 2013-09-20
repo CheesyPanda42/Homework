@@ -1,0 +1,88 @@
+Error 00001. 0x310030 (Thread 0x1EEC):
+Reference to freed resource:
+fclose(0x0040F294) 
+
+| splitter.c line 42:
+| 		memset(in_buffer,0,size);
+| 		printf("%d\n\n",bytes_read);
+|>		fclose(outputfile);
+| 	} while (bytes_read > 0);
+| 	
+Call Tree:
+   0x004016C2(=bcc_cg.exe:0x01:0006C2) splitter.c#42
+   0x004014B2(=bcc_cg.exe:0x01:0004B2) driver.c#97
+   0x0040B6D7(=bcc_cg.exe:0x01:00A6D7)
+
+The file stream (0x0040F294) [name: 'part_0002'] was opened with fopen
+| splitter.c line 37:
+| 		if (bytes_read >0)
+| 		{
+|>			outputfile = fopen(current_file_name, "wb");
+| 			fwrite(in_buffer,1,bytes_read,outputfile);
+| 		}
+Call Tree:
+   0x0040168E(=bcc_cg.exe:0x01:00068E) splitter.c#37
+   0x004014B2(=bcc_cg.exe:0x01:0004B2) driver.c#97
+   0x0040B6D7(=bcc_cg.exe:0x01:00A6D7)
+
+The file stream (0x0040F294) was closed with fclose
+| splitter.c line 42:
+| 		memset(in_buffer,0,size);
+| 		printf("%d\n\n",bytes_read);
+|>		fclose(outputfile);
+| 	} while (bytes_read > 0);
+| 	
+Call Tree:
+   0x004016C2(=bcc_cg.exe:0x01:0006C2) splitter.c#42
+   0x004014B2(=bcc_cg.exe:0x01:0004B2) driver.c#97
+   0x0040B6D7(=bcc_cg.exe:0x01:00A6D7)
+
+------------------------------------------
+Error 00002. 0x820000 (r) (Thread 0x1EEC):
+Function failure:
+fclose(0x0040F294)=0xFFFFFFFF [-1]
+
+| splitter.c line 42:
+| 		memset(in_buffer,0,size);
+| 		printf("%d\n\n",bytes_read);
+|>		fclose(outputfile);
+| 	} while (bytes_read > 0);
+| 	
+Call Tree:
+   0x004016C2(=bcc_cg.exe:0x01:0006C2) splitter.c#42
+   0x004014B2(=bcc_cg.exe:0x01:0004B2) driver.c#97
+   0x0040B6D7(=bcc_cg.exe:0x01:00A6D7)
+
+------------------------------------------
+Error 00003. 0x300010 (Thread 0x1EEC):
+Resource leak: The file handle (0x4) was never closed
+
+The file handle (0x00000004) [name: 'dummy'] was opened with fopen
+| splitter.c line 27:
+| 	inputfile = fopen(filename, "rb");
+| 	/*FILE *outputfile = fopen(output, "wb");*/
+|>	outputfile = fopen("dummy","wb");
+| 	
+| 	printf("File %s opened\n\n", filename);
+Call Tree:
+   0x00401633(=bcc_cg.exe:0x01:000633) splitter.c#27
+   0x004014B2(=bcc_cg.exe:0x01:0004B2) driver.c#97
+   0x0040B6D7(=bcc_cg.exe:0x01:00A6D7)
+
+------------------------------------------
+Error 00004. 0x300010 (Thread 0x1EEC):
+Resource leak: The file stream (0x40F264) was never closed
+
+The file stream (0x0040F264) [name: 'dummy'] was opened with fopen
+| splitter.c line 27:
+| 	inputfile = fopen(filename, "rb");
+| 	/*FILE *outputfile = fopen(output, "wb");*/
+|>	outputfile = fopen("dummy","wb");
+| 	
+| 	printf("File %s opened\n\n", filename);
+Call Tree:
+   0x00401633(=bcc_cg.exe:0x01:000633) splitter.c#27
+   0x004014B2(=bcc_cg.exe:0x01:0004B2) driver.c#97
+   0x0040B6D7(=bcc_cg.exe:0x01:00A6D7)
+
+------------------------------------------

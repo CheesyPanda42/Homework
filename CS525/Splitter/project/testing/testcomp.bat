@@ -1,0 +1,10 @@
+make clean
+make gcc_c
+make gcc_c_cpp
+make gcc_cpp
+make msc_c
+make msc_c_cpp
+make msc_cpp
+make bcc_c
+make bcc_c_cpp
+make bcc_cpp

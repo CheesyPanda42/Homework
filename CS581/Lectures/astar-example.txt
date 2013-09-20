@@ -1,0 +1,85 @@
+Admissible, but not consistent heuristic example:
+
+//      (B)
+//    /     \
+//   2       1
+//  /         \
+//(A)         (D)-1-(E)--10--(F)
+//  \         /
+//   1       4
+//    \     /
+//      (C)
+//h(B)=10
+//h(all other nodes)=0 
+
+admissibility is evident.
+
+consistency fail on triangle B-D-F
+h(B) < h(D) + c(B,D) doesn't hold since
+10 < 0 + 1 is not true.
+
+1-6) is a solution using Pathfinding A*.
+Pathfinding A* keeps a closed list with expanded nodes, 
+if a just generated child is on the closed list - it's skipped
+(see http://www.policyalmanac.org/games/aStarTutorial.htm)
+but this is "safe" only when heuristic is consistent.
+
+1) ol: [ A<- , 0,0 ]
+   cl:
+2) ol: [B<-A, 2,10] [C<-A, 1,0] 
+   cl: [ A<- , 0,0 ]
+3) [C<-A, 1,0]  not Goal
+   ol: [B<-A, 2,10] [D<-C, 5,0] 
+   cl: [ A<- , 0,0 ], [C<-A, 1,0] 
+comment (in pathfinding  closed list will be A<- ,C<-A)
+
+3) [D<-C, 5,0] not Goal
+   ol: [B<-A, 2,10] [E<-D, 6,0] 
+   cl: [ A<- , 0,0 ], [C<-A, 1,0], [D<-C, 5,0]  
+4) [E<-D, 6,0]  not Goal
+   ol: [F<-E, 16,0], [B<-A, 2,10]
+   cl: [ A<- , 0,0 ], [C<-A, 1,0], [D<-C, 5,0], [E<-D, 6,0] 
+5) [B<-A, 2,10]  not Goal
+   child [D<-B, 3,0] is on closedlist, so skip it <<<---------- here problem starts
+   ol: [F<-E, 16,0]
+   cl: [ A<- , 0,0 ], [C<-A, 1,0], [D<-C, 5,0], [E<-D, 6,0] 
+6) [F<-E, 16,0]   Goal !!!!!!! but SUBOPTIMAL !!!!!!!!!!!!!!
+   ol: 
+   cl: [ A<- , 0,0 ], [C<-A, 1,0], [D<-C, 5,0], [E<-D, 6,0] 
+
+here is how to change Pathfinding A* 
+into a general A*:
+1) keep track of f-value in the closed list
+2) if state is re-expanded, check if it's on the closed list (as before)
+        a) if not - child is put into openlist
+        b) if yes - check f-value, 
+                - if new f-value is bigger - skip the child
+                - if new f-value is smaller - delete old state from closedlist and 
+                         put the better child into openlist
+                    
+
+5') [B<-A, 2,10]  not Goal
+   child [D<-B, 3,0] is on closedlist, and 
+           [D<-B, 3,0] is better then [D<-C, 5,0]. 
+                 So delete [D<-C, 5,0] from closedlist, put [D<-B, 3,0] into openlist
+   ol: [F<-E, 16,0], [D<-B, 3,0]
+   cl: [ A<- , 0,0 ], [C<-A, 1,0], [E<-D, 6,0] 
+
+6') - 8') proceed as usual to find a goal F with f=14
+
+
+Here is a tree generated from the graph, "..." stand for "repeat recursively"
+//                A
+//             /     \
+//            /       \
+//          B           C
+//        /   \        /   \
+//       A     D      A     D
+//      ...  /   \   ...  /   \
+//          B     E      C     E
+//         ...  /   \   ...  /   \ 
+//             F     D      F     D 
+//             |    ...     |    ...
+//             E            E
+//            ...          ...
+

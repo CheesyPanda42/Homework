@@ -1,0 +1,127 @@
+\hypertarget{splitter_8c}{\section{splitter.\-c File Reference}
+\label{splitter_8c}\index{splitter.\-c@{splitter.\-c}}
+}
+
+
+This is the implementation file for the File Splitter program.  
+
+
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}splitter.\-h\char`\"{}}\\*
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{splitter_8c_a6c7cd32e1bac137f05e4a752b4ad10af}{B\-U\-F\-F\-\_\-\-S\-I\-Z\-E}~4096
+\item 
+\#define \hyperlink{splitter_8c_a24c1405225e4ce27b24bcf4f32f4ff0e}{F\-I\-L\-E\-N\-A\-M\-E\-\_\-\-M\-A\-X\-\_\-\-S\-I\-Z\-E}~256
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{splitter_8c_a5e727d24c0ac9a8da169ae4860f997dc}{Split\-File} (char const $\ast$filename, char const $\ast$output, size\-\_\-t size)
+\item 
+int \hyperlink{splitter_8c_a9a5d252221925ed9fddd004646731493}{Join\-Files} (char $\ast$$\ast$filenames, int num\-\_\-files, char const $\ast$output)
+\item 
+int \hyperlink{splitter_8c_adf88419df9ad36067ce2f31caf72951e}{Error\-Han} (int error\-\_\-code)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This is the implementation file for the File Splitter program. \begin{DoxyAuthor}{Author}
+Cory Prelerson 
+\end{DoxyAuthor}
+\begin{DoxyParagraph}{email\-: cory.prelerson.edu}
+
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Digi\-Pen login\-: cory.prelerson}
+
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Course\-: C\-S525}
+
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Assignment \#1 -\/ File Splitter}
+
+\end{DoxyParagraph}
+\begin{DoxyDate}{Date}
+9.\-15.\-2013 Operations are\-:
+\begin{DoxyItemize}
+\item Split a large file into several smaller files
+\item Join several smaller files into one larger file 
+\end{DoxyItemize}
+\end{DoxyDate}
+
+
+\subsection{Macro Definition Documentation}
+\hypertarget{splitter_8c_a6c7cd32e1bac137f05e4a752b4ad10af}{\index{splitter.\-c@{splitter.\-c}!B\-U\-F\-F\-\_\-\-S\-I\-Z\-E@{B\-U\-F\-F\-\_\-\-S\-I\-Z\-E}}
+\index{B\-U\-F\-F\-\_\-\-S\-I\-Z\-E@{B\-U\-F\-F\-\_\-\-S\-I\-Z\-E}!splitter.c@{splitter.\-c}}
+\subsubsection[{B\-U\-F\-F\-\_\-\-S\-I\-Z\-E}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\-U\-F\-F\-\_\-\-S\-I\-Z\-E~4096}}\label{splitter_8c_a6c7cd32e1bac137f05e4a752b4ad10af}
+
+\begin{DoxyItemize}
+\item B\-U\-F\-F\-\_\-\-S\-I\-Z\-E -\/ maximum size of input buffer 
+\end{DoxyItemize}\hypertarget{splitter_8c_a24c1405225e4ce27b24bcf4f32f4ff0e}{\index{splitter.\-c@{splitter.\-c}!F\-I\-L\-E\-N\-A\-M\-E\-\_\-\-M\-A\-X\-\_\-\-S\-I\-Z\-E@{F\-I\-L\-E\-N\-A\-M\-E\-\_\-\-M\-A\-X\-\_\-\-S\-I\-Z\-E}}
+\index{F\-I\-L\-E\-N\-A\-M\-E\-\_\-\-M\-A\-X\-\_\-\-S\-I\-Z\-E@{F\-I\-L\-E\-N\-A\-M\-E\-\_\-\-M\-A\-X\-\_\-\-S\-I\-Z\-E}!splitter.c@{splitter.\-c}}
+\subsubsection[{F\-I\-L\-E\-N\-A\-M\-E\-\_\-\-M\-A\-X\-\_\-\-S\-I\-Z\-E}]{\setlength{\rightskip}{0pt plus 5cm}\#define F\-I\-L\-E\-N\-A\-M\-E\-\_\-\-M\-A\-X\-\_\-\-S\-I\-Z\-E~256}}\label{splitter_8c_a24c1405225e4ce27b24bcf4f32f4ff0e}
+
+\begin{DoxyItemize}
+\item F\-I\-L\-E\-N\-A\-M\-E\-\_\-\-M\-A\-X\-\_\-\-S\-I\-Z\-E-\/ maximum size for input or output file name 
+\end{DoxyItemize}
+
+\subsection{Function Documentation}
+\hypertarget{splitter_8c_adf88419df9ad36067ce2f31caf72951e}{\index{splitter.\-c@{splitter.\-c}!Error\-Han@{Error\-Han}}
+\index{Error\-Han@{Error\-Han}!splitter.c@{splitter.\-c}}
+\subsubsection[{Error\-Han}]{\setlength{\rightskip}{0pt plus 5cm}int Error\-Han (
+\begin{DoxyParamCaption}
+\item[{int}]{error\-\_\-code}
+\end{DoxyParamCaption}
+)}}\label{splitter_8c_adf88419df9ad36067ce2f31caf72951e}
+Handles printing error messages and returning error codes. Used as a return value back to the driver.
+
+
+\begin{DoxyParams}{Parameters}
+{\em error\-\_\-code} & Integer corresponding to error encountered. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+error\-\_\-code Passes error code back as return value. 
+\end{DoxyReturn}
+\hypertarget{splitter_8c_a9a5d252221925ed9fddd004646731493}{\index{splitter.\-c@{splitter.\-c}!Join\-Files@{Join\-Files}}
+\index{Join\-Files@{Join\-Files}!splitter.c@{splitter.\-c}}
+\subsubsection[{Join\-Files}]{\setlength{\rightskip}{0pt plus 5cm}int Join\-Files (
+\begin{DoxyParamCaption}
+\item[{char $\ast$$\ast$}]{filenames, }
+\item[{int}]{num\-\_\-files, }
+\item[{char const $\ast$}]{output}
+\end{DoxyParamCaption}
+)}}\label{splitter_8c_a9a5d252221925ed9fddd004646731493}
+Joins several smaller files into one larger one. Reads from input file into buffer, then writes buffer out to output file.
+
+
+\begin{DoxyParams}{Parameters}
+{\em filenames} & List of file names to be joined. \\
+\hline
+{\em num\-\_\-files} & The number of files that are to be joined. \\
+\hline
+{\em output} & Name of the file created by joining the smaller files. \\
+\hline
+\end{DoxyParams}
+\hypertarget{splitter_8c_a5e727d24c0ac9a8da169ae4860f997dc}{\index{splitter.\-c@{splitter.\-c}!Split\-File@{Split\-File}}
+\index{Split\-File@{Split\-File}!splitter.c@{splitter.\-c}}
+\subsubsection[{Split\-File}]{\setlength{\rightskip}{0pt plus 5cm}int Split\-File (
+\begin{DoxyParamCaption}
+\item[{char const $\ast$}]{filename, }
+\item[{char const $\ast$}]{output, }
+\item[{size\-\_\-t}]{size}
+\end{DoxyParamCaption}
+)}}\label{splitter_8c_a5e727d24c0ac9a8da169ae4860f997dc}
+Splits larger file into several small chunks. Reads into a buffer of size min(size, {\ttfamily B\-U\-F\-F\-\_\-\-S\-I\-Z\-E}), then writes buffer out.
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & File name for file to be split \\
+\hline
+{\em output} & File name prefix for smaller files \\
+\hline
+{\em size} & Size of chunks for file to be split into. \\
+\hline
+\end{DoxyParams}
+Input buffer size = min(size, B\-U\-F\-F\-\_\-\-S\-I\-Z\-E) 

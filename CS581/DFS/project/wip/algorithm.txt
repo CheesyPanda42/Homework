@@ -1,0 +1,74 @@
+Node result[prevNode, prevAction] // result[prevNode, prevAction] = current node
+
+untried[Node] = {actions} // list of actions not tried yet for a node
+
+unbacktracked[] = {prevNodes} // list of visited nodes (may want to do something to demand uniquiness
+
+
+Node
+	x pos
+	y pos
+	heading
+
+
+Agent::GetAction(percept p)
+	if (p.dirt) SUCK
+	updateNode (prevAction)
+	next_action = DFS (currNode, p)
+	return (next_action)
+	
+	
+Goal?
+	- possibility: at home location and at least 1 node is empty of new actions? 
+	- re include shutoff in list of actions. Home node first to reach it?
+	
+Action Agent::DFS (Node currentNode, percept p) // may not need p
+	prev_action = next_action
+	if (p == GOAL) return (SHUTOFF)  // may need to be node = goal
+	if(!untried.exists(currentNode))
+		untried[currentNode] = {F, L, R} // possibly FLRS, may switch LR
+	if (prevNode)
+		result[prevNode, prevAction] = currentNode // what's the point of this line?
+		unbacktracked[currentNode].push(prevNode)
+	if (untried[currentNode].isEmpty())
+		if unbacktracked[currentNode].isEmpty() Return SHUTOFF // may have to check this line
+		else nextAction = action so that return to node = unbacktracked[currentNode].pop()
+	else next_action = untried[CurrentNode].pop()
+	prevNode = currentNode
+	return next_action
+	
+	
+	
+void Agent::updateNode (Action prevAction)
+	switch (prevAction)
+		case FOR
+			if (prevNode.heading = 0) currentNode.y++
+			if (prevNode.heading = 1) currentNode.x++
+			if (prevNode.heading = 2) currentNode.y--
+			if (prevNode.heading = 3) currentNode.x--
+		case LEFT
+			currentNode.heading = (prevNode.heading - 1) % 4
+		case RIGHT 
+			currentNode.heading = (prevNode.heading + 1) % 4
+	
+//function to figure out how to get to previous node?
+May want to do another walkthrough to double check this, especially the end of it. 
+
+
+
+
+ON BUMP
+Want to see if left/right turns have been visited
+temp node = current node
+	-- turn temp node left
+		-- check if visited
+if no, turn left
+else
+	temp node = current
+		-- turn temp node right
+			-- check if visited
+	if no turn right
+	else backtrack
+	
+backtracking flag?
+if back tracking, next action = right, right, forward, right, right? 
