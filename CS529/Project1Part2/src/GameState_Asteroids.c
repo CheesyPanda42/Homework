@@ -18,8 +18,8 @@
 
 #define SHIP_INITIAL_NUM			3			// initial number of ship lives
 #define SHIP_SIZE					20.0f		// ship size
-#define SHIP_ACCEL_FORWARD			50.0f		// ship forward acceleration (in m/s^2)
-#define SHIP_ACCEL_BACKWARD			 10.0f		// ship backward acceleration (in m/s^2)
+#define SHIP_ACCEL_FORWARD			30.0f		// ship forward acceleration (in m/s^2)
+#define SHIP_ACCEL_BACKWARD			10.0f		// ship backward acceleration (in m/s^2)
 #define SHIP_ROT_SPEED				(2.0f * PI)	// ship rotation speed (degree/second)
 
 #define BULLET_SPEED				15.0f		// bullet speed (m/s)
@@ -208,7 +208,7 @@ void GameStateAsteroidsInit(void)
 	for (int i = 0; i < INI_ASTEROID_CNT; i++)
 	{
 		Vector2DSet(&aPos, rand()%1024, -rand()%768);
-		Vector2DSet(&aVel, (rand() % 4) - 2, (rand() % 4) - 2);
+		Vector2DSet(&aVel, (rand() % 4) - 2.1, (rand() % 4) - 2.1);
 		dir = rand() % 360;
 
 		GameObjInst * spAsteroid = gameObjInstCreate(TYPE_ASTEROID, (rand() % ASTEROID_SIZE) + ASTEROID_SIZE/2, &aPos, &aVel, dir);
@@ -246,6 +246,7 @@ void GameStateAsteroidsUpdate(void)
 
 	frameTime = AEFrameRateControllerGetFrameTime();
 
+
 	// =========================
 	// update according to input
 	// =========================
@@ -260,7 +261,7 @@ void GameStateAsteroidsUpdate(void)
 		Vector2DScale(&accel, &accel, frameTime);
 		Vector2DAdd(&spShip->velCurr, &accel, &spShip->velCurr);
 		Vector2DScale(&spShip->velCurr, &spShip->velCurr, 0.85);
-		printf("Frametime: %f Velocity: %f %f\n", frameTime, spShip->velCurr.x, spShip->velCurr.y);
+		printf("Frametime: %f Pos: %f %f\n", frameTime, spShip->posCurr.x, spShip->posCurr.y);
 	}
 
 	if (AEInputCheckCurr(VK_DOWN))
@@ -274,7 +275,7 @@ void GameStateAsteroidsUpdate(void)
 		Vector2DScale(&accel, &accel, frameTime);
 		Vector2DAdd(&spShip->velCurr, &accel, &spShip->velCurr);
 		Vector2DScale(&spShip->velCurr, &spShip->velCurr, 0.8);
-		printf("Frametime: %f Velocity: %f %f\n", frameTime, spShip->velCurr.x, spShip->velCurr.y);
+		
 	}
 
 	if (AEInputCheckCurr(VK_LEFT))
@@ -335,6 +336,7 @@ void GameStateAsteroidsUpdate(void)
 		
 		Vector2DAdd(&pInst->posCurr, &pInst->velCurr, &pInst->posCurr);
 
+
 	}
 
 	// ===================================
@@ -388,34 +390,64 @@ void GameStateAsteroidsUpdate(void)
 	// ====================
 	for ( int i = 0; i < GAME_OBJ_INST_NUM_MAX; i ++)
 	{
-
-		GameObjInst * pInst = sGameObjInstList + 1;
+		GameObjInst * pInst1 = sGameObjInstList + i;
 
 		// if instance is inactive, ignore
-		if ((pInst->flag & FLAG_ACTIVE) == 0)
+		if ((pInst1->flag & FLAG_ACTIVE) == 0)
 			continue;
 		
-	/*
-		if oi1 is an asteroid
-			for each object instance oi2
-				if(oi2 is not active or oi2 is an asteroid)
-					skip
+		// all collision checks are only if pInst1 is an asteroid
+		if (pInst1->pObject->type == TYPE_ASTEROID)
+		{
+			//printf("Testing asteroid\n");
+			for (int j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
+			{
+				GameObjInst * pInst2 = sGameObjInstList + j;
+				int collision = 0;
 
-				if(oi2 is the ship)
-					Check for collision between the ship and the asteroid
-					Update game behavior accordingly
-					Update "Object instances array"
+				// if pInst2 is inactive it is ignored 
+				// asteroid to asteroid collision is ignored
+				if((pInst2->flag & FLAG_ACTIVE) == 0 || pInst2->pObject->type == TYPE_ASTEROID)
+				{
+					continue;
+				}
+
+				if(pInst2->pObject->type == TYPE_SHIP)
+				{
+					printf("Testing ship vs asteroid\n");
+					if(StaticRectToStaticRect(&pInst1->posCurr,pInst1->scale,pInst1->scale, &pInst2-> posCurr, pInst2->scale, pInst2->scale))
+					{
+						printf("Collision!\n");
+						Vector2DSet(&pInst2->posCurr, 0,0);
+						Vector2DSet(&pInst2->velCurr, 0,0);
+						gameObjInstDestroy(pInst1);
+					}
+				}
+
 				else
-				if(oi2 is a bullet)
-					Check for collision between the bullet and the asteroid
-					Update game behavior accordingly
-					Update "Object instances array"
-				else
+				if(pInst2->pObject->type == TYPE_BULLET)
+				{
+					printf("Testing bullet vs asteroid\n");
+					if(StaticPointToStaticRect(&pInst2->posCurr,&pInst1->posCurr, pInst1->scale,pInst1->scale))
+					{
+						printf("Collision!\n");
+						gameObjInstDestroy(pInst1);
+						gameObjInstDestroy(pInst1);
+					}
+				}
+
+
+
+
+/*				else
 				if(oi2 is a missle)
 					Check for collision between the missile and the asteroid
 					Update game behavior accordingly
 					Update "Object instances array"
-	*/
+*/
+			}
+		}
+	
 	}
 	// =====================================
 	// calculate the matrix for all objects

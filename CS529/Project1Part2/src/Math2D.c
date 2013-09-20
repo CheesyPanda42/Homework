@@ -70,5 +70,6 @@ int StaticRectToStaticRect(Vector2D *pRect0, float Width0, float Height0, Vector
 	b1 = pRect0->y - Height0/2;		// bottom-most x value of Rectangle0
 	b2 = pRect1->y + Height1/2;		// bottom-most x value of Rectangle0
 	if (r1 < l2 || r2 < l1 || t1 < b2 || t2 < b1) collision = 0;
+	printf("C: %i\n", collision);
 	return collision;
 }
