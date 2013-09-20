@@ -6,12 +6,17 @@
 using namespace std;
 Agent::Agent(int random_seed) 
 { 
-	InitializeNode (emptyNode);
-	InitializeNode (prevNode);
+	emptyNode = InitializeNode (emptyNode);
+
+	prevNode = InitializeNode (prevNode);
 	prevNode.id = -1;
-	InitializeNode (currentNode);
+
+	currentNode = InitializeNode (currentNode);
+
 	squares_cleaned = 0;
+	
 	prevAction = NOOP;
+	
 	for (int i = 0; i < MAX_NODES; i++)
 	{
 		untried_actions[i].push(NOOP);
@@ -23,37 +28,45 @@ Action Agent::GetAction(Percept p)
 	Action next_action;
 	if (p.dirt)
 	{
+		// if the current square is dirty, clean it
 		squares_cleaned ++;
 		return SUCK;
 	}
 	if (p.bump)
 	{	
-		//next_action = NOOP;
+		// if agent bumped, previous node will be the same as the 
+		// current, and the next action on the stack will take place
 		UpdateNode(NOOP);
 	}
 	else
 	{
+		// if neither of these is the case, the current node 
+		// is updated using the previous node's stats,
 		UpdateNode(prevAction);
-		PrintNextAction(prevAction);
+		//PrintNextAction(prevAction);
 		
 	}	
+	// The next action is decided
 	next_action = DFS(p);
 	prevAction = next_action;
-	PrintNextAction(prevAction);
+	// PrintNextAction(prevAction);
 	return(next_action);
 }
 
 Action Agent::DFS (Percept p)
 {
-	Node temp;
 	Action next_action;
 	next_action = NOOP;
-	temp.id = -1;
+	
 	cout << "Current Node: " << endl;
 	PrintNode(currentNode);
 	cout << "Previous Node: " << endl;
 	PrintNode(prevNode);
+	
+	// If goal state is reached, turn off
 	if (p.home && squares_cleaned > 1) return SHUTOFF;
+	// If the current node has not been reached before, set up 
+	// the action stack for the node
 	if (!untried_actions[currentNode.id].empty() && untried_actions[currentNode.id].top() == NOOP)
 	{
 		cout << "Pushing actions" << endl;
@@ -68,27 +81,22 @@ Action Agent::DFS (Percept p)
 		untried_actions[currentNode.id].push(FORWARD);
 		cout << "Forward pushed" << endl;
 	}
+	// if the previous node existed, add it to the unbacktrack list
 	if (prevNode.id != -1)
 	{
 		unbacktracked[currentNode] = prevNode;
-		cout << "PrevNode " << prevNode.id << " put on unbacktracked [" << currentNode.id << "]" << endl;
+		//cout << "PrevNode " << prevNode.id << " put on unbacktracked [" << currentNode.id << "]" << endl;
 	}
 	
-	// ERROR CHECK
-	if(!untried_actions[currentNode.id].empty())
-	cerr <<"TOP OF UNTRIED: " <<  untried_actions[currentNode.id].top() << endl;
-	else 
-	cerr << "Top of stack empty" << endl;
-	// DONE
-	
+	// if the current node has no more possible actions, shut down
+	// the agent should only have no possible actions if it winds up
+	// stuck, or back on the home square
 	if (untried_actions[currentNode.id].empty())
 	{
 		cerr << "Untried actions is empty" << endl;
-		//if (unbacktracked[currentNode].id == temp.id) return SHUTOFF;
-		//else temp.x = 1;// action to return to prevNode
 		return SHUTOFF;
 	}
-	
+	// if there are possible actions, get the next one and try it
 	else
 	{
 		next_action = untried_actions[currentNode.id].top();
@@ -96,6 +104,7 @@ Action Agent::DFS (Percept p)
 		PrintNextAction(next_action);
 		untried_actions[currentNode.id].pop();
 	}
+	
 	prevNode = currentNode;
 	PrintNextAction (next_action);
 	return next_action;
@@ -130,18 +139,24 @@ void Agent::PrintNextAction (Action next_action)
   return;
 }
 
+// Update the current node based off the previous action
 void Agent::UpdateNode (Action prevAction)
 {
 	Node temp;
 	temp = currentNode;
 	switch (prevAction)
 	{
+		// If agent moved forward, the x or y position will 
+		// changed based off of its heading (relative to the start position)
 		case FORWARD:
 				if(prevNode.heading == 0) currentNode.y++;
 				if(prevNode.heading == 1) currentNode.x++;
 				if(prevNode.heading == 2) currentNode.y--;
 				if(prevNode.heading == 3) currentNode.x--;
 				break;
+		// changed the heading if the agent moved left or right
+		// Headings (relative to start)
+		// 0 = up; 1 = right; 2 = down; 3 = left
 		case LEFT:
 				currentNode.heading = (prevNode.heading +3) % 4;
 				break;
@@ -155,41 +170,14 @@ void Agent::UpdateNode (Action prevAction)
 
 }
 
-/*
-Node Agent::UpdateNode (Node node, Action prevAction)
-{
-	Node temp;
-	temp = currentNode;
-	switch (prevAction)
-	{
-		case FORWARD:
-				if(prevNode.heading == 0) nodeNode.y++;
-				if(prevNode.heading == 1) nodeNode.x++;
-				if(prevNode.heading == 2) nodeNode.y--;
-				if(prevNode.heading == 3) nodeNode.x--;
-				break;
-		case LEFT:
-				currentNode.heading = (prevNode.heading +3) % 4;
-				break;
-		case RIGHT:
-				currentNode.heading = (prevNode.heading + 1) % 4;
-				break;
-		default:
-				break;
-	}
-	currentNode.id = abs((100*currentNode.x + 10*currentNode.y + currentNode.heading));
-}
-*/
 
-
-void InitializeNode (Node node)
+Node InitializeNode (Node node)
 {
 	node.id = 0;
 	node.x = 0;
 	node.y = 0;
 	node.heading = 0;
-	node.parentNode = NULL;
-	return;
+	return node;
 }
 
 void PrintNode (Node node)

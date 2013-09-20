@@ -1,0 +1,7 @@
+Exception: STATUS_ACCESS_VIOLATION at eip=00402C12
+eax=CC47B008 ebx=001C9148 ecx=20000038 edx=00000001 esi=00000004 edi=00000001
+ebp=00000000 esp=001C9070 program=C:\Users\MasterWaldo\Documents\GitHub\Homework\CS581\DFS\project\wip\gcc0.exe, pid 6120, thread main
+cs=001B ds=0023 es=0023 fs=003B gs=0000 ss=0023
+Stack trace:
+Frame     Function  Args
+End of stack trace
