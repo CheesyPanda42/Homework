@@ -17,7 +17,7 @@
 #define GAME_OBJ_NUM_MAX			32
 
 #define SHIP_INITIAL_NUM			3			// initial number of ship lives
-#define SHIP_SIZE					20.0f		// ship size
+#define SHIP_SIZE					30.0f		// ship size
 #define SHIP_ACCEL_FORWARD			30.0f		// ship forward acceleration (in m/s^2)
 #define SHIP_ACCEL_BACKWARD			10.0f		// ship backward acceleration (in m/s^2)
 #define SHIP_ROT_SPEED				(2.0f * PI)	// ship rotation speed (degree/second)
@@ -25,8 +25,10 @@
 #define BULLET_SPEED				15.0f		// bullet speed (m/s)
 #define BULLET_SIZE					10
 
-#define INI_ASTEROID_CNT			8			// number of initial asteroids
-#define ASTEROID_SIZE				50			// asteroid size
+#define INI_ASTEROID_CNT			6			// number of initial asteroids
+#define ASTEROID_SIZE				75			// asteroid size
+#define ASTEROID_MIN_SIZE			15
+#define ASTEROID_SPEED				3			// speed of asteroids
 // ---------------------------------------------------------------------------
 enum TYPE
 {
@@ -66,7 +68,7 @@ typedef struct
 	Vector2D			velCurr;	// object current velocity
 	float				dirCurr;	// object current direction
 
-	AEMtx33				transform;	// object transformation matrix: Each frame, calculate the object instance's transformation matrix and save it here
+	Matrix2D			transform;	// object transformation matrix: Each frame, calculate the object instance's transformation matrix and save it here
 }GameObjInst;
 
 // ---------------------------------------------------------------------------
@@ -88,6 +90,7 @@ static long					sShipLives;									// The number of lives left
 
 // the score = number of asteroid destroyed
 static unsigned long		sScore;										// Current score
+
 
 // ---------------------------------------------------------------------------
 
@@ -127,9 +130,9 @@ void GameStateAsteroidsLoad(void)
 
 	AEGfxTriStart();
 	AEGfxTriAdd(
-		-0.5f,  0.5f, 0xFFFFFFFF, 0.0f, 0.0f, 
+		-0.5f,  0.5f, 0xFFFFFFFF, 1.0f, 0.0f, 
 		-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
-		 0.5f,  0.0f, 0xFFFFFFFF, 0.0f, 0.0f); 
+		 0.5f,  0.0f, 0xFFFFFFFF, 0.5f, 1.0f); 
 
 	pObj->pMesh = AEGfxTriEnd();
 	AE_ASSERT_MESG(pObj->pMesh, "Failed to create object!!");
@@ -144,14 +147,14 @@ void GameStateAsteroidsLoad(void)
 	AEGfxTriStart();
 	AEGfxTriAdd
 	(
-		0.25f, 0.25f, 0xFF5F00FF, 0.0f, 0.0f,
-		0.25f, -0.25f, 0xFF00FFFF, 0.0f, 0.0f,
+		0.25f, 0.25f, 0xFF5F00FF, 1.0f, 0.0f,
+		0.25f, -0.25f, 0xFF00FFFF, 1.0f, 1.0f,
 		-0.25f, -0.25f, 0xFF052F00F, 0.0f, 0.0f
 	);
 	AEGfxTriAdd
 	(
-		0.25f, 0.25f,  0xFFF00FFF, 0.0f, 0.0f,
-		-0.25f, 0.25f, 0xFFF64F0F, 0.0f, 0.0f,
+		0.25f, 0.25f,  0xFFF00FFF, 1.0f, 0.0f,
+		-0.25f, 0.25f, 0xFFF64F0F, 0.0f, 1.0f,
 		-0.25f, -0.25f,0xFFAF45FF, 0.0f, 0.0f
 	);
 	pObj->pMesh = AEGfxTriEnd();
@@ -166,15 +169,15 @@ void GameStateAsteroidsLoad(void)
 	AEGfxTriStart();
 	AEGfxTriAdd
 	(
-		0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
-		0.5f, -0.5f, 0xFFFF00FF, 0.0f, 0.0f,
-		-0.5f, -0.5f, 0xFF00FFFF, 0.0f, 0.0f
+		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+		0.5f, -0.5f, 0xFFFF00FF, 1.0f, 1.0f,
+		-0.5f, -0.5f, 0xFF00FFFF, 0.0f, 1.0f
 	);
 	AEGfxTriAdd
 	(
-		0.5f, 0.5f, 0xFF0000FF, 0.0f, 0.0f,
+		0.5f, 0.5f, 0xFF0000FF, 1.0f, 0.0f,
 		-0.5f, 0.5f, 0xFF0000FF, 0.0f, 0.0f,
-		-0.5f, -0.5f, 0xFF0000FF, 0.0f, 0.0f
+		-0.5f, -0.5f, 0xFF0000FF, 0.0f, 1.0f
 	);
 	pObj->pMesh = AEGfxTriEnd();
 	AE_ASSERT_MESG(pObj->pMesh, "Failed to create object!!");
@@ -208,7 +211,7 @@ void GameStateAsteroidsInit(void)
 	for (int i = 0; i < INI_ASTEROID_CNT; i++)
 	{
 		Vector2DSet(&aPos, rand()%1024, -rand()%768);
-		Vector2DSet(&aVel, (rand() % 4) - 2.1, (rand() % 4) - 2.1);
+		Vector2DSet(&aVel, (rand() % ASTEROID_SPEED) - 2.1, (rand() % ASTEROID_SPEED) - 2.1);
 		dir = rand() % 360;
 
 		GameObjInst * spAsteroid = gameObjInstCreate(TYPE_ASTEROID, (rand() % ASTEROID_SIZE) + ASTEROID_SIZE/2, &aPos, &aVel, dir);
@@ -414,25 +417,31 @@ void GameStateAsteroidsUpdate(void)
 
 				if(pInst2->pObject->type == TYPE_SHIP)
 				{
-					printf("Testing ship vs asteroid\n");
 					if(StaticRectToStaticRect(&pInst1->posCurr,pInst1->scale,pInst1->scale, &pInst2-> posCurr, pInst2->scale, pInst2->scale))
 					{
-						printf("Collision!\n");
 						Vector2DSet(&pInst2->posCurr, 0,0);
 						Vector2DSet(&pInst2->velCurr, 0,0);
 						gameObjInstDestroy(pInst1);
+						sShipLives--;
 					}
 				}
 
 				else
 				if(pInst2->pObject->type == TYPE_BULLET)
 				{
-					printf("Testing bullet vs asteroid\n");
 					if(StaticPointToStaticRect(&pInst2->posCurr,&pInst1->posCurr, pInst1->scale,pInst1->scale))
 					{
-						printf("Collision!\n");
+						for (int i = 0; i < 4; i++)
+						{
+							Vector2D miniVel = pInst1->velCurr;
+							Vector2D randVel;
+							Vector2DSet(&randVel, i*cosf(rand()%360), i*sinf(rand()%360));
+							Vector2DAdd(&miniVel, &miniVel, &randVel);
+							if(pInst1->scale > ASTEROID_MIN_SIZE)
+								GameObjInst * spAsteroid = gameObjInstCreate(TYPE_ASTEROID, pInst1->scale/2, &pInst1->posCurr, &miniVel, pInst1->dirCurr*i);
+						}
 						gameObjInstDestroy(pInst1);
-						gameObjInstDestroy(pInst1);
+						gameObjInstDestroy(pInst2);
 					}
 				}
 
@@ -455,7 +464,7 @@ void GameStateAsteroidsUpdate(void)
 
 	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
-		AEMtx33		 trans, rot, scale;
+		Matrix2D	 trans, rot, scale;
 		GameObjInst* pInst = sGameObjInstList + i;
 		
 
@@ -467,7 +476,11 @@ void GameStateAsteroidsUpdate(void)
 		// Compute the rotation matrix 
 		// Compute the translation matrix
 		// Concatenate the 3 matrix in the correct order in the object instance's "transform" matrix
-
+		Matrix2DScale(&scale, pInst->scale,pInst->scale);
+		Matrix2DRotRad(&rot, pInst->dirCurr);
+		Matrix2DTranslate(&trans,pInst->posCurr.x , pInst->posCurr.y);
+		Matrix2DConcat(&pInst->transform, &rot, &scale);
+		Matrix2DConcat(&pInst->transform, &trans, &pInst->transform);
 	}
 }
 
@@ -478,13 +491,16 @@ void GameStateAsteroidsDraw(void)
 	char strBuffer[1024];
 	unsigned long i;
 	double frameTime;
-	Matrix2D transform;
-	Matrix2D scale;
-	Matrix2D rotate;
-	Matrix2D translate;
+	AEGfxTexture * asteroidTex;
+	AEGfxTexture * shipTex;
+	AEGfxTexture * bulletTex;
+	AEGfxTexture * missileTex;
+	
+	asteroidTex = AEGfxTextureLoad("asteroid.png");
+	shipTex =	  AEGfxTextureLoad("spaceship.png");
+	bulletTex =	  AEGfxTextureLoad("laser.png");
 
-
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetRenderMode (AE_GFX_RM_TEXTURE);
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -497,19 +513,23 @@ void GameStateAsteroidsDraw(void)
 		// skip non-active object
 		if ((pInst->flag & FLAG_ACTIVE) == 0)
 			continue;
-		
 
+		if(pInst->pObject->type == TYPE_ASTEROID)
+		{
+			AEGfxTextureSet(asteroidTex, 0.0f, 0.0f);
+		}
+		if(pInst->pObject->type == TYPE_SHIP)
+		{
+			AEGfxTextureSet(shipTex, 0.0f, 0.0f);
+		}
+		if(pInst->pObject->type == TYPE_BULLET)
+		{
+			AEGfxTextureSet(bulletTex, 0.0f, 0.0f);
+		}
 		// Set the current object instance's transform matrix using "AEGfxSetTransform"
-		
-		Matrix2DScale(&scale, pInst->scale,pInst->scale);
-		Matrix2DRotRad(&rotate, pInst->dirCurr);
-		Matrix2DTranslate(&translate,pInst->posCurr.x , pInst->posCurr.y);
-		Matrix2DConcat(&transform, &rotate, &scale);
-		Matrix2DConcat(&transform, &translate, &transform);
 		AEGfxSetPosition (pInst->posCurr.x, pInst->posCurr.y);
-		AEGfxSetTransform(transform.m);
+		AEGfxSetTransform(pInst->transform.m);
 		
-
 		// Draw the shape used by the current object instance using "AEGfxTriDraw"
 		AEGfxTriDraw(pInst->pObject->pMesh);
 	}
@@ -534,6 +554,11 @@ void GameStateAsteroidsDraw(void)
 void GameStateAsteroidsFree(void)
 {
 	// kill all object instances in the array using "gameObjInstDestroy"
+	for (int i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
+	{
+		GameObjInst* pInst = sGameObjInstList + i;
+		gameObjInstDestroy(pInst);
+	}
 }
 
 // ---------------------------------------------------------------------------
