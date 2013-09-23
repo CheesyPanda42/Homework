@@ -23,14 +23,14 @@
 #define SHIP_ROT_SPEED				(2.0f * PI)	// ship rotation speed (degree/second)
 
 #define BULLET_SPEED				15.0f		// bullet speed (m/s)
-#define BULLET_SIZE					10
+#define BULLET_SIZE					15
 
-#define MISSILE_SIZE				250
+#define MISSILE_SIZE				50
 #define MISSILE_INIT_SPEED			25
 
 #define INI_ASTEROID_CNT			6			// number of initial asteroids
 #define ASTEROID_SIZE				75			// asteroid size
-#define ASTEROID_MIN_SIZE			45
+#define ASTEROID_MIN_SIZE			35
 #define ASTEROID_SPEED				3			// speed of asteroids
 // ---------------------------------------------------------------------------
 enum TYPE
@@ -356,7 +356,6 @@ void GameStateAsteroidsUpdate(void)
 		Vector2DScale(&accel, &accel, frameTime);
 		Vector2DAdd(&spShip->velCurr, &accel, &spShip->velCurr);
 		Vector2DScale(&spShip->velCurr, &spShip->velCurr, 0.85);
-		printf("Frametime: %f Pos: %f %f\n", frameTime, spShip->posCurr.x, spShip->posCurr.y);
 	}
 
 	if (AEInputCheckCurr(VK_DOWN))
@@ -389,13 +388,11 @@ void GameStateAsteroidsUpdate(void)
 	// Shoot a bullet if space is triggered (Create a new object instance)
 	if (AEInputCheckTriggered(' '))
 	{
-		printf("pew pew");
 		Vector2D bPos = spShip->posCurr;
 		Vector2D bVel = {cosf(spShip->dirCurr) * BULLET_SPEED, sinf(spShip->dirCurr)* BULLET_SPEED};
 		//Vector2DScale(&bVel, &bVel,BULLET_SPEED);
 
 		GameObjInst * spBullet = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE , &bPos, &bVel, spShip->dirCurr);
-		printf("Bullet pointer: %p\n", spBullet);
 	}
 	
 
@@ -410,14 +407,12 @@ void GameStateAsteroidsUpdate(void)
 		dir = rand() % 360;
 
 		GameObjInst * spAsteroid = gameObjInstCreate(TYPE_ASTEROID, (rand() % ASTEROID_SIZE) + ASTEROID_SIZE/2, &aPos, &aVel, dir);
-		//printf("Asteroid %i : %p  Pos:(%f, %f)  Vel:(%f %f)\n", i, spAsteroid, spAsteroid->posCurr.x, spAsteroid->posCurr.y, spAsteroid->velCurr.x, spAsteroid->velCurr.y);
 		AE_ASSERT(spAsteroid);
 	}
 
 	// Shoot a homing missle if 'm' is triggered (Create a new object instance)
 	if (AEInputCheckTriggered(0x4D))
 	{
-		printf("whoosh\n");
 		Vector2D bPos = spShip->posCurr;
 		Vector2D bVel = {cosf(spShip->dirCurr) * BULLET_SPEED, sinf(spShip->dirCurr)* BULLET_SPEED};
 		//Vector2DScale(&bVel, &bVel,BULLET_SPEED);
@@ -428,7 +423,6 @@ void GameStateAsteroidsUpdate(void)
 	// Landmine
 	if (AEInputCheckTriggered(0x4C))
 	{
-		printf("boom\n");
 		Vector2D bPos = spShip->posCurr;
 		Vector2D bVel = {0,0};
 		//Vector2DScale(&bVel, &bVel,BULLET_SPEED);
@@ -500,6 +494,12 @@ void GameStateAsteroidsUpdate(void)
 			if(pInst->posCurr.x < winMinX || pInst->posCurr.x > winMaxX || pInst->posCurr.y < winMinY || pInst->posCurr.y > winMaxY)
 				gameObjInstDestroy(pInst);
 		}
+		if (pInst->pObject->type == TYPE_MISSILE)
+		{
+			//gameObjInstDestroy(pInst);
+			if(pInst->posCurr.x < winMinX || pInst->posCurr.x > winMaxX || pInst->posCurr.y < winMinY || pInst->posCurr.y > winMaxY)
+				gameObjInstDestroy(pInst);
+		}
 
 
 		// Update missile (Check if previous target is still alive, ajudst angle, find new target etc..)
@@ -547,7 +547,7 @@ void GameStateAsteroidsUpdate(void)
 				else
 				if (pInst2->pObject->type == TYPE_FORCEFIELD)
 				{
-					if(StaticCircleToStaticCircle(&pInst2->posCurr,SHIP_SIZE*2,&pInst1->posCurr,pInst1->scale))
+					if(StaticCircleToStaticCircle(&pInst2->posCurr,SHIP_SIZE,&pInst1->posCurr,pInst1->scale/2))
 					{
 						gameObjInstDestroy(pInst2);
 						for (int i = 0; i < 4; i++)
@@ -559,9 +559,8 @@ void GameStateAsteroidsUpdate(void)
 							if(pInst1->scale > ASTEROID_MIN_SIZE)
 								GameObjInst * spAsteroid = gameObjInstCreate(TYPE_ASTEROID, pInst1->scale/2, &pInst1->posCurr, &miniVel, pInst1->dirCurr*i);
 						}
+						gameObjInstDestroy(pInst1);
 					}
-					
-					
 				}
 				else
 				if(pInst2->pObject->type == TYPE_BULLET)
@@ -620,6 +619,11 @@ void GameStateAsteroidsUpdate(void)
 		Matrix2DTranslate(&trans,pInst->posCurr.x , pInst->posCurr.y);
 		Matrix2DConcat(&pInst->transform, &rot, &scale);
 		Matrix2DConcat(&pInst->transform, &trans, &pInst->transform);
+	}
+
+	if (sShipLives == 0 )
+	{
+		gGameStateNext = GS_QUIT;
 	}
 }
 
@@ -723,6 +727,11 @@ void GameStateAsteroidsFree(void)
 void GameStateAsteroidsUnload(void)
 {
 	// free all mesh data (shapes) of each object using "AEGfxTriFree"
+	for (int i = 0; i < GAME_OBJ_NUM_MAX; i++)
+	{
+		GameObj * pObj = sGameObjList + i;
+		AEGfxTriFree(pObj->pMesh);
+	}
 }
 
 // ---------------------------------------------------------------------------

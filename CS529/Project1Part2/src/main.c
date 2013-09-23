@@ -24,7 +24,7 @@
 int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_line, int show)
 {
 	// Initialize the system
-	AESysInit (instanceH, show, 1024, 768, 1, 60, NULL);
+	AESysInit (instanceH, show, 800, 600, 1, 60, NULL);
 
 	GameStateMgrInit(GS_ASTEROIDS);
 
