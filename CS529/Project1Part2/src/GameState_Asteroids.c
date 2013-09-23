@@ -25,9 +25,12 @@
 #define BULLET_SPEED				15.0f		// bullet speed (m/s)
 #define BULLET_SIZE					10
 
+#define MISSILE_SIZE				250
+#define MISSILE_INIT_SPEED			25
+
 #define INI_ASTEROID_CNT			6			// number of initial asteroids
 #define ASTEROID_SIZE				75			// asteroid size
-#define ASTEROID_MIN_SIZE			15
+#define ASTEROID_MIN_SIZE			45
 #define ASTEROID_SPEED				3			// speed of asteroids
 // ---------------------------------------------------------------------------
 enum TYPE
@@ -37,6 +40,11 @@ enum TYPE
 	TYPE_BULLET,
 	TYPE_ASTEROID,
 	TYPE_MISSILE,
+	TYPE_LANDMINE,
+	TYPE_FORCEFIELD,
+	TYPE_FF_EFFECT,
+	TYPE_LM_EFFECT,
+
 
 	TYPE_NUM
 };
@@ -69,6 +77,7 @@ typedef struct
 	float				dirCurr;	// object current direction
 
 	Matrix2D			transform;	// object transformation matrix: Each frame, calculate the object instance's transformation matrix and save it here
+	float				counter;
 }GameObjInst;
 
 // ---------------------------------------------------------------------------
@@ -182,11 +191,92 @@ void GameStateAsteroidsLoad(void)
 	pObj->pMesh = AEGfxTriEnd();
 	AE_ASSERT_MESG(pObj->pMesh, "Failed to create object!!");
 
-
+	
 	
 	// ========================
 	// create the missile shape
 	// ========================
+	pObj		=sGameObjList + sGameObjNum++;
+	pObj->type	=TYPE_MISSILE;
+
+	AEGfxTriStart();
+	AEGfxTriAdd
+	(
+		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+		0.5f, -0.5f, 0xFFFF00FF, 1.0f, 1.0f,
+		-0.5f, -0.5f, 0xFF00FFFF, 0.0f, 1.0f
+	);
+	AEGfxTriAdd
+	(
+		0.5f, 0.5f, 0xFF0000FF, 1.0f, 0.0f,
+		-0.5f, 0.5f, 0xFF0000FF, 0.0f, 0.0f,
+		-0.5f, -0.5f, 0xFF0000FF, 0.0f, 1.0f
+	);
+	pObj->pMesh = AEGfxTriEnd();
+	AE_ASSERT_MESG(pObj->pMesh, "Failed to create object!!");
+
+
+
+	// ========================
+	// landmine
+	// ========================
+	pObj		=sGameObjList + sGameObjNum++;
+	pObj->type	=TYPE_LANDMINE;
+
+	AEGfxTriStart();
+	AEGfxTriAdd
+	(
+		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+		0.5f, -0.5f, 0xFFFF00FF, 1.0f, 1.0f,
+		-0.5f, -0.5f, 0xFF00FFFF, 0.0f, 1.0f
+	);
+	AEGfxTriAdd
+	(
+		0.5f, 0.5f, 0xFF0000FF, 1.0f, 0.0f,
+		-0.5f, 0.5f, 0xFF0000FF, 0.0f, 0.0f,
+		-0.5f, -0.5f, 0xFF0000FF, 0.0f, 1.0f
+	);
+	pObj->pMesh = AEGfxTriEnd();
+	AE_ASSERT_MESG(pObj->pMesh, "Failed to create object!!");
+
+	// ========================
+	// forcefield
+	// ========================
+	pObj		=sGameObjList + sGameObjNum++;
+	pObj->type	=TYPE_FORCEFIELD;
+
+	AEGfxTriStart();
+	AEGfxTriAdd
+	(
+		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+		0.5f, -0.5f, 0xFFFF00FF, 1.0f, 1.0f,
+		-0.5f, -0.5f, 0xFF00FFFF, 0.0f, 1.0f
+	);
+	AEGfxTriAdd
+	(
+		0.5f, 0.5f, 0xFF0000FF, 1.0f, 0.0f,
+		-0.5f, 0.5f, 0xFF0000FF, 0.0f, 0.0f,
+		-0.5f, -0.5f, 0xFF0000FF, 0.0f, 1.0f
+	);
+	pObj->pMesh = AEGfxTriEnd();
+	AE_ASSERT_MESG(pObj->pMesh, "Failed to create object!!");
+
+	//==============================
+	// particle effect for explosion
+	//==============================
+	pObj = sGameObjList+sGameObjNum++;
+	pObj-> type = TYPE_LM_EFFECT;
+
+	AEGfxTriStart();
+	AEGfxTriAdd
+	(
+		-0.5f,  0.5f, 0xFFFF0000, 0.0f, 0.0f, 
+		-0.5f, -0.5f, 0xFFFF0000, 0.0f, 0.0f,
+		 0.5f,  0.0f, 0xFFFF0000, 0.0f, 0.0f
+	);
+
+	pObj->pMesh = AEGfxTriEnd();
+
 }
 
 // ---------------------------------------------------------------------------
@@ -200,6 +290,8 @@ void GameStateAsteroidsInit(void)
 	// create the main ship
 	spShip = gameObjInstCreate(TYPE_SHIP, SHIP_SIZE, 0, 0, 0.0f);
 	AE_ASSERT(spShip);
+	
+	gameObjInstCreate(TYPE_FORCEFIELD,SHIP_SIZE*2,0,0,0.0f);
 	
 	// CREATE THE INITIAL ASTEROIDS INSATNCES USING THE "GAMEOBJINSTCREATE" FUNCTION
 	Vector2D aVel;
@@ -321,8 +413,28 @@ void GameStateAsteroidsUpdate(void)
 		//printf("Asteroid %i : %p  Pos:(%f, %f)  Vel:(%f %f)\n", i, spAsteroid, spAsteroid->posCurr.x, spAsteroid->posCurr.y, spAsteroid->velCurr.x, spAsteroid->velCurr.y);
 		AE_ASSERT(spAsteroid);
 	}
+
 	// Shoot a homing missle if 'm' is triggered (Create a new object instance)
-	//if (AEInputCheckTriggered(DIK_M))
+	if (AEInputCheckTriggered(0x4D))
+	{
+		printf("whoosh\n");
+		Vector2D bPos = spShip->posCurr;
+		Vector2D bVel = {cosf(spShip->dirCurr) * BULLET_SPEED, sinf(spShip->dirCurr)* BULLET_SPEED};
+		//Vector2DScale(&bVel, &bVel,BULLET_SPEED);
+
+		GameObjInst * spMissile = gameObjInstCreate(TYPE_MISSILE, MISSILE_SIZE , &bPos, &bVel, spShip->dirCurr);
+	}
+
+	// Landmine
+	if (AEInputCheckTriggered(0x4C))
+	{
+		printf("boom\n");
+		Vector2D bPos = spShip->posCurr;
+		Vector2D bVel = {0,0};
+		//Vector2DScale(&bVel, &bVel,BULLET_SPEED);
+
+		GameObjInst * spMine = gameObjInstCreate(TYPE_LANDMINE, 20 , &bPos, &bVel, spShip->dirCurr);
+	}
 
 
 	// ==================================================
@@ -365,6 +477,12 @@ void GameStateAsteroidsUpdate(void)
 			pInst->posCurr.x = AEWrap(pInst->posCurr.x, winMinX - SHIP_SIZE, winMaxX + SHIP_SIZE);
 			pInst->posCurr.y = AEWrap(pInst->posCurr.y, winMinY - SHIP_SIZE, winMaxY + SHIP_SIZE);
 		}
+		// ff remains on the ship
+		if (pInst->pObject->type == TYPE_FORCEFIELD)
+		{
+			pInst->posCurr = spShip->posCurr;
+		}
+
 
 		// Wrap asteroids here
 		if (pInst->pObject->type == TYPE_ASTEROID)
@@ -423,9 +541,28 @@ void GameStateAsteroidsUpdate(void)
 						Vector2DSet(&pInst2->velCurr, 0,0);
 						gameObjInstDestroy(pInst1);
 						sShipLives--;
+						gameObjInstCreate(TYPE_FORCEFIELD,SHIP_SIZE*2,0,0,0.0f);
 					}
 				}
-
+				else
+				if (pInst2->pObject->type == TYPE_FORCEFIELD)
+				{
+					if(StaticCircleToStaticCircle(&pInst2->posCurr,SHIP_SIZE*2,&pInst1->posCurr,pInst1->scale))
+					{
+						gameObjInstDestroy(pInst2);
+						for (int i = 0; i < 4; i++)
+						{
+							Vector2D miniVel = pInst1->velCurr;
+							Vector2D randVel;
+							Vector2DSet(&randVel, i*cosf(rand()%360), i*sinf(rand()%360));
+							Vector2DAdd(&miniVel, &miniVel, &randVel);
+							if(pInst1->scale > ASTEROID_MIN_SIZE)
+								GameObjInst * spAsteroid = gameObjInstCreate(TYPE_ASTEROID, pInst1->scale/2, &pInst1->posCurr, &miniVel, pInst1->dirCurr*i);
+						}
+					}
+					
+					
+				}
 				else
 				if(pInst2->pObject->type == TYPE_BULLET)
 				{
@@ -440,6 +577,8 @@ void GameStateAsteroidsUpdate(void)
 							if(pInst1->scale > ASTEROID_MIN_SIZE)
 								GameObjInst * spAsteroid = gameObjInstCreate(TYPE_ASTEROID, pInst1->scale/2, &pInst1->posCurr, &miniVel, pInst1->dirCurr*i);
 						}
+						sScore += 10;
+						printf("Score %d\n", sScore);
 						gameObjInstDestroy(pInst1);
 						gameObjInstDestroy(pInst2);
 					}
@@ -495,10 +634,16 @@ void GameStateAsteroidsDraw(void)
 	AEGfxTexture * shipTex;
 	AEGfxTexture * bulletTex;
 	AEGfxTexture * missileTex;
-	
+	AEGfxTexture * ffTex;
+	AEGfxTexture * mineTex;
+
 	asteroidTex = AEGfxTextureLoad("asteroid.png");
 	shipTex =	  AEGfxTextureLoad("spaceship.png");
 	bulletTex =	  AEGfxTextureLoad("laser.png");
+	missileTex =  AEGfxTextureLoad("missile.png");
+	ffTex =		  AEGfxTextureLoad("forcefield.png");
+	mineTex =	  AEGfxTextureLoad("landmine.png");
+
 
 	AEGfxSetRenderMode (AE_GFX_RM_TEXTURE);
 	AEGfxTextureSet(NULL, 0, 0);
@@ -525,6 +670,18 @@ void GameStateAsteroidsDraw(void)
 		if(pInst->pObject->type == TYPE_BULLET)
 		{
 			AEGfxTextureSet(bulletTex, 0.0f, 0.0f);
+		}
+		if(pInst->pObject->type == TYPE_MISSILE)
+		{
+			AEGfxTextureSet(missileTex,0.0f,0.0f);
+		}
+		if(pInst->pObject->type == TYPE_LANDMINE)
+		{
+			AEGfxTextureSet(mineTex,0.0f,0.0f);
+		}
+		if(pInst->pObject->type == TYPE_FORCEFIELD)
+		{
+			AEGfxTextureSet(ffTex, 0.0f, 0.0f);
 		}
 		// Set the current object instance's transform matrix using "AEGfxSetTransform"
 		AEGfxSetPosition (pInst->posCurr.x, pInst->posCurr.y);
@@ -592,6 +749,7 @@ GameObjInst* gameObjInstCreate(unsigned long type, float scale, Vector2D* pPos, 
 			pInst->posCurr	= pPos ? *pPos : zero;
 			pInst->velCurr	= pVel ? *pVel : zero;
 			pInst->dirCurr	= dir;
+			pInst->counter  = 0;
 			
 			// return the newly created instance
 			return pInst;
