@@ -400,7 +400,8 @@ void GameStateAsteroidsUpdate(void)
 			Vector2D bPos = spShip->posCurr;
 			Vector2D bVel = {cosf(spShip->dirCurr) * MISSILE_INIT_SPEED, sinf(spShip->dirCurr)* MISSILE_INIT_SPEED};
 
-			gameObjInstCreate(TYPE_MISSILE, MISSILE_SIZE , &bPos, &bVel, spShip->dirCurr);
+			GameObjInst * pMissile = gameObjInstCreate(TYPE_MISSILE, MISSILE_SIZE , &bPos, &bVel, spShip->dirCurr);
+			pMissile->counter = 10;
 			missileExist = 1;
 			numMissiles ++;
 		}
@@ -483,15 +484,28 @@ void GameStateAsteroidsUpdate(void)
 		// Update missile (Check if previous target is still alive, ajudst angle, find new target etc..)
 		if (pInst->pObject->type == TYPE_MISSILE)
 		{
-			if((missileTarget->flag & FLAG_ACTIVE) == 0)
+			pInst->counter -= frameTime;
+			if (pInst -> counter < 0)
 			{
-				MissileGetTarget();
+				gameObjInstDestroy(pInst);
+				missileExist = 0;
 			}
-			//pInst->velCurr = missileTarget->posCurr;
-			Vector2DFromAngleDeg(&pInst->velCurr, missileTarget->dirCurr);
-			//pInst->dirCurr = missileTarget->dirCurr;
-			//Vector2DScale(&pInst->velCurr,&pInst->velCurr, frameTime);
-			Vector2DScale(&pInst->velCurr,&pInst->velCurr, 0.9);
+			else
+			{	if((missileTarget->flag & FLAG_ACTIVE) == 0)
+				{
+					MissileGetTarget();
+				}
+				float angle;
+				float ratio;
+
+				Vector2DFromAngleDeg(&pInst->velCurr, missileTarget->dirCurr);
+				Vector2DAdd(&pInst->velCurr, &pInst->velCurr, &missileTarget->velCurr);
+				ratio = pInst->velCurr.y/pInst->velCurr.x;
+				angle = atan(ratio) * PI/180;
+
+
+				pInst->dirCurr = angle;
+			}
 		}
 	}
 
@@ -620,13 +634,14 @@ void GameStateAsteroidsDraw(void)
 	AEGfxTexture * bulletTex;
 	AEGfxTexture * missileTex;
 	AEGfxTexture * mineTex;
+	AEGfxTexture * targetTex;
 
 	asteroidTex = AEGfxTextureLoad("asteroid.png");
 	shipTex =	  AEGfxTextureLoad("spaceship.png");
 	bulletTex =	  AEGfxTextureLoad("laser.png");
 	missileTex =  AEGfxTextureLoad("missile.png");
 	mineTex =	  AEGfxTextureLoad("landmine.png");
-
+	targetTex =	  AEGfxTextureLoad("asteroidtarget.png");
 
 	AEGfxSetRenderMode (AE_GFX_RM_TEXTURE);
 	AEGfxTextureSet(NULL, 0, 0);
@@ -644,7 +659,8 @@ void GameStateAsteroidsDraw(void)
 		
 		if(pInst->pObject->type == TYPE_ASTEROID)
 		{
-			AEGfxTextureSet(asteroidTex, 0.0f, 0.0f);
+			if (pInst == missileTarget) AEGfxTextureSet(targetTex,0.0f,0.0f);
+			else	AEGfxTextureSet(asteroidTex, 0.0f, 0.0f);
 		}
 		if(pInst->pObject->type == TYPE_SHIP)
 		{
@@ -676,7 +692,8 @@ void GameStateAsteroidsDraw(void)
 	AEGfxTextureUnload(bulletTex);
 	AEGfxTextureUnload(missileTex);
 	AEGfxTextureUnload(mineTex);
-	
+	AEGfxTextureUnload(targetTex);
+
 	frameTime = AEFrameRateControllerGetFrameTime();
 	sprintf(strBuffer, "FrameTime: %lf", frameTime);
 	AEGfxPrint(10, 30, -1, strBuffer);
