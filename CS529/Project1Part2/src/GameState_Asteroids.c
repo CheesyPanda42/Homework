@@ -26,7 +26,7 @@
 #define BULLET_SIZE					15
 
 #define MISSILE_SIZE				30
-#define MISSILE_INIT_SPEED			25
+#define MISSILE_INIT_SPEED			10
 
 #define INI_ASTEROID_CNT			5			// number of initial asteroids
 #define ASTEROID_SIZE				75			// asteroid size
@@ -114,6 +114,8 @@ static GameObjInst*			gameObjInstCreate (unsigned long type, float scale, Vector
 static void					gameObjInstDestroy(GameObjInst* pInst);
 
 // ---------------------------------------------------------------------------
+
+void MissileGetTarget();
 
 // "Load" function of this state
 void GameStateAsteroidsLoad(void)
@@ -289,8 +291,7 @@ void GameStateAsteroidsInit(void)
 		Vector2DSet(&aVel, (rand() % ASTEROID_SPEED) - 2.1, (rand() % ASTEROID_SPEED) - 2.1);
 		dir = rand() % 360;
 
-		GameObjInst * spAsteroid = gameObjInstCreate(TYPE_ASTEROID, (rand() % ASTEROID_SIZE) + ASTEROID_SIZE/2, &aPos, &aVel, dir);
-		AE_ASSERT(spAsteroid);
+		gameObjInstCreate(TYPE_ASTEROID, (rand() % ASTEROID_SIZE) + ASTEROID_SIZE/2, &aPos, &aVel, dir);
 	}
 	// reset the score and the number of ship
 	sScore      = 0;
@@ -393,18 +394,12 @@ void GameStateAsteroidsUpdate(void)
 	{
 		if(!missileExist && numMissiles < MAX_MISSILES)
 		{ 
-			int i = 0;
-			GameObjInst * pObj = sGameObjInstList + i;
-			while(pObj ->pObject->type != TYPE_ASTEROID && i < GAME_OBJ_INST_NUM_MAX)
-			{
-				i++;
-				pObj = sGameObjInstList + i;
-			}
-			missileTarget = pObj;
+			MissileGetTarget();
 
-			printf("found asteroid %p, %i  x:%d  y:%d\n", pObj, pObj->pObject->type, pObj->posCurr.x, pObj->posCurr.y);
+			printf("found asteroid %p, %i  x:%d  y:%d\n", missileTarget, missileTarget->pObject->type,missileTarget->posCurr.x, missileTarget->posCurr.y);
 			Vector2D bPos = spShip->posCurr;
-			Vector2D bVel = {cosf(spShip->dirCurr) * BULLET_SPEED, sinf(spShip->dirCurr)* BULLET_SPEED};
+			Vector2D bVel = {cosf(spShip->dirCurr) * MISSILE_INIT_SPEED, sinf(spShip->dirCurr)* MISSILE_INIT_SPEED};
+
 			gameObjInstCreate(TYPE_MISSILE, MISSILE_SIZE , &bPos, &bVel, spShip->dirCurr);
 			missileExist = 1;
 			numMissiles ++;
@@ -464,8 +459,8 @@ void GameStateAsteroidsUpdate(void)
 		if (pInst->pObject->type == TYPE_ASTEROID)
 		{
 			// warp the ship from one end of the screen to the other
-			pInst->posCurr.x = AEWrap(pInst->posCurr.x, winMinX - SHIP_SIZE, winMaxX + SHIP_SIZE);
-			pInst->posCurr.y = AEWrap(pInst->posCurr.y, winMinY - SHIP_SIZE, winMaxY + SHIP_SIZE);
+			pInst->posCurr.x = AEWrap(pInst->posCurr.x, winMinX - ASTEROID_SIZE, winMaxX + ASTEROID_SIZE);
+			pInst->posCurr.y = AEWrap(pInst->posCurr.y, winMinY - ASTEROID_SIZE, winMaxY + ASTEROID_SIZE);
 		}
 		// Remove bullets that go out of bounds
 		if (pInst->pObject->type == TYPE_BULLET)
@@ -479,13 +474,25 @@ void GameStateAsteroidsUpdate(void)
 		{
 			if(pInst->posCurr.x < winMinX || pInst->posCurr.x > winMaxX || pInst->posCurr.y < winMinY || pInst->posCurr.y > winMaxY)
 			{
-				gameObjInstDestroy(pInst);
-				missileExist = 0;
+				pInst->posCurr.x = AEWrap(pInst->posCurr.x, winMinX - MISSILE_SIZE, winMaxX + MISSILE_SIZE);
+				pInst->posCurr.y = AEWrap(pInst->posCurr.y, winMinY - MISSILE_SIZE, winMaxY + MISSILE_SIZE);
 			}
 		}
 
 
 		// Update missile (Check if previous target is still alive, ajudst angle, find new target etc..)
+		if (pInst->pObject->type == TYPE_MISSILE)
+		{
+			if((missileTarget->flag & FLAG_ACTIVE) == 0)
+			{
+				MissileGetTarget();
+			}
+			//pInst->velCurr = missileTarget->posCurr;
+			Vector2DFromAngleDeg(&pInst->velCurr, missileTarget->dirCurr);
+			//pInst->dirCurr = missileTarget->dirCurr;
+			//Vector2DScale(&pInst->velCurr,&pInst->velCurr, frameTime);
+			Vector2DScale(&pInst->velCurr,&pInst->velCurr, 0.9);
+		}
 	}
 
 
@@ -517,7 +524,7 @@ void GameStateAsteroidsUpdate(void)
 
 				if(pInst2->pObject->type == TYPE_SHIP)
 				{
-					if(StaticRectToStaticRect(&pInst1->posCurr,pInst1->scale,pInst1->scale, &pInst2-> posCurr, pInst2->scale, pInst2->scale))
+					if(StaticRectToStaticRect(&pInst1->posCurr,pInst1->scale,pInst1->scale, &pInst2-> posCurr, pInst2->scale/2, pInst2->scale/2))
 					{
 						Vector2DSet(&pInst2->posCurr, 0,0);
 						Vector2DSet(&pInst2->velCurr, 0,0);
@@ -757,3 +764,15 @@ void gameObjInstDestroy(GameObjInst* pInst)
 	pInst->flag = 0;
 }
 // ---------------------------------------------------------------------------
+
+void MissileGetTarget()
+{
+		int i = 0;
+		GameObjInst * pObj = sGameObjInstList + i;
+		while(pObj ->pObject->type != TYPE_ASTEROID && i < GAME_OBJ_INST_NUM_MAX)
+		{
+			i++;
+			pObj = sGameObjInstList + i;
+		}
+		missileTarget = pObj;
+}
