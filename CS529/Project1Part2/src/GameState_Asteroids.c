@@ -17,7 +17,7 @@
 #define GAME_OBJ_NUM_MAX			32
 
 #define SHIP_INITIAL_NUM			3			// initial number of ship lives
-#define SHIP_SIZE					30.0f		// ship size
+#define SHIP_SIZE					40.0f		// ship size
 #define SHIP_ACCEL_FORWARD			30.0f		// ship forward acceleration (in m/s^2)
 #define SHIP_ACCEL_BACKWARD			10.0f		// ship backward acceleration (in m/s^2)
 #define SHIP_ROT_SPEED				(2.0f * PI)	// ship rotation speed (degree/second)
@@ -25,13 +25,16 @@
 #define BULLET_SPEED				15.0f		// bullet speed (m/s)
 #define BULLET_SIZE					15
 
-#define MISSILE_SIZE				50
+#define MISSILE_SIZE				30
 #define MISSILE_INIT_SPEED			25
 
 #define INI_ASTEROID_CNT			5			// number of initial asteroids
 #define ASTEROID_SIZE				75			// asteroid size
 #define ASTEROID_MIN_SIZE			35
 #define ASTEROID_SPEED				3			// speed of asteroids
+
+
+#define MAX_MISSILES				15			// maximum number of missiles
 // ---------------------------------------------------------------------------
 enum TYPE
 {
@@ -99,6 +102,10 @@ static long					sShipLives;									// The number of lives left
 // the score = number of asteroid destroyed
 static unsigned long		sScore;										// Current score
 
+// missile related variables
+static int					missileExist;
+static int					numMissiles;
+static GameObjInst*			missileTarget;
 
 // ---------------------------------------------------------------------------
 
@@ -125,7 +132,8 @@ void GameStateAsteroidsLoad(void)
 
 	// The ship object instance hasn't been created yet, so this "spShip" pointer is initialized to 0
 	spShip = 0;
-
+	missileExist = 0;
+	numMissiles = 0;
 	// load/create the mesh data (game objects / Shapes)
 	
 
@@ -236,6 +244,7 @@ void GameStateAsteroidsLoad(void)
 	pObj->pMesh = AEGfxTriEnd();
 	AE_ASSERT_MESG(pObj->pMesh, "Failed to create object!!");
 
+	/*
 	//==============================
 	// particle effect for explosion
 	//==============================
@@ -251,7 +260,7 @@ void GameStateAsteroidsLoad(void)
 	);
 
 	pObj->pMesh = AEGfxTriEnd();
-
+	*/
 }
 
 // ---------------------------------------------------------------------------
@@ -281,7 +290,6 @@ void GameStateAsteroidsInit(void)
 		dir = rand() % 360;
 
 		GameObjInst * spAsteroid = gameObjInstCreate(TYPE_ASTEROID, (rand() % ASTEROID_SIZE) + ASTEROID_SIZE/2, &aPos, &aVel, dir);
-		printf("Asteroid %i : %p  Pos:(%f, %f)  Vel:(%f %f)\n", i, spAsteroid, spAsteroid->posCurr.x, spAsteroid->posCurr.y, spAsteroid->velCurr.x, spAsteroid->velCurr.y);
 		AE_ASSERT(spAsteroid);
 	}
 	// reset the score and the number of ship
@@ -383,11 +391,24 @@ void GameStateAsteroidsUpdate(void)
 	// Shoot a homing missle if 'm' is triggered (Create a new object instance)
 	if (AEInputCheckTriggered(0x4D))
 	{
-		Vector2D bPos = spShip->posCurr;
-		Vector2D bVel = {cosf(spShip->dirCurr) * BULLET_SPEED, sinf(spShip->dirCurr)* BULLET_SPEED};
-		//Vector2DScale(&bVel, &bVel,BULLET_SPEED);
+		if(!missileExist && numMissiles < MAX_MISSILES)
+		{ 
+			int i = 0;
+			GameObjInst * pObj = sGameObjInstList + i;
+			while(pObj ->pObject->type != TYPE_ASTEROID && i < GAME_OBJ_INST_NUM_MAX)
+			{
+				i++;
+				pObj = sGameObjInstList + i;
+			}
+			missileTarget = pObj;
 
-		GameObjInst * spMissile = gameObjInstCreate(TYPE_MISSILE, MISSILE_SIZE , &bPos, &bVel, spShip->dirCurr);
+			printf("found asteroid %p, %i  x:%d  y:%d\n", pObj, pObj->pObject->type, pObj->posCurr.x, pObj->posCurr.y);
+			Vector2D bPos = spShip->posCurr;
+			Vector2D bVel = {cosf(spShip->dirCurr) * BULLET_SPEED, sinf(spShip->dirCurr)* BULLET_SPEED};
+			gameObjInstCreate(TYPE_MISSILE, MISSILE_SIZE , &bPos, &bVel, spShip->dirCurr);
+			missileExist = 1;
+			numMissiles ++;
+		}
 	}
 
 	// Landmine
@@ -456,9 +477,11 @@ void GameStateAsteroidsUpdate(void)
 		// Remove missiles if they go out of bounds
 		if (pInst->pObject->type == TYPE_MISSILE)
 		{
-			//gameObjInstDestroy(pInst);
 			if(pInst->posCurr.x < winMinX || pInst->posCurr.x > winMaxX || pInst->posCurr.y < winMinY || pInst->posCurr.y > winMaxY)
+			{
 				gameObjInstDestroy(pInst);
+				missileExist = 0;
+			}
 		}
 
 
@@ -521,6 +544,20 @@ void GameStateAsteroidsUpdate(void)
 						gameObjInstDestroy(pInst1);
 						gameObjInstDestroy(pInst2);
 					}
+
+				}
+				else
+				if(pInst2->pObject->type == TYPE_MISSILE)
+				{
+					if(StaticPointToStaticRect(&pInst2->posCurr,&pInst1->posCurr, pInst1->scale,pInst1->scale))
+					{
+						sScore += 10;
+						printf("Score %d\n", sScore);
+						gameObjInstDestroy(pInst1);
+						gameObjInstDestroy(pInst2);
+						missileExist = 0;
+					}
+
 				}
 
 /*				else
