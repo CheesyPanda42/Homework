@@ -27,6 +27,7 @@
 
 #define MISSILE_SIZE				30
 #define MISSILE_INIT_SPEED			10
+#define MISSILE_SPEED				40
 
 #define INI_ASTEROID_CNT			5			// number of initial asteroids
 #define ASTEROID_SIZE				75			// asteroid size
@@ -296,6 +297,9 @@ void GameStateAsteroidsInit(void)
 	// reset the score and the number of ship
 	sScore      = 0;
 	sShipLives  = SHIP_INITIAL_NUM;
+
+	missileExist = 0;
+	numMissiles = 0;
 }
 
 // ---------------------------------------------------------------------------
@@ -374,7 +378,7 @@ void GameStateAsteroidsUpdate(void)
 		GameObjInst * spBullet = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE , &bPos, &bVel, spShip->dirCurr);
 	}
 	
-
+	// create an asteroid when 'a' is pressed
 	if (AEInputCheckTriggered(0x41))
 	{
 		Vector2D aPos;
@@ -407,7 +411,8 @@ void GameStateAsteroidsUpdate(void)
 		}
 	}
 
-	// Landmine
+
+	// Landmine if l is pressed
 	if (AEInputCheckTriggered(0x4C))
 	{
 		Vector2D bPos = spShip->posCurr;
@@ -417,6 +422,11 @@ void GameStateAsteroidsUpdate(void)
 		GameObjInst * spMine = gameObjInstCreate(TYPE_LANDMINE, 20 , &bPos, &bVel, spShip->dirCurr);
 	}
 
+
+	if (AEInputCheckTriggered('R'))
+	{
+		gGameStateNext = GS_RESTART;
+	}
 
 	// ==================================================
 	// update physics of all active game object instances
@@ -478,12 +488,7 @@ void GameStateAsteroidsUpdate(void)
 				pInst->posCurr.x = AEWrap(pInst->posCurr.x, winMinX - MISSILE_SIZE, winMaxX + MISSILE_SIZE);
 				pInst->posCurr.y = AEWrap(pInst->posCurr.y, winMinY - MISSILE_SIZE, winMaxY + MISSILE_SIZE);
 			}
-		}
 
-
-		// Update missile (Check if previous target is still alive, ajudst angle, find new target etc..)
-		if (pInst->pObject->type == TYPE_MISSILE)
-		{
 			pInst->counter -= frameTime;
 			if (pInst -> counter < 0)
 			{
@@ -491,20 +496,16 @@ void GameStateAsteroidsUpdate(void)
 				missileExist = 0;
 			}
 			else
-			{	if((missileTarget->flag & FLAG_ACTIVE) == 0)
+			{	
+				if((missileTarget->flag & FLAG_ACTIVE) == 0)
 				{
 					MissileGetTarget();
 				}
-				float angle;
-				float ratio;
-
-				Vector2DFromAngleDeg(&pInst->velCurr, missileTarget->dirCurr);
 				Vector2DAdd(&pInst->velCurr, &pInst->velCurr, &missileTarget->velCurr);
-				ratio = pInst->velCurr.y/pInst->velCurr.x;
-				angle = atan(ratio) * PI/180;
-
-
-				pInst->dirCurr = angle;
+				printf("Missile Vel: %d, %d  Asteroid vel: %d, %d \n", &pInst->velCurr.x, &pInst->velCurr.y, &missileTarget->velCurr.x, &missileTarget->velCurr.y);
+				Vector2DScale(&pInst->velCurr, &pInst->velCurr, frameTime);
+				// Vector2DScale(&pInst->velCurr, &pInst->velCurr, MISSILE_SPEED);
+				Vector2DScale(&pInst->velCurr, &pInst->velCurr, 0.4);
 			}
 		}
 	}
@@ -580,13 +581,6 @@ void GameStateAsteroidsUpdate(void)
 					}
 
 				}
-
-/*				else
-				if(oi2 is a missle)
-					Check for collision between the missile and the asteroid
-					Update game behavior accordingly
-					Update "Object instances array"
-*/
 			}
 		}
 	}
