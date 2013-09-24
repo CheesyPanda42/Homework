@@ -45,8 +45,8 @@ enum TYPE
 	TYPE_ASTEROID,
 	TYPE_MISSILE,
 	TYPE_LANDMINE,
-	TYPE_FF_EFFECT,
-	TYPE_LM_EFFECT,
+	TYPE_TEXT,
+	TYPE_NUMBER,
 
 
 	TYPE_NUM
@@ -247,23 +247,50 @@ void GameStateAsteroidsLoad(void)
 	pObj->pMesh = AEGfxTriEnd();
 	AE_ASSERT_MESG(pObj->pMesh, "Failed to create object!!");
 
-	/*
+	
 	//==============================
-	// particle effect for explosion
+	// text box
 	//==============================
-	pObj = sGameObjList+sGameObjNum++;
-	pObj-> type = TYPE_LM_EFFECT;
+	pObj		=sGameObjList + sGameObjNum++;
+	pObj->type	=TYPE_TEXT;
 
 	AEGfxTriStart();
 	AEGfxTriAdd
 	(
-		-0.5f,  0.5f, 0xFFFF0000, 0.0f, 0.0f, 
-		-0.5f, -0.5f, 0xFFFF0000, 0.0f, 0.0f,
-		 0.5f,  0.0f, 0xFFFF0000, 0.0f, 0.0f
+		0.5f, 0.5f, 0xFFFFFFFF, 0.1f, 1.0f,
+		0.5f, -0.5f, 0xFFFFFFFF, 0.1f, 0.0f,
+		-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 0.0f
 	);
-
+	AEGfxTriAdd
+	(
+		0.5f, 0.5f, 0xFFFFFFFF, 0.1f, 1.0f,
+		-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+		-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 0.0f
+	);
 	pObj->pMesh = AEGfxTriEnd();
-	*/
+	AE_ASSERT_MESG(pObj->pMesh, "Failed to create object!!");
+
+	//==============================
+	// number box
+	//==============================
+	pObj		=sGameObjList + sGameObjNum++;
+	pObj->type	=TYPE_NUMBER;
+
+	AEGfxTriStart();
+	AEGfxTriAdd
+	(
+		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+		0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+		-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f
+	);
+	AEGfxTriAdd
+	(
+		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+		-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
+		-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f
+	);
+	pObj->pMesh = AEGfxTriEnd();
+	AE_ASSERT_MESG(pObj->pMesh, "Failed to create object!!");
 }
 
 // ---------------------------------------------------------------------------
@@ -286,6 +313,7 @@ void GameStateAsteroidsInit(void)
 
 	srand(time(NULL));
 
+	// create initial asteroids
 	for (int i = 0; i < INI_ASTEROID_CNT; i++)
 	{
 		Vector2DSet(&aPos, rand()%800, -rand()%600);
@@ -293,6 +321,15 @@ void GameStateAsteroidsInit(void)
 		dir = rand() % 360;
 
 		gameObjInstCreate(TYPE_ASTEROID, (rand() % ASTEROID_SIZE) + ASTEROID_SIZE/2, &aPos, &aVel, dir);
+	}
+
+	// create text field
+	for (int i = 0; i < 5; i++)
+	{
+		Vector2D tPos;
+		Vector2D tVel = {0,0};
+		Vector2DSet(&tPos, i*100, 0);
+		gameObjInstCreate(TYPE_TEXT, 20, &tPos, &tVel, 0);
 	}
 	// reset the score and the number of ship
 	sScore      = 0;
@@ -480,7 +517,7 @@ void GameStateAsteroidsUpdate(void)
 			if(pInst->posCurr.x < winMinX || pInst->posCurr.x > winMaxX || pInst->posCurr.y < winMinY || pInst->posCurr.y > winMaxY)
 				gameObjInstDestroy(pInst);
 		}
-		// Remove missiles if they go out of bounds
+		// Missile behavior
 		if (pInst->pObject->type == TYPE_MISSILE)
 		{
 			if(pInst->posCurr.x < winMinX || pInst->posCurr.x > winMaxX || pInst->posCurr.y < winMinY || pInst->posCurr.y > winMaxY)
@@ -501,11 +538,12 @@ void GameStateAsteroidsUpdate(void)
 				{
 					MissileGetTarget();
 				}
+
 				Vector2DAdd(&pInst->velCurr, &pInst->velCurr, &missileTarget->velCurr);
-				printf("Missile Vel: %d, %d  Asteroid vel: %d, %d \n", &pInst->velCurr.x, &pInst->velCurr.y, &missileTarget->velCurr.x, &missileTarget->velCurr.y);
 				Vector2DScale(&pInst->velCurr, &pInst->velCurr, frameTime);
-				// Vector2DScale(&pInst->velCurr, &pInst->velCurr, MISSILE_SPEED);
+				Vector2DScale(&pInst->velCurr, &pInst->velCurr, MISSILE_SPEED);
 				Vector2DScale(&pInst->velCurr, &pInst->velCurr, 0.4);
+				
 			}
 		}
 	}
@@ -629,6 +667,7 @@ void GameStateAsteroidsDraw(void)
 	AEGfxTexture * missileTex;
 	AEGfxTexture * mineTex;
 	AEGfxTexture * targetTex;
+	AEGfxTexture * textTex;
 
 	asteroidTex = AEGfxTextureLoad("asteroid.png");
 	shipTex =	  AEGfxTextureLoad("spaceship.png");
@@ -636,6 +675,7 @@ void GameStateAsteroidsDraw(void)
 	missileTex =  AEGfxTextureLoad("missile.png");
 	mineTex =	  AEGfxTextureLoad("landmine.png");
 	targetTex =	  AEGfxTextureLoad("asteroidtarget.png");
+	textTex =	  AEGfxTextureLoad("text.png");
 
 	AEGfxSetRenderMode (AE_GFX_RM_TEXTURE);
 	AEGfxTextureSet(NULL, 0, 0);
@@ -671,6 +711,10 @@ void GameStateAsteroidsDraw(void)
 		if(pInst->pObject->type == TYPE_LANDMINE)
 		{
 			AEGfxTextureSet(mineTex,0.0f,0.0f);
+		}
+		if(pInst->pObject->type == TYPE_TEXT)
+		{
+			AEGfxTextureSet(textTex,0.0f,0.0f);
 		}
 		
 		// Set the current object instance's transform matrix using "AEGfxSetTransform"
