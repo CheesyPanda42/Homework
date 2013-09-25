@@ -1,11 +1,9 @@
 // ---------------------------------------------------------------------------
 // Project Name		:	Asteroid Game
-// File Name		:	GameState_Play.cpp
-// Author			:	Sun Tjen Fam
-// Creation Date	:	2008/01/31
-// Purpose			:	implementation of the 'play' game state
-// History			:
-// - 2008/01/31		:	- initial implementation
+// File Name		:	GameState_Asteroids.c
+// Author			:	Cory Prelerson, cory.prelerson, 60000913
+// Creation Date	:	9.24.2013
+// Purpose			:	implementation of the 'asteroid' game state
 // ---------------------------------------------------------------------------
 
 #include "main.h"
@@ -25,7 +23,7 @@
 #define BULLET_SPEED				15.0f		// bullet speed (m/s)
 #define BULLET_SIZE					15
 
-#define MISSILE_SIZE				30
+#define MISSILE_SIZE				20
 #define MISSILE_INIT_SPEED			10
 #define MISSILE_SPEED				40
 
@@ -33,6 +31,7 @@
 #define ASTEROID_SIZE				75			// asteroid size
 #define ASTEROID_MIN_SIZE			35
 #define ASTEROID_SPEED				3			// speed of asteroids
+#define ASTEROID_TIMER				6
 
 
 #define MAX_MISSILES				15			// maximum number of missiles
@@ -107,6 +106,7 @@ static unsigned long		sScore;										// Current score
 static int					missileExist;
 static int					numMissiles;
 static GameObjInst*			missileTarget;
+static float				lastAsteroid;
 
 // ---------------------------------------------------------------------------
 
@@ -201,7 +201,7 @@ void GameStateAsteroidsLoad(void)
 	pObj->pMesh = AEGfxTriEnd();
 	AE_ASSERT_MESG(pObj->pMesh, "Failed to create object!!");
 
-	
+	int i = 0;
 	// ========================
 	// create the missile shape
 	// ========================
@@ -246,7 +246,7 @@ void GameStateAsteroidsLoad(void)
 	);
 	pObj->pMesh = AEGfxTriEnd();
 	AE_ASSERT_MESG(pObj->pMesh, "Failed to create object!!");
-
+/*
 	
 	//==============================
 	// text box
@@ -291,6 +291,8 @@ void GameStateAsteroidsLoad(void)
 	);
 	pObj->pMesh = AEGfxTriEnd();
 	AE_ASSERT_MESG(pObj->pMesh, "Failed to create object!!");
+
+	*/
 }
 
 // ---------------------------------------------------------------------------
@@ -321,8 +323,9 @@ void GameStateAsteroidsInit(void)
 		dir = rand() % 360;
 
 		gameObjInstCreate(TYPE_ASTEROID, (rand() % ASTEROID_SIZE) + ASTEROID_SIZE/2, &aPos, &aVel, dir);
+		lastAsteroid = 0;
 	}
-
+/*
 	// create text field
 	for (int i = 0; i < 5; i++)
 	{
@@ -331,6 +334,8 @@ void GameStateAsteroidsInit(void)
 		Vector2DSet(&tPos, i*100, 0);
 		gameObjInstCreate(TYPE_TEXT, 20, &tPos, &tVel, 0);
 	}
+
+*/
 	// reset the score and the number of ship
 	sScore      = 0;
 	sShipLives  = SHIP_INITIAL_NUM;
@@ -364,7 +369,7 @@ void GameStateAsteroidsUpdate(void)
 	// ======================
 
 	frameTime = AEFrameRateControllerGetFrameTime();
-
+	lastAsteroid += frameTime;
 
 	// =========================
 	// update according to input
@@ -422,11 +427,12 @@ void GameStateAsteroidsUpdate(void)
 		Vector2D aVel;
 		float dir;
 		
-		Vector2DSet(&aPos, 0, 0);
+		Vector2DSet(&aPos, rand()% 800, rand() % -600);
 		Vector2DSet(&aVel, (rand() % 4) - 2.1, (rand() % 4) - 2.1);
 		dir = rand() % 360;
 
 		GameObjInst * spAsteroid = gameObjInstCreate(TYPE_ASTEROID, (rand() % ASTEROID_SIZE) + ASTEROID_SIZE/2, &aPos, &aVel, dir);
+		lastAsteroid = 0;
 		AE_ASSERT(spAsteroid);
 	}
 
@@ -459,7 +465,7 @@ void GameStateAsteroidsUpdate(void)
 		GameObjInst * spMine = gameObjInstCreate(TYPE_LANDMINE, 20 , &bPos, &bVel, spShip->dirCurr);
 	}
 
-
+	
 	if (AEInputCheckTriggered('R'))
 	{
 		gGameStateNext = GS_RESTART;
@@ -520,12 +526,14 @@ void GameStateAsteroidsUpdate(void)
 		// Missile behavior
 		if (pInst->pObject->type == TYPE_MISSILE)
 		{
+			// wrap missile
 			if(pInst->posCurr.x < winMinX || pInst->posCurr.x > winMaxX || pInst->posCurr.y < winMinY || pInst->posCurr.y > winMaxY)
 			{
 				pInst->posCurr.x = AEWrap(pInst->posCurr.x, winMinX - MISSILE_SIZE, winMaxX + MISSILE_SIZE);
 				pInst->posCurr.y = AEWrap(pInst->posCurr.y, winMinY - MISSILE_SIZE, winMaxY + MISSILE_SIZE);
 			}
 
+			// destroy missile if it's been alive too long
 			pInst->counter -= frameTime;
 			if (pInst -> counter < 0)
 			{
@@ -534,18 +542,43 @@ void GameStateAsteroidsUpdate(void)
 			}
 			else
 			{	
+				// if the missile's old target is dead, get a new one
 				if((missileTarget->flag & FLAG_ACTIVE) == 0)
 				{
 					MissileGetTarget();
 				}
-
-				Vector2DAdd(&pInst->velCurr, &pInst->velCurr, &missileTarget->velCurr);
-				Vector2DScale(&pInst->velCurr, &pInst->velCurr, frameTime);
-				Vector2DScale(&pInst->velCurr, &pInst->velCurr, MISSILE_SPEED);
-				Vector2DScale(&pInst->velCurr, &pInst->velCurr, 0.4);
 				
+				// travel on inital path for first second of life, then start homing
+				if(pInst->counter < 9)
+				{
+					Vector2D added;
+					Vector2DSet(&added, missileTarget->posCurr.x, missileTarget->posCurr.y);
+					Vector2DScale(&added,&added, frameTime);
+					Vector2DAdd(&pInst->velCurr, &pInst->velCurr, &added);
+					Vector2DScale(&pInst->velCurr, &pInst->velCurr, 0.6);
+					//pInst->dirCurr = atan(pInst->velCurr.y / pInst->velCurr.x) *180 / PI;
+
+					pInst->dirCurr = -atan(pInst->velCurr.y / pInst->velCurr.x) *180 / PI * (float)(frameTime);
+					pInst->dirCurr =  AEWrap(pInst->dirCurr, -PI, PI);
+				}			
 			}
 		}
+	}
+
+
+	// spawn new asteroids after ASTEROID_TIMER seconds
+	if (lastAsteroid > ASTEROID_TIMER)
+	{
+		Vector2D aPos;
+		Vector2D aVel;
+		float dir;
+		
+		Vector2DSet(&aPos, rand()% 800, rand() % -600);
+		Vector2DSet(&aVel, (rand() % 4) - 2.1, (rand() % 4) - 2.1);
+		dir = rand() % 360;
+
+		GameObjInst * spAsteroid = gameObjInstCreate(TYPE_ASTEROID, (rand() % ASTEROID_SIZE) + ASTEROID_SIZE/2, &aPos, &aVel, dir);
+		lastAsteroid = 0;
 	}
 
 
@@ -583,6 +616,7 @@ void GameStateAsteroidsUpdate(void)
 						Vector2DSet(&pInst2->velCurr, 0,0);
 						gameObjInstDestroy(pInst1);
 						sShipLives--;
+						printf("Lives left: %i\n", sShipLives);
 					}
 				}
 				else
@@ -619,6 +653,25 @@ void GameStateAsteroidsUpdate(void)
 					}
 
 				}
+				else if(pInst2->pObject->type == TYPE_LANDMINE)
+				{
+					if(StaticPointToStaticRect(&pInst2->posCurr,&pInst1->posCurr, pInst1->scale,pInst1->scale))
+					{
+						for (int i = 0; i < 4; i++)
+						{
+							Vector2D miniVel = pInst1->velCurr;
+							Vector2D randVel;
+							Vector2DSet(&randVel, i*cosf(rand()%360), i*sinf(rand()%360));
+							Vector2DAdd(&miniVel, &miniVel, &randVel);
+							if(pInst1->scale > ASTEROID_MIN_SIZE)
+								GameObjInst * spAsteroid = gameObjInstCreate(TYPE_ASTEROID, pInst1->scale/2, &pInst1->posCurr, &miniVel, pInst1->dirCurr*i);
+						}
+						sScore += 10;
+						printf("Score %d\n", sScore);
+						gameObjInstDestroy(pInst1);
+						gameObjInstDestroy(pInst2);
+					}
+				}
 			}
 		}
 	}
@@ -650,7 +703,8 @@ void GameStateAsteroidsUpdate(void)
 
 	if (sShipLives == 0 )
 	{
-		gGameStateNext = GS_QUIT;
+		gameObjInstDestroy(spShip);
+		printf("GAME OVER\n SCORE: %i", sScore);
 	}
 }
 
