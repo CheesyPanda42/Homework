@@ -1,0 +1,113 @@
+
+D:\GitHub\Homework\CS525\MatrixLab>a.exe 2 2 
+2 x 2 matrix created at 0x6000421d0
+2 x 2 matrix created at 0x600052290
+2 x 2 matrix created at 0x6000522f0
+Matrix m1 created at 0x6000421d0
+Matrix m2 created at 0x600052290
+Filling 2 x 2 matrix
+0: i
+j: 0
+j: 1
+1: i
+j: 0
+j: 1
+Printing Matrix
+   0    0 
+   0    1 
+
+   0    0 
+   0    1 
+
+   0    0 
+   0    2 
+Freeing matrix
+
+D:\GitHub\Homework\CS525\MatrixLab>a.exe 3 3  
+3 x 3 matrix created at 0x6000421f0
+3 x 3 matrix created at 0x6000522d0
+3 x 3 matrix created at 0x600052350
+Matrix m1 created at 0x6000421f0
+Matrix m2 created at 0x6000522d0
+Filling 3 x 3 matrix
+0: i
+j: 0
+j: 1
+j: 2
+1: i
+j: 0
+j: 1
+j: 2
+2: i
+j: 0
+j: 1
+j: 2
+Printing Matrix
+   0    0    0 
+   0    1    2 
+   0    2    4 
+
+   0    0    0 
+   0    1    2 
+   0    2    4 
+
+   0    0    0 
+   0    2    4 
+   0    4    8 
+Freeing matrix
+
+D:\GitHub\Homework\CS525\MatrixLab>a.exe 4 4 
+4 x 4 matrix created at 0x6000421f0
+4 x 4 matrix created at 0x6000522f0
+4 x 4 matrix created at 0x600052390
+Matrix m1 created at 0x6000421f0
+Matrix m2 created at 0x6000522f0
+Filling 4 x 4 matrix
+0: i
+j: 0
+j: 1
+j: 2
+j: 3
+1: i
+j: 0
+j: 1
+j: 2
+j: 3
+2: i
+j: 0
+j: 1
+j: 2
+j: 3
+3: i
+j: 0
+j: 1
+j: 2
+j: 3
+Printing Matrix
+   0    0    0    0 
+   0    1    2    3 
+   0    2    4    6 
+   0    3    6    9 
+
+   0    0    0    0 
+   0    1    2    3 
+   0    2    4    6 
+   0    3    6    9 
+
+   0    0    0    0 
+   0    2    4    6 
+   0    4    8   12 
+   0    6   12   18 
+Freeing matrix
+
+D:\GitHub\Homework\CS525\MatrixLab>a.exe 5 5  
+
+D:\GitHub\Homework\CS525\MatrixLab>a.exe 6 6  
+
+D:\GitHub\Homework\CS525\MatrixLab>a.exe 7 7  
+
+D:\GitHub\Homework\CS525\MatrixLab>a.exe 8 8 
+
+D:\GitHub\Homework\CS525\MatrixLab>a.exe 9 9 
+
+D:\GitHub\Homework\CS525\MatrixLab>a.exe 10 10 
