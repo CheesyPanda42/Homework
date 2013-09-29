@@ -39,8 +39,6 @@ Matrix matrix_create( int num_rows, int num_columns )
 		}
 	}
 	
-	printf("%i x %i matrix created at %p\n", num_rows, num_columns, m);
-	
 	return m;
 }
 
@@ -64,7 +62,7 @@ Matrix matrix_add( Matrix m1, Matrix m2, Matrix result, int num_rows, int num_co
 Matrix matrix_transpose(Matrix m, int num_rows, int num_columns)
 {
 	int i,j;
-	Matrix m_t;
+	Matrix m_t = matrix_create(num_rows, num_columns);
 	for(i = 0; i < num_rows; i++)
 	{
 		for(j=0; j < num_columns; j++)
@@ -82,11 +80,9 @@ void matrix_delete (Matrix m, int num_rows)
 	int i;
 	for (i = 0; i < num_rows; i++)
 	{
-		printf("Freeing row\n");
 		free (m[i]);
 	}
 	
-	printf("Freeing matrix\n");
 	free (m);
 	
 	return;
@@ -95,9 +91,25 @@ void matrix_delete (Matrix m, int num_rows)
 /* Delete row of matrix */
 void   matrix_delete_row( Matrix m, int r, int num_rows )
 {
-	int i;
-	for (i = 0; i < r; i++)
-	{
-		
-	}
+	int * p_r;
+	p_r = &num_rows;
+	*p_r = 5;
+	printf("numrows: %p , %i;  p_r: %p, %i\n", &num_rows, num_rows, p_r, *p_r);
+	free(m[r]);
+	return;
 }
+
+void   matrix_delete_column( Matrix m, int c, int num_rows, int num_columns )
+{
+	int i, j;
+	void * col;
+	for (i = 0; i < num_rows; i++)
+	{
+		int* l;
+		l = m[i] + c;
+		printf("m[%i][%i]: %p  m[%i] + c =%p\n", i , c, &m[i][c], i, &l);
+		/*free(m[i] + c);*/
+	}
+	return;
+}
+

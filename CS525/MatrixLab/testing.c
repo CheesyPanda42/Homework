@@ -32,17 +32,40 @@ int main(int argc, char** argv)
 		}
 	}
 	
-	printf("Printing Matrix\n");
+	printf("Printing Matrix 1\n");
 	matrix_print(m1, rows, col);
-	printf("\n");
+	printf("Printing Matrix 2\n");
 	matrix_print(m2, rows, col);
 	printf("\n");
 	
 	mres = matrix_add(m1,m2,mres,rows,col);
+	printf("Printing Matrix add\n");
 	matrix_print(mres,rows,col);
-	printf("\n");
+	
+	printf("Printing Matrix trans\n");
 	m_t = matrix_transpose(m1, rows, col);
 	matrix_print (m_t, rows, col);
+	
+	
+	int l;
+	int * m;
+	m = m1[1] + 1;
+	l = *m;
+	printf("%p : %i, l:%p %i\n",&m1[0][2], m1[0][2], m, l);
+	
+	
+	printf("Deleting row\n");
+	matrix_delete_row(m1, 2, rows);
+	printf("Numrows after:%p %i\n",&rows, rows);
+	printf("Deleting column\n");
+	matrix_delete_column(m2, 2, rows, col);
+	
+	printf("Printing Matrix\n");
+	matrix_print(m1, rows, col);
+	printf("\n");
+	matrix_print(m2, rows, col);
+	printf("\n");	
+	
 	
 	printf("Freeing matrix\n");
 	/*matrix_delete(m,rows);*/
