@@ -15,7 +15,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// window handle
 	HWND hWnd;
 
-	hWnd = EGSysInit (hInstance, nCmdShow, 1440, 900, WindowProc, true);
+	hWnd = EGSysInit (hInstance, nCmdShow, 1440, 900, WindowProc, false);
 
 	// enter main loop
 	MSG msg;

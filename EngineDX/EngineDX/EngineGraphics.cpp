@@ -1,10 +1,14 @@
 #include "EngineGraphics.h"
 
 
-// global declarations
-LPDIRECT3D9 d3d;	// pointer to d3d interface
-LPDIRECT3DDEVICE9 d3ddev; // pointer to device class
 
+
+
+
+// global declarations
+LPDIRECT3D9 d3d;								// pointer to d3d interface
+LPDIRECT3DDEVICE9 d3ddev;						// pointer to device class
+LPDIRECT3DVERTEXBUFFER9 v_buffer = NULL;		// pointer to vertex buffer
 
 
 // initialize graphics
@@ -98,6 +102,10 @@ void initD3D(HWND hWnd, bool fullscreen, int winHeight, int winWidth)
 						D3DCREATE_SOFTWARE_VERTEXPROCESSING,
 						&d3dpp,
 						&d3ddev);
+
+	init_graphics();
+
+	d3ddev->SetRenderState(D3DRS_LIGHTING, FALSE);		// turn off 3d lighting
 }
 
 // function to render a frame
@@ -105,8 +113,8 @@ void render_frame(void)
 {
 	int r,g,b;
 	r = 0;
-	g = 100;
-	b = 200;
+	g = 0;
+	b = 0;
 
 	// clear window to blue
 	d3ddev -> Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(r,g,b), 1.0f, 0);
@@ -115,7 +123,44 @@ void render_frame(void)
 	d3ddev -> BeginScene();
 
 	// do rendering on back buffer
-	
+	// select vertex format
+	d3ddev -> SetFVF(CUSTOMFVF);
+
+	// set up pipeline
+	D3DXMATRIX matRotateY;
+
+	static float index = 0.0f; 
+	index += 0.5f;
+
+	D3DXMatrixRotationY(&matRotateY, index);
+
+	d3ddev -> SetTransform (D3DTS_WORLD, &matRotateY);
+
+	D3DXMATRIX matView; 
+
+	D3DXMatrixLookAtLH ( &matView,
+						 &D3DXVECTOR3 (0.0f, 0.0f, 10.0f),    // the camera position
+						 &D3DXVECTOR3 (0.0f, 0.0f, 0.0f),    // the look-at position
+						 &D3DXVECTOR3 (0.0f, 1.0f, 0.0f));    // the up direction
+
+
+	d3ddev->SetTransform(D3DTS_VIEW, &matView);
+
+	D3DXMATRIX matProjection;
+
+	D3DXMatrixPerspectiveFovLH(&matProjection,
+                               D3DXToRadian(45),    // the horizontal field of view
+                               (FLOAT)1400 / (FLOAT)900, // aspect ratio
+                               1.0f,    // the near view-plane
+                               100.0f);    // the far view-plane
+
+    d3ddev->SetTransform(D3DTS_PROJECTION, &matProjection);    // set the projection
+
+	// select vertex buffer to display
+	d3ddev -> SetStreamSource(0, v_buffer, 0, sizeof(CUSTOMVERTEX));
+
+	// copy vertex buffer to back buffer
+	d3ddev-> DrawPrimitive(D3DPT_TRIANGLELIST, 0, 1);
 
 	// end scene
 	d3ddev -> EndScene();
@@ -125,9 +170,46 @@ void render_frame(void)
 }
 
 
+
+// function to put 3d model into vRam
+// probably should become AddTriangle or something similar
+void init_graphics (void)
+{
+	// create vertices
+    // create the vertices using the CUSTOMVERTEX struct
+    CUSTOMVERTEX vertices[] = 
+    {
+        { 3.0f, -3.0f, 0.0f, D3DCOLOR_XRGB(0, 0, 255), },
+        { 0.0f, 3.0f, 0.0f, D3DCOLOR_XRGB(0, 255, 0), },
+        { -3.0f, -3.0f, 0.0f, D3DCOLOR_XRGB(255, 0, 0), },
+    };
+
+    // create a vertex buffer interface called v_buffer
+    d3ddev->CreateVertexBuffer(3*sizeof(CUSTOMVERTEX),
+                               0,
+                               CUSTOMFVF,
+                               D3DPOOL_MANAGED,
+                               &v_buffer,
+                               NULL);
+
+	// void pointer
+	VOID *pVoid;
+
+	// lock vRam and load verticies
+	v_buffer -> Lock(0,0,(void**)&pVoid, 0);
+	memcpy(pVoid, vertices, sizeof(vertices));
+	v_buffer -> Unlock();
+
+
+}
+
+
+
+
 // clean up
 void cleanD3D(void)
 {
+	v_buffer ->Release();
 	d3ddev->Release();
 	d3d->Release();
 }
