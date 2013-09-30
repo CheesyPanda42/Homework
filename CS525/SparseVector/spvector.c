@@ -73,6 +73,75 @@ void printf_rows(ConstRowNode_handle p_r, char *fmt, int dim) {
 }
 
 
+
+/* insert an element into a list 
+ * list is ordered using pos
+ * if position pos is already occupied, the value of the node
+ * should be updated with val
+ * if val=0, then the element should be deleted
+ * return 0 if operation is succesfull 
+ *        1 if malloc failed */
+int insert_element(ElementNode_handle * p_e,int pos,int val)
+{
+	ElementNode_handle head;
+	ElementNode_handle temp;
+	ElementNode_handle insert;
+
+
+
+	
+	insert =(ElementNode_handle) malloc(sizeof(ElementNode));
+	head = *p_e;
+	
+	
+	
+	if(*p_e == 0)
+	{
+		printf("Adding first element!\n");
+		*p_e = insert;
+	}
+	else if(head-> pos > pos)
+	{
+		printf("need to reorganize\n");
+	}
+	
+	
+	
+	temp = *p_e;
+	
+	//printf ("%p, %p\n", p_e, *p_e);
+	printf("Pos: %i, Val %i\n", pos, val);
+	printf("Temp: %p, Insert:%p\n", temp, insert);
+	
+	insert -> pos = pos;
+	insert -> data = val;
+	insert -> next = 0;
+	
+	//*p_e = insert;
+	
+}
+
+
+
+/*
+ * get the value at the given position,
+ * p_e is the head pointer 
+ */
+int  get( ConstElementNode_handle p_e, int pos )
+{
+	ElementNode_handle temp;
+	int i;
+	while (i < pos + 1 && p_e)
+	{
+		temp = p_e->next;
+		i++;
+	}
+	return temp->data;
+}
+
+
+
+
 int  determinant(ConstRowNode_handle p_r,int dim) {
 	/* this is a meaningless code to get rid of "unsed argument" warnings in 
 	 * Borland an MS */
