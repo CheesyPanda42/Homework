@@ -17,12 +17,10 @@ Matrix matrix_create( int num_rows, int num_columns )
 {
 	Matrix m;
 	int i;
-	int * p_m;
-	
-	m = malloc(num_rows *  sizeof(int*));
 	
 	/* Allocate memory for matrix rows */
-	printf("m: %p\n", m);
+	m = (int**) malloc(sizeof * m *num_rows);
+	
 	if (!m)
 	{
 		printf("Error allocating memory\n");
@@ -33,10 +31,7 @@ Matrix matrix_create( int num_rows, int num_columns )
 	
 	for (i = 0; i < num_rows; i++)
 	{
-		m[i] = malloc(num_columns * sizeof(int));
-		
-		//m[i] = p_m + (num_columns * i);
-		printf("m[%i]: %p\n", i, m[i] );
+		m[i] = (int*) malloc(sizeof * m[i] *num_columns);
 		if (!m[i])
 		{
 			printf("Error allocating memory\n");
@@ -96,56 +91,24 @@ void matrix_delete (Matrix m, int num_rows)
 /* Delete row of matrix */
 void   matrix_delete_row( Matrix m, int r, int num_rows )
 {
-	int i;
 	int * p_r;
 	p_r = &num_rows;
-	*p_r--;
+	*p_r = 5;
 	printf("numrows: %p , %i;  p_r: %p, %i\n", &num_rows, num_rows, p_r, *p_r);
-	//free(m[r]);
-	// set m[r] = m[r+1], do so for rest of array, delete last row pointer.
-	// Maybe
-	i = r;
-	while(i < num_rows-1)
-	{
-		m[i] = m[i+1];
-		i++;
-	}
-	free(m[num_rows]);
+	free(m[r]);
 	return;
 }
 
 void   matrix_delete_column( Matrix m, int c, int num_rows, int num_columns )
 {
 	int i, j;
-	/*
+	void * col;
 	for (i = 0; i < num_rows; i++)
 	{
 		printf("m[%i][%i]: %i   [%p];    *(*m+%i)+%i): %i   [%p]\n", i, c, m[i][c], &m[i][c], i,c, *(*(m+i)+c), (*m+i)+c);
 		//free((*(m + i) + c));
-		free(&m[i][num_columns]);
+		free(&m[i][c]);
 	}
-	*/
-	// set m[i][c] to m[i][c+1]
-	// do so for rest of row
-	// do so for all rows
-	// remove last column
-	
-	i = 0;
-	j = c;
-	while (i < num_rows)
-	{
-		printf(" i: %i\n", i);
-		while (j < num_columns-1)
-		{
-			printf("j: %i\n");
-			m[i][j] = m[i][j+1];
-			j++;
-		}
-		free((m+i)+num_columns);
-		i++;
-	}
-	
-	
 	return;
 }
 

@@ -27,6 +27,7 @@ int main(int argc, char** argv)
 		for (j = 0; j < col; j++)
 		{
 			printf("j: %i\n", j);
+			printf("m1[%i][%i]: %p;    m2[%i][%i]: %p\n", i,j, &m1[i][j], i, j, &m2[i][j]);
 			m1[i][j] = (rand() + (i*j+1)) % 100;
 			m2[i][j] = (rand() + (i*j+1)) % 100;
 		}
@@ -56,15 +57,11 @@ int main(int argc, char** argv)
 	
 	printf("Deleting row\n");
 	matrix_delete_row(m1, 2, rows);
+	matrix_print(m1, rows-1, col);
 	printf("Numrows after:%p %i\n",&rows, rows);
 	printf("Deleting column\n");
 	matrix_delete_column(m2, 2, rows, col);
-	
-	printf("Printing Matrix\n");
-	matrix_print(m1, rows, col);
-	printf("\n");
-	matrix_print(m2, rows, col);
-	printf("\n");	
+	matrix_print(m1, rows, col-1);
 	
 	
 	printf("Freeing matrix\n");
