@@ -41,15 +41,4 @@ Rectangle1: Center is pRect1, width is "Width1" and height is "Height1"
 int StaticRectToStaticRect(Vector2D *pRect0, float Width0, float Height0, Vector2D *pRect1, float Width1, float Height1);
 
 
-
-/*
-This function checks if a static circle is intersecting with a static rectangle
-
-Circle:		Center is "Center", radius is "Radius"
-Rectangle:	Center is "Rect", width is "Width" and height is "Height"
-Function returns true is the circle and rectangle are intersecting, otherwise it returns false
-*/
-
-int StaticCircleToStaticRectangle(Vector2D *pCenter, float Radius, Vector2D *pRect, float Width, float Height);  
-
 #endif

@@ -15,7 +15,10 @@
 
 #include "AEEngine.h"
 #include "GameStateMgr.h"
-
+#include "Math2D.h"
+#include "Vector2D.h"
+#include "Matrix2D.h"
+#include <fstream>
 // ---------------------------------------------------------------------------
 
 #define GAME_OBJ_NUM_MAX			32
@@ -75,11 +78,11 @@ typedef struct
 	GameObj*		pObject;	// pointer to the 'original'
 	unsigned int	flag;		// bit flag or-ed together
 	float			scale;
-	AEVec2			posCurr;	// object current position
-	AEVec2			velCurr;	// object current velocity
+	Vector2D			posCurr;	// object current position
+	Vector2D			velCurr;	// object current velocity
 	float			dirCurr;	// object current direction
 
-	AEMtx33			transform;	// object drawing matrix
+	Matrix2D			transform;	// object drawing matrix
 
 	//Used to hold the current 
 	int				gridCollisionFlag;
@@ -109,7 +112,7 @@ static int **MapData;
 static int **BinaryCollisionArray;
 static int BINARY_MAP_WIDTH;
 static int BINARY_MAP_HEIGHT;
-static AEMtx33 MapTransform;
+static Matrix2D MapTransform;
 int GetCellValue(int X, int Y);
 int CheckInstanceBinaryMapCollision(float PosX, float PosY, float scaleX, float scaleY);
 void SnapToCell(float *Coordinate);
@@ -126,7 +129,7 @@ void FreeMapData(void);
 
 
 // function to create/destroy a game object instance
-static GameObjInst*	gameObjInstCreate (unsigned int type, float scale, AEVec2* pPos, AEVec2* pVel, float dir, enum STATE startState);
+static GameObjInst*	gameObjInstCreate (unsigned int type, float scale, Vector2D* pPos, Vector2D* pVel, float dir, enum STATE startState);
 static void			gameObjInstDestroy(GameObjInst* pInst);
 
 //We need a pointer to the hero's instance for input purposes
@@ -142,7 +145,7 @@ void GameStatePlatformLoad(void)
 	float CircleAngleStep, i;
 	int Parts;
 	GameObj* pObj;
-	AEMtx33 mapScale, mapTrans;
+	Matrix2D mapScale, mapTrans;
 
 
 	sGameObjList = (GameObj *)calloc(GAME_OBJ_NUM_MAX, sizeof(GameObj));
@@ -286,7 +289,12 @@ void GameStatePlatformLoad(void)
 	Compute a scaling matrix and save it in "mapScale")
 	Concatenate scale * translate and save the result in "MapTransform"
 	***********/
-
+	Matrix2D MapTrans;
+	Matrix2D MapScale;
+	
+	Matrix2DTranslate (&MapTrans, -BINARY_MAP_WIDTH/2,-BINARY_MAP_WIDTH/2);
+	Matrix2DScale     (&MapScale, 1, 1);
+	Matrix2DConcat   (&MapTransform, &MapTrans, &MapScale);
 	
 }
 
@@ -294,7 +302,7 @@ void GameStatePlatformInit(void)
 {
 	int i, j;
 	GameObjInst *pInst;
-	AEVec2 Pos;
+	Vector2D Pos;
 
 	pHero = 0;
 	TotalCoins = 0;
@@ -323,14 +331,34 @@ void GameStatePlatformInit(void)
 		 - if the element represents a coin
 			Create a coin instance
 			Set its position depending on its array indices in MapData
-
-
-
-			
 	***********/
 	for(i = 0; i < BINARY_MAP_WIDTH; ++i)
 		for(j = 0; j < BINARY_MAP_HEIGHT; ++j)
 		{
+			int scale = 5;
+			Vector2D pos;
+			Vector2D vel;
+			Vector2DSet(&pos, BINARY_MAP_WIDTH*j, BINARY_MAP_HEIGHT*i);
+			Vector2DSet(&vel, 0,0);
+			switch(MapData[i][j])
+			{
+			case(TYPE_OBJECT_EMPTY):
+									{
+										gameObjInstCreate(TYPE_OBJECT_EMPTY, scale, &pos,&vel, 0,STATE_NONE);
+										break;
+									}
+			case(TYPE_OBJECT_COLLISION):
+									{
+										gameObjInstCreate(TYPE_OBJECT_COLLISION, scale, &pos,&vel, 0,STATE_NONE);
+										break;
+									}
+			case(TYPE_OBJECT_HERO):
+				break;
+			case(TYPE_OBJECT_ENEMY1):
+				break;
+			case(TYPE_OBJECT_COIN):
+				break;
+			}
 		}
 }
 
@@ -464,19 +492,19 @@ void GameStatePlatformUpdate(void)
 	//Computing the transformation matrices of the game object instances
 	for(i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
 	{
-		AEMtx33 scale, rot, trans;
+		Matrix2D scale, rot, trans;
 		GameObjInst *pInst = sGameObjInstList + i;
 
 		// skip non-active object
 		if (0 == (pInst->flag & FLAG_ACTIVE))
 			continue;
 
-		AEMtx33Scale(&scale, pInst->scale, pInst->scale);
-		AEMtx33Rot(&rot, pInst->dirCurr);
-		AEMtx33Trans(&trans, pInst->posCurr.x, pInst->posCurr.y);
+		Matrix2DScale(&scale, pInst->scale, pInst->scale);
+		Matrix2DRotDeg(&rot, pInst->dirCurr);
+		Matrix2DTranslate(&trans, pInst->posCurr.x, pInst->posCurr.y);
 
-		AEMtx33Concat(&pInst->transform, &trans, &rot);
-		AEMtx33Concat(&pInst->transform, &pInst->transform, &scale);
+		Matrix2DConcat(&pInst->transform, &trans, &rot);
+		Matrix2DConcat(&pInst->transform, &pInst->transform, &scale);
 	}
 }
 
@@ -484,7 +512,7 @@ void GameStatePlatformDraw(void)
 {
 	//Drawing the tile map (the grid)
 	int i, j;
-	AEMtx33 cellTranslation, cellFinalTransformation;
+	Matrix2D cellTranslation, cellFinalTransformation;
 	double frameTime;
 	char strBuffer[100];
 
@@ -523,6 +551,9 @@ void GameStatePlatformDraw(void)
 			continue;
 		
 		//Don't forget to concatenate the MapTransform matrix with the transformation of each game object instance
+		
+		
+		
 
 	}
 
@@ -550,10 +581,10 @@ void GameStatePlatformUnload(void)
 }
 
 
-GameObjInst* gameObjInstCreate(unsigned int type, float scale, AEVec2* pPos, AEVec2* pVel, float dir, enum STATE startState)
+GameObjInst* gameObjInstCreate(unsigned int type, float scale, Vector2D* pPos, Vector2D* pVel, float dir, enum STATE startState)
 {
 	unsigned int i;
-	AEVec2 zero = { 0.0f, 0.0f };
+	Vector2D zero = { 0.0f, 0.0f };
 
 	AE_ASSERT_PARM(type < sGameObjNum);
 	
@@ -594,35 +625,188 @@ void gameObjInstDestroy(GameObjInst* pInst)
 	pInst->flag = 0;
 }
 
+
+//import map data
+int ImportMapDataFromFile(char *FileName)
+{
+	std::fstream input;
+	int read;
+	char dummy[10];
+	int i,j;
+	
+	// dummy string for input
+	memset(dummy,0,10);
+
+	// Open map fine and ensure it opened correctly
+	input.open(FileName);
+	if (!input.is_open())
+	{
+		printf("Couldn't open file %s/n", FileName);
+		return 0;
+	}
+
+	// Get width data
+	input >> dummy;
+	input >> BINARY_MAP_WIDTH;
+
+	// Get height data
+	input >> dummy;
+	input >> BINARY_MAP_HEIGHT;
+
+	// Initialize map and collision data arrays
+	MapData = new int * [BINARY_MAP_HEIGHT];
+	BinaryCollisionArray = new int * [BINARY_MAP_HEIGHT];
+
+	for (i = 0; i < BINARY_MAP_HEIGHT; i++)
+	{
+		MapData[i] = new int[BINARY_MAP_WIDTH];
+		BinaryCollisionArray[i] = new int[BINARY_MAP_HEIGHT];
+	}
+
+	// Read in map and collision data
+	while(!input.eof())
+	{
+		for (i = 0; i < BINARY_MAP_WIDTH; i++)
+		{
+			for (j = 0; j < BINARY_MAP_HEIGHT; j++)
+			{
+				// if map data is a collision point, store in collision data
+				// all other cases, collision data is 0
+				input >> MapData[j][(BINARY_MAP_WIDTH-1)-i];
+				if (MapData[i][j] == 1) BinaryCollisionArray[i][j] = MapData[i][j];
+				else BinaryCollisionArray[i][j] = 0;
+			}
+		}
+	}
+
+	input.close();
+	return 1;
+}
+
+void FreeMapData(void)
+{
+	int i;
+	{
+		for (i = 0; i < BINARY_MAP_WIDTH; i++)
+		{
+			delete[] MapData[i];
+			delete[] BinaryCollisionArray[i];
+		}
+		delete[] MapData;
+		delete[] BinaryCollisionArray;
+	}
+} 
+
+void PrintRetrievedInformation(void)
+{
+	int i, j;
+
+	printf("Width: %i\n", BINARY_MAP_WIDTH);
+	printf("Height: %i\n", BINARY_MAP_HEIGHT);
+
+	printf("Map Data:\n");
+	for(j = BINARY_MAP_HEIGHT - 1; j >= 0; --j)
+	{
+		for(i = 0; i < BINARY_MAP_WIDTH; ++i)
+		{
+			printf("%i ", MapData[i][j]);
+		}
+
+		printf("\n");
+	}
+
+	printf("\n\nBinary Collision Data:\n");
+	for(j = BINARY_MAP_HEIGHT - 1; j >= 0; --j)
+	{
+		for(i = 0; i < BINARY_MAP_WIDTH; ++i)
+		{
+			printf("%i ", BinaryCollisionArray[i][j]);
+		}
+
+		printf("\n");
+	}
+}
+
+
 int GetCellValue(int X, int Y)
 {
-	return 0;
+	int cellData;
+
+	if (X > BINARY_MAP_WIDTH-1 || X < 0 || Y > BINARY_MAP_HEIGHT-1 || Y < 0)
+	{
+		return 0;
+	}
+
+	cellData = BinaryCollisionArray[X][Y];
+
+	return cellData;
 }
 
 
 int CheckInstanceBinaryMapCollision(float PosX, float PosY, float scaleX, float scaleY)
 {
-	//At the end of this function, "Flag" will be used to determine which sides
-	//of the object instance are colliding. 2 hot spots will be placed on each side.
-	return 0;
+	int Flag = 0;
+	float x1, x2, y1, y2;
+
+	// check top
+		// HS 1
+		y1 = PosY + scaleY/2;
+		x1 = PosX + scaleX/4;
+		// HS 2
+		y2 = PosY + scaleY/2;
+		x2 = PosX - scaleX/4;
+
+	if(GetCellValue(x1,y1) == 1) Flag |= COLLISION_TOP;
+	if(GetCellValue(x2,y2) == 1) Flag |= COLLISION_TOP;
+
+	// check bottom
+		// HS 1
+		y1 = PosY - scaleY/2;
+		x1 = PosX + scaleX/4;
+		// HS 2
+		y2 = PosY - scaleY/2;
+		x2 = PosX - scaleX/4;		
+
+	if(GetCellValue(x1,y1) == 1) Flag |= COLLISION_BOTTOM;
+	if(GetCellValue(x2,y2) == 1) Flag |= COLLISION_BOTTOM;
+
+
+	// check left
+		// HS 1
+		y1 = PosY + scaleY/4;
+		x1 = PosX - scaleX/2;
+		// HS 2
+		y2 = PosY - scaleY/4;
+		x2 = PosX - scaleX/2;		
+
+	if(GetCellValue(x1,y1) == 1) Flag |= COLLISION_LEFT;
+	if(GetCellValue(x2,y2) == 1) Flag |= COLLISION_LEFT;
+
+
+	// check right
+		// HS 1
+		y1 = PosY + scaleY/4;
+		x1 = PosX + scaleX/2;
+		// HS 2
+		y2 = PosY - scaleY/4;
+		x2 = PosX + scaleX/2;		
+
+	if(GetCellValue(x1,y1) == 1) Flag |= COLLISION_RIGHT;
+	if(GetCellValue(x2,y2) == 1) Flag |= COLLISION_RIGHT;
+
+	return Flag;
 }
 
 
 void SnapToCell(float *Coordinate)
 {
-
-}
-
-int ImportMapDataFromFile(char *FileName)
-{
-	return 0;
+	*Coordinate = (int)*Coordinate + 0.5;
 }
 
 
-void FreeMapData(void)
-{
 
-}
+
+
 
 void EnemyStateMachine(GameObjInst *pInst)
 {

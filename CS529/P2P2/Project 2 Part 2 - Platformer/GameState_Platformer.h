@@ -11,7 +11,7 @@
 #ifndef GAME_STATE_PLATFORM_H
 #define GAME_STATE_PLATFORM_H
 
-// ---------------------------------------------------------------------------
+// ---------------------------------w------------------------------------------
 
 void GameStatePlatformLoad(void);
 void GameStatePlatformInit(void);

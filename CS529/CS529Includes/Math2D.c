@@ -72,18 +72,3 @@ int StaticRectToStaticRect(Vector2D *pRect0, float Width0, float Height0, Vector
 	if (r1 < l2 || r2 < l1 || t1 < b2 || t2 < b1) collision = 0;
 	return collision;
 }
-
-
-/*
-This function checks if a static circle is intersecting with a static rectangle
-
-Circle:		Center is "Center", radius is "Radius"
-Rectangle:	Center is "Rect", width is "Width" and height is "Height"
-Function returns true is the circle and rectangle are intersecting, otherwise it returns false
-*/
-
-int StaticCircleToStaticRectangle(Vector2D *pCenter, float Radius, Vector2D *pRect, float Width, float Height)
-{
-	int collision = 1;
-	return collision;
-}
