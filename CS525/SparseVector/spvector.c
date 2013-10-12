@@ -58,7 +58,7 @@ void printf_rows(ConstRowNode_handle p_r, char *fmt, int dim) {
 	int i,j,last_pos=-1;
 	while (p_r) {
 		for (i=last_pos+1;i<p_r->pos;++i) { /* output row of 0's */
-			for (j=0;j<dim;++j) printf(fmt,0); 
+			for (j=0;j<dim;++j) printf(fmt,0);
 			printf("\n");
 		}
 		printf_elements(p_r->elements,fmt,dim);
@@ -67,65 +67,101 @@ void printf_rows(ConstRowNode_handle p_r, char *fmt, int dim) {
 		p_r = p_r->next;
 	}
 	for (i=last_pos+1;i<dim;++i) { /* output row of 0's */
-		for (j=0;j<dim;++j) printf(fmt,0); 
+		for (j=0;j<dim;++j) printf(fmt,0);
 		printf("\n");
 	}
 }
 
 
 
-/* insert an element into a list 
+/* insert an element into a list
  * list is ordered using pos
  * if position pos is already occupied, the value of the node
  * should be updated with val
  * if val=0, then the element should be deleted
- * return 0 if operation is succesfull 
+ * return 0 if operation is succesfull
  *        1 if malloc failed */
 int insert_element(ElementNode_handle * p_e,int pos,int val)
 {
-	ElementNode_handle head;
-	ElementNode_handle temp;
-	ElementNode_handle insert;
+	ElementNode * head_node;
+	ElementNode * pNode;
+	ElementNode * curr;
+	ElementNode * prev;
+	int curr_pos;
+	bool found;
 
-
-
-	
-	insert =(ElementNode_handle) malloc(sizeof(ElementNode));
-	head = *p_e;
-	
-	
-	
-	if(*p_e == 0)
+	found = false;
+	curr_pos = 0;
+	//printf("p_e: %p,    %p\n Data:   %d    pos:     %d\n", p_e, *p_e, val, pos);
+	if(!*p_e)
 	{
-		printf("Adding first element!\n");
-		*p_e = insert;
+		//printf("NULL POINTER\n");
+		head_node = (ElementNode*) malloc(sizeof(ElementNode));
+		*p_e = head_node;
+		head_node -> data = val;
+		head_node -> pos = pos;
+		head_node -> next = 0;
 	}
-	else if(head-> pos > pos)
+	else
 	{
-		printf("need to reorganize\n");
+		head_node = *p_e;
+
+		pNode = (ElementNode*) malloc(sizeof(ElementNode));
+		pNode -> data = val;
+		pNode -> pos  = pos;
+		pNode -> next = 0;
+		printf("\npNode: %p    data: %d      pos: %d\n", pNode, pNode->data, pNode -> pos);
+
+		curr = head_node;
+
+		while(!found)
+		{
+			// Insert new head
+			if ( pos < head_node-> pos)
+			{
+				printf("\nNew head\n");
+				*p_e = pNode;
+				pNode->next = curr;
+		 		printf("\nInsert at head: data:  %d    pos:  %d     node:    %p      next:    %p\n",pNode->data, pNode->pos, pNode, pNode->next);
+				printf("\nHead points to: %p    data: %d    pos %d\n", pNode->next, pNode->next->data, pNode->next->pos);
+				found = true;
+				break;
+			}
+
+
+			prev = curr;
+			printf("\ncurr->data: %d        curr->pos:     %d\n", curr->data,  curr->pos);
+			curr = curr->next;
+
+
+			// inserting at end of list
+			if(!curr)
+			{
+				printf("\nInsert at end: data:  %d    pos:  %d     node:    %p      next:    %p\n",pNode->data, pNode->pos, pNode, pNode->next);
+				curr = pNode;
+				found = true;
+			}
+			// inserting in middle of list
+			else if(curr -> pos > pos)
+			{
+				printf("\ninsert middle - pos: %d    curr->pos: %d\n", pos, curr->pos);
+				pNode->next = curr;
+				prev->next = pNode;
+				found = true;
+			}
+
+		}
+		printf("outside loop\n");
+		//curr->next  = pNode;
 	}
-	
-	
-	
-	temp = *p_e;
-	
-	//printf ("%p, %p\n", p_e, *p_e);
-	printf("Pos: %i, Val %i\n", pos, val);
-	printf("Temp: %p, Insert:%p\n", temp, insert);
-	
-	insert -> pos = pos;
-	insert -> data = val;
-	insert -> next = 0;
-	
-	//*p_e = insert;
-	
+    return 0;
 }
 
 
 
 /*
  * get the value at the given position,
- * p_e is the head pointer 
+ * p_e is the head pointer
  */
 int  get( ConstElementNode_handle p_e, int pos )
 {
@@ -143,7 +179,7 @@ int  get( ConstElementNode_handle p_e, int pos )
 
 
 int  determinant(ConstRowNode_handle p_r,int dim) {
-	/* this is a meaningless code to get rid of "unsed argument" warnings in 
+	/* this is a meaningless code to get rid of "unsed argument" warnings in
 	 * Borland an MS */
 	int result=1;
 	if (dim==0) ++result;

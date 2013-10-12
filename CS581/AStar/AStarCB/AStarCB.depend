@@ -1,0 +1,29 @@
+# depslib dependency file v1.0
+1380756976 source:d:\github\homework\cs581\astar\astarcb\astar.cpp
+	"astar.h"
+
+1381526498 d:\github\homework\cs581\astar\astarcb\astar.h
+	<list>
+	<queue>
+	<vector>
+	<stdio.h>
+	<map>
+	<functional>
+
+1380778322 source:d:\github\homework\cs581\astar\astarcb\driver.cpp
+	<iostream>
+	<iomanip>
+	<fstream>
+	<algorithm>
+	<cmath>
+	<cstring>
+	<ctime>
+	"graph.h"
+	"astar.h"
+
+1379536016 d:\github\homework\cs581\astar\astarcb\graph.h
+	<vector>
+	<map>
+	<algorithm>
+	<cstdio>
+

@@ -18,7 +18,7 @@
 // ---------------------------------------------------------------------------
 // Static function protoypes
 
-
+LRESULT CALLBACK dummy(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 // ---------------------------------------------------------------------------
 // main
 
@@ -77,3 +77,8 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 }
 
 // ---------------------------------------------------------------------------
+
+LRESULT CALLBACK dummy(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	return DefWindowProc(hWnd,message,wParam,lParam);
+}

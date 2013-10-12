@@ -7,5 +7,5 @@ delete column 2 =
    3    2 
    6    5 
 transpose =
-   0    3    0 
-  -1    2    0 
+   0    3    6 
+  -1    2    5 

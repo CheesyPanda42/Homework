@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cstdlib>
-#include <Windows.h>
-#include <WindowsX.h>
+
 #include "EngineGraphics.h"
 
 using namespace std;

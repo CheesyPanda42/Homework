@@ -1,0 +1,31 @@
+	/*
+	for (i = 0; i < num_rows; i++)
+	{
+		printf("m[%i][%i]: %i   [%p];    *(*m+%i)+%i): %i   [%p]\n", i, c, m[i][c], &m[i][c], i,c, *(*(m+i)+c), (*m+i)+c);
+		//free((*(m + i) + c));
+		free(&m[i][num_columns]);
+	}
+	*/
+	// set m[i][c] to m[i][c+1]
+	// do so for rest of row
+	// do so for all rows
+	// remove last column
+	
+	i = 0;
+	j = c;
+	while (i < num_rows)
+	{
+		j = c;
+		printf(" i: %i\n", i);
+		while (j < num_columns-1)
+		{
+			printf("j: %i\n");
+			printf("m[%i][%i]: %i\n", i, j, *(m[i]+j));
+			m[i][j] = m[i][j+1];
+			printf("m[%i][%i]: %i\n", i, j, *(m[i]+j));
+			j++;
+		}
+		//free(m[i]+j);
+		i++;
+	}
+	

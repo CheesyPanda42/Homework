@@ -8,9 +8,9 @@ delete column 2 =
    6    5 
 delete row 1 =
    0   -1 
-   0    0 
+   6    5 
 delete column 1 =
    0 
-   0 
+   6 
 delete row 0 =
-   0 
+   6 

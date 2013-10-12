@@ -75,24 +75,24 @@ typedef struct
 
 typedef struct
 {
-	GameObj*		pObject;	// pointer to the 'original'
-	unsigned int	flag;		// bit flag or-ed together
-	float			scale;
+	GameObj*			pObject;	// pointer to the 'original'
+	unsigned int		flag;		// bit flag or-ed together
+	float				scale;
 	Vector2D			posCurr;	// object current position
 	Vector2D			velCurr;	// object current velocity
-	float			dirCurr;	// object current direction
+	float				dirCurr;	// object current direction
 
 	Matrix2D			transform;	// object drawing matrix
 
 	//Used to hold the current 
-	int				gridCollisionFlag;
+	int					gridCollisionFlag;
 
 	// pointer to custom data specific for each object type
-	void*			pUserData;
+	void*				pUserData;
 
 	//State of the object instance
-	enum			STATE state;
-	enum			INNER_STATE innerState;
+	enum				STATE state;
+	enum				INNER_STATE innerState;
 
 	//General purpose counter (This variable will be used for the enemy state machine)
 	double			counter;
@@ -118,6 +118,7 @@ int CheckInstanceBinaryMapCollision(float PosX, float PosY, float scaleX, float 
 void SnapToCell(float *Coordinate);
 int ImportMapDataFromFile(char *FileName);
 void FreeMapData(void);
+void PrintRetrievedInformation(void);
 
 
 //Collision flags
@@ -187,14 +188,14 @@ void GameStatePlatformLoad(void)
 	//2nd argument: Y
 	//3rd argument: ARGB
 	AEGfxTriAdd(
-		-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 0.0f, 
-		 0.5f,  -0.5f, 0xFFFFFFFF, 0.0f, 0.0f, 
-		-0.5f,  0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+		-0.5f, -0.5f, 0xFF00FFFF, 0.0f, 0.0f, 
+		 0.5f,  -0.5f, 0xFF00FFFF, 0.0f, 0.0f, 
+		-0.5f,  0.5f, 0xFF00FFFF, 0.0f, 0.0f);
 	
 	AEGfxTriAdd(
-		-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f, 
-		 0.5f,  -0.5f, 0xFFFFFFFF, 0.0f, 0.0f, 
-		0.5f,  0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+		-0.5f, 0.5f, 0xFF00FFFF, 0.0f, 0.0f, 
+		 0.5f,  -0.5f, 0xFF00FFFF, 0.0f, 0.0f, 
+		0.5f,  0.5f, 0xFF00FFFF, 0.0f, 0.0f);
 
 	pObj->pMesh = AEGfxTriEnd();
 
@@ -276,6 +277,8 @@ void GameStatePlatformLoad(void)
 	if(!ImportMapDataFromFile("Exported.txt"))
 		gGameStateNext = GS_QUIT;
 
+	PrintRetrievedInformation();
+
 
 	//Computing the matrix which take a point out of the normalized coordinates system
 	//of the binary map
@@ -293,8 +296,8 @@ void GameStatePlatformLoad(void)
 	Matrix2D MapScale;
 	
 	Matrix2DTranslate (&MapTrans, -BINARY_MAP_WIDTH/2,-BINARY_MAP_WIDTH/2);
-	Matrix2DScale     (&MapScale, 1, 1);
-	Matrix2DConcat   (&MapTransform, &MapTrans, &MapScale);
+	Matrix2DScale     (&MapScale, 40, 25);
+	Matrix2DConcat    (&MapTransform, &MapScale, &MapTrans);
 	
 }
 
@@ -333,12 +336,12 @@ void GameStatePlatformInit(void)
 			Set its position depending on its array indices in MapData
 	***********/
 	for(i = 0; i < BINARY_MAP_WIDTH; ++i)
-		for(j = 0; j < BINARY_MAP_HEIGHT; ++j)
+		for(j = 0; j < BINARY_MAP_HEIGHT; ++j) 
 		{
-			int scale = 5;
+			int scale = 1;
 			Vector2D pos;
 			Vector2D vel;
-			Vector2DSet(&pos, BINARY_MAP_WIDTH*j, BINARY_MAP_HEIGHT*i);
+			Vector2DSet(&pos,i,j);
 			Vector2DSet(&vel, 0,0);
 			switch(MapData[i][j])
 			{
@@ -353,11 +356,24 @@ void GameStatePlatformInit(void)
 										break;
 									}
 			case(TYPE_OBJECT_HERO):
-				break;
+									{	
+										Hero_Initial_X = i;
+										Hero_Initial_Y = j;
+										pHero = gameObjInstCreate(TYPE_OBJECT_HERO, scale, &pos,&vel, 0,STATE_NONE);
+										break;
+									}
 			case(TYPE_OBJECT_ENEMY1):
-				break;
+									{
+										gameObjInstCreate(TYPE_OBJECT_ENEMY1, scale, &pos,&vel, 0,STATE_NONE);
+										break;
+									}
 			case(TYPE_OBJECT_COIN):
-				break;
+									{
+										gameObjInstCreate(TYPE_OBJECT_COIN, scale, &pos,&vel, 0,STATE_NONE);
+										break;
+									}
+			default:
+									break;
 			}
 		}
 }
@@ -402,6 +418,25 @@ void GameStatePlatformUpdate(void)
 	***********/
 
 
+	if(AEInputCheckCurr(VK_RIGHT))
+	{
+		pHero->velCurr.x = MOVE_VELOCITY_HERO;
+	}
+	else if(AEInputCheckCurr(VK_LEFT))
+	{
+		pHero->velCurr.x = -MOVE_VELOCITY_HERO;
+	}
+	else
+	{
+		Vector2DSet(&pHero->velCurr, 0, 0);
+	}
+
+
+	if(AEInputCheckTriggered('Q'))
+	{
+		gGameStateNext = GS_QUIT;
+	}
+
 	//Update object instances physics and behavior
 	for(i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
 	{
@@ -419,6 +454,9 @@ void GameStatePlatformUpdate(void)
 		If object instance is an enemy
 			Apply enemy state machine
 		****************/
+		if(pInst->pObject->type == TYPE_OBJECT_HERO)
+			pInst->velCurr.y += (GRAVITY*frameTime);
+
 	}
 
 	//Update object instances positions
@@ -433,6 +471,8 @@ void GameStatePlatformUpdate(void)
 		/**********
 		update the position using: P1 = V1*t + P0
 		**********/
+		Vector2DScale(&pInst->velCurr, &pInst->velCurr, frameTime);
+		Vector2DAdd (&pInst->posCurr, &pInst->posCurr, &pInst->velCurr);
 	}
 
 	//Check for grid collision
@@ -551,8 +591,9 @@ void GameStatePlatformDraw(void)
 			continue;
 		
 		//Don't forget to concatenate the MapTransform matrix with the transformation of each game object instance
-		
-		
+		Matrix2DConcat(&pInst->transform, &MapTransform, &pInst->transform);
+		AEGfxSetTransform(pInst->transform.m);
+		AEGfxTriDraw(pInst->pObject->pMesh);
 		
 
 	}

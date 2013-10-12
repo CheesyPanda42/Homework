@@ -1,0 +1,28 @@
+# depslib dependency file v1.0
+1381352958 source:d:\github\homework\cs525\sparsevector\spvector.c
+	<stdlib.h>
+	<stdio.h>
+	"spvector.h"
+
+1380005412 d:\github\homework\cs525\sparsevector\spvector.h
+	<stdio.h>
+
+1381351070 source:d:\github\homework\cs525\sparsevector\testing.c
+	"spvector.h"
+	<stdio.h>
+
+1381566010 source:d:\github\homework\cs525\sparsevectorcb\spvector.c
+	<stdlib.h>
+	<stdio.h>
+	"spvector.h"
+
+1380005412 d:\github\homework\cs525\sparsevectorcb\spvector.h
+	<stdio.h>
+
+1381564110 source:d:\github\homework\cs525\sparsevectorcb\testing.c
+	"spvector.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+

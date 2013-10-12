@@ -1,9 +1,13 @@
-a.exe 2 2
-a.exe 3 3 
-a.exe 4 4
-a.exe 5 5 
-a.exe 6 6 
-a.exe 7 7 
-a.exe 8 8
-a.exe 9 9
-a.exe 10 10
+make 0
+make 1
+make 2
+make 3
+make 4
+make 5
+make 6
+make 7
+make 8
+make 9
+make 10
+make 11
+

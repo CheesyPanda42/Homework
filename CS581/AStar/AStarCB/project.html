@@ -1,0 +1,45 @@
+<html>
+<title>
+A* project
+</title>
+<body>
+For this assignment you have to implement A* search algorithm.
+
+<br>
+<a href=".">files</a>
+<br>
+<a href="project.zip">zipped files</a>
+
+<p>
+See the provided code. 
+Notes: 
+<ul>
+<li>you are only modifying "astar.cpp" and "astar.h". Graph implementation is fixed. 
+<li>Graph implementation <a href="graph.h">graph.h</a> uses templates to allow user-defined vertices and edges. 
+<li>If you need more functionality from Graph class - email me and
+I'll consider your request, do not modify Graph yourself!
+<li>Your Astar class should implement all methods currently called by the driver. You may define new methods of Astar class.
+<li>maps should be in 24-bit bmp format. Colors do not matter: black (all 3 bytes 0) means obstacle, otherwise it's passable.
+<li>my times for bigger maps: test9 - 1.389s, test 10 - 7.191s
+<li>Callbacks are for debugging/grading/visualizations purpose only. You have to have a call to OnIteration in the beginning of 
+each A* loop and a call to OnFinish in the end of the search function. When grading efficiency of your implementation the callback will be empty.
+    <ol>
+        <li>You code <b>does not have to</b> compile with Callback2 and Callback3. But it may be easier to debug if it does. Currently Callback2
+        prints both closed and open lists - you may add you own code. Callback3 creates a bmp image with closed and open lists drawn 
+        on the original map file. Take a look at the output as a "movie" to see how your implementation works. Or just create an actual movie using "mencoder":
+        <br>
+        mencoder "mf://frame*.bmp" -mf fps=25 -o output.avi -ovc lavc -lavcopts vcodec=mpeg4
+        <br>or any other software
+        <li>currently driver is using Callback (empty OnIteration and OnFinish). To switch to another Callback modify line "#define USECALLBACK1" in the driver.
+    </ol>
+</ul>
+<hr>
+	
+<p><b>To submit</b>
+<ul>
+<li><tt>astar.h</tt>
+<li><tt>astar.cpp</tt> - possibly empty
+</ul>
+
+	</body>
+	</html>

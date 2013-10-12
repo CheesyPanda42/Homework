@@ -64,10 +64,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="EngineGraphics.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="GameState.cpp" />
+    <ClCompile Include="gamestatetest.cpp" />
+    <ClCompile Include="StateManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EngineGraphics.h" />
+    <ClInclude Include="GameState.h" />
+    <ClInclude Include="StateManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="CS230SimpleDemo" />
+		<Option pch_mode="2" />
+		<Option compiler="cygwin" />
+		<Build>
+			<Target title="Debug Win32">
+				<Option output="Project 2 Part 2 - Platformer" prefix_auto="1" extension_auto="1" />
+				<Option type="0" />
+				<Option compiler="msvc10" />
+				<Compiler>
+					<Add option="/DWIN32" />
+					<Add option="/D_DEBUG" />
+					<Add option="/D_WINDOWS" />
+					<Add directory="../Alpha_Engine" />
+				</Compiler>
+				<Linker>
+					<Add option="/debug" />
+					<Add directory="../Lib" />
+				</Linker>
+			</Target>
+			<Target title="Release Win32">
+				<Option output="Project 2 Part 2 - Platformer" prefix_auto="1" extension_auto="1" />
+				<Option type="0" />
+				<Option compiler="cygwin" />
+				<Compiler>
+					<Add option="/DWIN32" />
+					<Add option="/DNDEBUG" />
+					<Add option="/D_WINDOWS" />
+					<Add directory="../Alpha_Engine" />
+				</Compiler>
+				<Linker>
+					<Add option="/debug" />
+					<Add directory="../Lib" />
+				</Linker>
+			</Target>
+		</Build>
+		<Unit filename="AEEngine.h" />
+		<Unit filename="AEFrameRateController.h" />
+		<Unit filename="AEGameStateMgr.h" />
+		<Unit filename="AEGraphics.h" />
+		<Unit filename="AEInput.h" />
+		<Unit filename="AELineSegment2.h" />
+		<Unit filename="AEMath.h" />
+		<Unit filename="AEMtx33.h" />
+		<Unit filename="AESystem.h" />
+		<Unit filename="AEUtil.h" />
+		<Unit filename="AEVec2.h" />
+		<Unit filename="GameStateList.h" />
+		<Unit filename="GameStateMgr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="GameStateMgr.h" />
+		<Unit filename="GameState_Platformer.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="GameState_Platformer.h" />
+		<Unit filename="Main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Math2D.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Math2D.h" />
+		<Unit filename="Matrix2D.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Matrix2D.h" />
+		<Unit filename="Vector2D.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Vector2D.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
