@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="queen-4-dfs" />
+	<File name="csp.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2373" topLine="34" />
+		</Cursor>
+	</File>
+	<File name="variable.inl" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3873" topLine="132" />
+		</Cursor>
+	</File>
+	<File name="variable.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="691" topLine="20" />
+		</Cursor>
+	</File>
+	<File name="contraints.graph.cpp" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="824" topLine="35" />
+		</Cursor>
+	</File>
+	<File name="contraints.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1169" topLine="46" />
+		</Cursor>
+	</File>
+	<File name="csp.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1708" topLine="49" />
+		</Cursor>
+	</File>
+	<File name="contraints.graph.h" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3161" topLine="86" />
+		</Cursor>
+	</File>
+	<File name="main.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3881" topLine="151" />
+		</Cursor>
+	</File>
+	<File name="contraints.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3864" topLine="78" />
+		</Cursor>
+	</File>
+	<File name="variable.h" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2829" topLine="75" />
+		</Cursor>
+	</File>
+</CodeBlocks_layout_file>

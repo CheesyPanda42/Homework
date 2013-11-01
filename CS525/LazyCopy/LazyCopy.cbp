@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="LazyCopy" />
+		<Option pch_mode="2" />
+		<Option compiler="cygwin" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/LazyCopy" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="cygwin" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/LazyCopy" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="cygwin" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="CRTP.h" />
+		<Unit filename="abstract-element.h" />
+		<Unit filename="array.cpp" />
+		<Unit filename="array.h" />
+		<Unit filename="driver.cpp" />
+		<Unit filename="element-factory.cpp" />
+		<Unit filename="element-factory.h" />
+		<Unit filename="element1.cpp" />
+		<Unit filename="element1.h" />
+		<Unit filename="element2.cpp" />
+		<Unit filename="element2.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

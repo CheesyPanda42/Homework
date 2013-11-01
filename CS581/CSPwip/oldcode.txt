@@ -1,0 +1,47 @@
+	++recursive_call_counter;
+	std::cout << "\n******************entering SolveDFS (level " << level << ")*******************\n";
+
+    //choose a variable by MRV
+    Variable* var_to_assign = MinRemVal();
+	//Variable* var_to_assign = MaxDegreeHeuristic();
+
+
+
+while (!cg.AllVariablesAssigned() && !var_to_assign->IsImpossible() ) { //Impossible = empty available values set
+	var_to_assign->Assign();
+    std::map<Variable*, std::set<typename Variable::Value> > prevState = SaveState(var_to_assign);
+	std::cout <<"Var: " <<  *var_to_assign << "   ;  assigned " << var_to_assign->GetValue() << std::endl;
+	SolveDFS(++level);
+    LoadState(prevState);
+
+	    // Get constraints for current variable
+    const std::vector<const Constraint*>& constraints = cg.GetConstraints(var_to_assign);
+    Constraint const* curr_constraint;
+    typename std::vector<const Constraint*>::const_iterator b_con = constraints.begin();
+    typename std::vector<const Constraint*>::const_iterator e_con = constraints.end();
+
+    for(;b_con < e_con; ++b_con)
+    {
+        ++iteration_counter;
+        curr_constraint = *b_con;
+        if (!curr_constraint->Satisfiable()) std::cout << "Contstraint can't be satisfied\n";
+        std::cout << "\n++++++++Constraint:   " << *curr_constraint << " ++++++++++\n\n";
+        if(curr_constraint->Check()) std::cout << "Constraint Satified\n";
+        else
+        {
+            std::cout << "Removing value from variable\n";
+            var_to_assign->RemoveValue( var_to_assign->GetValue() ); //deletes from the original
+            std::cout << "Unassigning\n";
+            var_to_assign->UnAssign();
+            break;
+        }
+    }
+
+
+}
+    if (var_to_assign->IsImpossible())
+    {
+        return false;
+    }
+    std::cout<<"*********Exiting DFS Level " << level << "****************\n";
+    return true;

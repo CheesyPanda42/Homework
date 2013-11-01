@@ -1,0 +1,291 @@
+\hypertarget{spvector_8c}{\section{spvector.\-c File Reference}
+\label{spvector_8c}\index{spvector.\-c@{spvector.\-c}}
+}
+
+
+This is the implementation file for all the sparse vector program. It contains the functions and struct definitions to run the sparse vector program.  
+
+
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}spvector.\-h\char`\"{}}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct_element_node}{Element\-Node}
+\item 
+struct \hyperlink{struct_row_node}{Row\-Node}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{spvector_8c_a41f9c5fb8b08eb5dc3edce4dcb37fee7}{\#define {\bfseries true}~1}\label{spvector_8c_a41f9c5fb8b08eb5dc3edce4dcb37fee7}
+
+\item 
+\hypertarget{spvector_8c_a65e9886d74aaee76545e83dd09011727}{\#define {\bfseries false}~0}\label{spvector_8c_a65e9886d74aaee76545e83dd09011727}
+
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{spvector_8c_aa6c0071625016598b3a9da1798e66833}{typedef struct \hyperlink{struct_element_node}{Element\-Node} {\bfseries Element\-Node}}\label{spvector_8c_aa6c0071625016598b3a9da1798e66833}
+
+\item 
+\hypertarget{spvector_8c_a6821669c8e9f80889e63caf16047c971}{typedef struct \hyperlink{struct_row_node}{Row\-Node} {\bfseries Row\-Node}}\label{spvector_8c_a6821669c8e9f80889e63caf16047c971}
+
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{spvector_8c_afda5ebe48158ce4bbe0e052f63ab9fc5}{printf\-\_\-elements} (Const\-Element\-Node\-\_\-handle p\-\_\-e, char $\ast$fmt, int dim)
+\begin{DoxyCompactList}\small\item\em Function for printing the current vector following a specific format. \end{DoxyCompactList}\item 
+void \hyperlink{spvector_8c_a846c9dd5b9ed196701da9dfb785e236e}{print\-\_\-elements} (Const\-Element\-Node\-\_\-handle p\-\_\-e)
+\begin{DoxyCompactList}\small\item\em A function for simple printing of the vector. \end{DoxyCompactList}\item 
+\hypertarget{spvector_8c_a2a9d7fbe2c9b2179c02eb4768a3bcee9}{void {\bfseries print\-\_\-rows} (Const\-Row\-Node\-\_\-handle p\-\_\-r)}\label{spvector_8c_a2a9d7fbe2c9b2179c02eb4768a3bcee9}
+
+\item 
+\hypertarget{spvector_8c_ac47ab8afca5cb5ff711277521df61f19}{void {\bfseries printf\-\_\-rows} (Const\-Row\-Node\-\_\-handle p\-\_\-r, char $\ast$fmt, int dim)}\label{spvector_8c_ac47ab8afca5cb5ff711277521df61f19}
+
+\item 
+int \hyperlink{spvector_8c_a80b99d5b6f3a39683901d61b69a7553a}{insert\-\_\-element} (\hyperlink{struct_element_node}{Element\-Node\-\_\-handle} $\ast$p\-\_\-e, int pos, int val)
+\begin{DoxyCompactList}\small\item\em Inserts an element into the list. List is ordered by pos. If position pos is already occupied, the value is updated with val. If val = 0, the element is deleted. \end{DoxyCompactList}\item 
+void \hyperlink{spvector_8c_ac2abef824faa79e9aaee82fdf0c40a74}{delete\-\_\-element} (\hyperlink{struct_element_node}{Element\-Node\-\_\-handle} $\ast$p\-\_\-e, int pos)
+\begin{DoxyCompactList}\small\item\em Delete an element at position pos if it exists. \end{DoxyCompactList}\item 
+\hyperlink{struct_element_node}{Element\-Node\-\_\-handle} \hyperlink{spvector_8c_af1aa79513c4f90abf4027b9a9aa28f49}{add} (Const\-Element\-Node\-\_\-handle p\-\_\-e1, Const\-Element\-Node\-\_\-handle p\-\_\-e2)
+\begin{DoxyCompactList}\small\item\em Add two vectors as lists. \end{DoxyCompactList}\item 
+int \hyperlink{spvector_8c_a9f7bb76c12e6b2f0325b33e675efe14e}{get} (Const\-Element\-Node\-\_\-handle p\-\_\-e, int pos)
+\begin{DoxyCompactList}\small\item\em Gets the value of the vector at position pos. \end{DoxyCompactList}\item 
+int \hyperlink{spvector_8c_a7e243ad91193e0c70a76cc0b7a48c3ef}{scalar\-\_\-product} (Const\-Element\-Node\-\_\-handle p\-\_\-e1, Const\-Element\-Node\-\_\-handle p\-\_\-e2)
+\begin{DoxyCompactList}\small\item\em Performs dot product multiplication of two given vectors. \end{DoxyCompactList}\item 
+void \hyperlink{spvector_8c_a93a724fcec566ed67c0b2c2aad2c0560}{free\-\_\-elements} (\hyperlink{struct_element_node}{Element\-Node\-\_\-handle} p\-\_\-e)
+\begin{DoxyCompactList}\small\item\em Deallocates a vector. \end{DoxyCompactList}\item 
+\hypertarget{spvector_8c_a44a538167a49173f02806aea9c36d753}{int {\bfseries insert\-\_\-row} (\hyperlink{struct_row_node}{Row\-Node\-\_\-handle} $\ast$p\-\_\-r, int pos, \hyperlink{struct_element_node}{Element\-Node\-\_\-handle} p\-\_\-e)}\label{spvector_8c_a44a538167a49173f02806aea9c36d753}
+
+\item 
+\hypertarget{spvector_8c_a3cee9cc474c532b76171f1d12880f8e9}{int {\bfseries insert\-\_\-element2} (\hyperlink{struct_row_node}{Row\-Node\-\_\-handle} $\ast$pp\-\_\-r, int pos\-\_\-row, int pos\-\_\-col, int val)}\label{spvector_8c_a3cee9cc474c532b76171f1d12880f8e9}
+
+\item 
+\hypertarget{spvector_8c_ad15cfab33ff3f0aa81508e6359ae3871}{\hyperlink{struct_row_node}{Row\-Node\-\_\-handle} {\bfseries find\-\_\-row} (\hyperlink{struct_row_node}{Row\-Node\-\_\-handle} $\ast$pp\-\_\-r, int pos)}\label{spvector_8c_ad15cfab33ff3f0aa81508e6359ae3871}
+
+\item 
+\hypertarget{spvector_8c_a247e94dd66d1a9dab4437a493384adcc}{\hyperlink{struct_row_node}{Row\-Node\-\_\-handle} {\bfseries transpose} (Const\-Row\-Node\-\_\-handle p\-\_\-r)}\label{spvector_8c_a247e94dd66d1a9dab4437a493384adcc}
+
+\item 
+\hypertarget{spvector_8c_a6d34874ea59762e3f561ec58b5a6080a}{\hyperlink{struct_row_node}{Row\-Node\-\_\-handle} {\bfseries mult} (Const\-Row\-Node\-\_\-handle p\-\_\-r1, Const\-Row\-Node\-\_\-handle p\-\_\-r2)}\label{spvector_8c_a6d34874ea59762e3f561ec58b5a6080a}
+
+\item 
+\hypertarget{spvector_8c_a4ac4e5b71a8eb128dc9f971033f3ab2a}{void {\bfseries free\-\_\-rows} (\hyperlink{struct_row_node}{Row\-Node\-\_\-handle} p\-\_\-r)}\label{spvector_8c_a4ac4e5b71a8eb128dc9f971033f3ab2a}
+
+\item 
+\hypertarget{spvector_8c_a957c42822b58c26b12558d56a7ab174a}{int {\bfseries determinant} (Const\-Row\-Node\-\_\-handle p\-\_\-r, int dim)}\label{spvector_8c_a957c42822b58c26b12558d56a7ab174a}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This is the implementation file for all the sparse vector program. It contains the functions and struct definitions to run the sparse vector program. \begin{DoxyAuthor}{Author}
+Cory Prelerson (cory.\-prelerson) 
+\end{DoxyAuthor}
+\begin{DoxyParagraph}{email\-: cory.prelerson.edu}
+
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Digi\-Pen login\-: cory.prelerson}
+
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Course\-: C\-S525}
+
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Assignment Sparse Vector}
+
+\end{DoxyParagraph}
+\begin{DoxyDate}{Date}
+10/12/2013 Operations include\-:
+\end{DoxyDate}
+
+\begin{DoxyItemize}
+\item Insert an element into the vector
+\item Print the vector's elements
+\item Add two vectors
+\item Find the scalar product of two vectors
+\item Remove an element from a vector
+\item Free the memory used by a vector
+\item Matrix operations are defined but not implemented. Dummy functions are used to prevent warnings. 
+\end{DoxyItemize}
+
+\subsection{Function Documentation}
+\hypertarget{spvector_8c_af1aa79513c4f90abf4027b9a9aa28f49}{\index{spvector.\-c@{spvector.\-c}!add@{add}}
+\index{add@{add}!spvector.c@{spvector.\-c}}
+\subsubsection[{add}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Element\-Node\-\_\-handle} add (
+\begin{DoxyParamCaption}
+\item[{Const\-Element\-Node\-\_\-handle}]{p\-\_\-e1, }
+\item[{Const\-Element\-Node\-\_\-handle}]{p\-\_\-e2}
+\end{DoxyParamCaption}
+)}}\label{spvector_8c_af1aa79513c4f90abf4027b9a9aa28f49}
+
+
+Add two vectors as lists. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\-\_\-e1} & First vector to be added \\
+\hline
+{\em p\-\_\-e2} & Second vector to be added \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns Element\-Node\-\_\-handle for resulting vector 
+\end{DoxyReturn}
+\hypertarget{spvector_8c_ac2abef824faa79e9aaee82fdf0c40a74}{\index{spvector.\-c@{spvector.\-c}!delete\-\_\-element@{delete\-\_\-element}}
+\index{delete\-\_\-element@{delete\-\_\-element}!spvector.c@{spvector.\-c}}
+\subsubsection[{delete\-\_\-element}]{\setlength{\rightskip}{0pt plus 5cm}void delete\-\_\-element (
+\begin{DoxyParamCaption}
+\item[{{\bf Element\-Node\-\_\-handle} $\ast$}]{p\-\_\-e, }
+\item[{int}]{pos}
+\end{DoxyParamCaption}
+)}}\label{spvector_8c_ac2abef824faa79e9aaee82fdf0c40a74}
+
+
+Delete an element at position pos if it exists. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\-\_\-e} & Pointer to vector \\
+\hline
+{\em pos} & Position of element to be deleted \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\hypertarget{spvector_8c_a93a724fcec566ed67c0b2c2aad2c0560}{\index{spvector.\-c@{spvector.\-c}!free\-\_\-elements@{free\-\_\-elements}}
+\index{free\-\_\-elements@{free\-\_\-elements}!spvector.c@{spvector.\-c}}
+\subsubsection[{free\-\_\-elements}]{\setlength{\rightskip}{0pt plus 5cm}void free\-\_\-elements (
+\begin{DoxyParamCaption}
+\item[{{\bf Element\-Node\-\_\-handle}}]{p\-\_\-e}
+\end{DoxyParamCaption}
+)}}\label{spvector_8c_a93a724fcec566ed67c0b2c2aad2c0560}
+
+
+Deallocates a vector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\-\_\-e} & The vector to be freed \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\hypertarget{spvector_8c_a9f7bb76c12e6b2f0325b33e675efe14e}{\index{spvector.\-c@{spvector.\-c}!get@{get}}
+\index{get@{get}!spvector.c@{spvector.\-c}}
+\subsubsection[{get}]{\setlength{\rightskip}{0pt plus 5cm}int get (
+\begin{DoxyParamCaption}
+\item[{Const\-Element\-Node\-\_\-handle}]{p\-\_\-e, }
+\item[{int}]{pos}
+\end{DoxyParamCaption}
+)}}\label{spvector_8c_a9f7bb76c12e6b2f0325b33e675efe14e}
+
+
+Gets the value of the vector at position pos. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\-\_\-e} & The vector being searched \\
+\hline
+{\em pos} & The position of the node in question \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int Returns the value of the node if it exists, 0 if it doesn't 
+\end{DoxyReturn}
+\hypertarget{spvector_8c_a80b99d5b6f3a39683901d61b69a7553a}{\index{spvector.\-c@{spvector.\-c}!insert\-\_\-element@{insert\-\_\-element}}
+\index{insert\-\_\-element@{insert\-\_\-element}!spvector.c@{spvector.\-c}}
+\subsubsection[{insert\-\_\-element}]{\setlength{\rightskip}{0pt plus 5cm}int insert\-\_\-element (
+\begin{DoxyParamCaption}
+\item[{{\bf Element\-Node\-\_\-handle} $\ast$}]{p\-\_\-e, }
+\item[{int}]{pos, }
+\item[{int}]{val}
+\end{DoxyParamCaption}
+)}}\label{spvector_8c_a80b99d5b6f3a39683901d61b69a7553a}
+
+
+Inserts an element into the list. List is ordered by pos. If position pos is already occupied, the value is updated with val. If val = 0, the element is deleted. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$p\-\_\-e} & A pointer to the vector being operated on \\
+\hline
+{\em pos} & The position in the vector the new node is to go \\
+\hline
+{\em val} & The value being inserted into the vector \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Return 0 if successful Return 1 if malloc fails 
+\end{DoxyReturn}
+\hypertarget{spvector_8c_a846c9dd5b9ed196701da9dfb785e236e}{\index{spvector.\-c@{spvector.\-c}!print\-\_\-elements@{print\-\_\-elements}}
+\index{print\-\_\-elements@{print\-\_\-elements}!spvector.c@{spvector.\-c}}
+\subsubsection[{print\-\_\-elements}]{\setlength{\rightskip}{0pt plus 5cm}void print\-\_\-elements (
+\begin{DoxyParamCaption}
+\item[{Const\-Element\-Node\-\_\-handle}]{p\-\_\-e}
+\end{DoxyParamCaption}
+)}}\label{spvector_8c_a846c9dd5b9ed196701da9dfb785e236e}
+
+
+A function for simple printing of the vector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\-\_\-e} & The vector to be printed \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\hypertarget{spvector_8c_afda5ebe48158ce4bbe0e052f63ab9fc5}{\index{spvector.\-c@{spvector.\-c}!printf\-\_\-elements@{printf\-\_\-elements}}
+\index{printf\-\_\-elements@{printf\-\_\-elements}!spvector.c@{spvector.\-c}}
+\subsubsection[{printf\-\_\-elements}]{\setlength{\rightskip}{0pt plus 5cm}void printf\-\_\-elements (
+\begin{DoxyParamCaption}
+\item[{Const\-Element\-Node\-\_\-handle}]{p\-\_\-e, }
+\item[{char $\ast$}]{fmt, }
+\item[{int}]{dim}
+\end{DoxyParamCaption}
+)}}\label{spvector_8c_afda5ebe48158ce4bbe0e052f63ab9fc5}
+
+
+Function for printing the current vector following a specific format. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\-\_\-e} & the vector to be printed \\
+\hline
+{\em $\ast$fmt} & a string defining the formatting to be used \\
+\hline
+{\em dim} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\hypertarget{spvector_8c_a7e243ad91193e0c70a76cc0b7a48c3ef}{\index{spvector.\-c@{spvector.\-c}!scalar\-\_\-product@{scalar\-\_\-product}}
+\index{scalar\-\_\-product@{scalar\-\_\-product}!spvector.c@{spvector.\-c}}
+\subsubsection[{scalar\-\_\-product}]{\setlength{\rightskip}{0pt plus 5cm}int scalar\-\_\-product (
+\begin{DoxyParamCaption}
+\item[{Const\-Element\-Node\-\_\-handle}]{p\-\_\-e1, }
+\item[{Const\-Element\-Node\-\_\-handle}]{p\-\_\-e2}
+\end{DoxyParamCaption}
+)}}\label{spvector_8c_a7e243ad91193e0c70a76cc0b7a48c3ef}
+
+
+Performs dot product multiplication of two given vectors. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\-\_\-e1} & The first vector in the operation \\
+\hline
+{\em p\-\_\-e2} & The second vector in the operation \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int Returns the scalar product of the two vectors 
+\end{DoxyReturn}

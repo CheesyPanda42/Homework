@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1383178202 source:d:\github\homework\cs525\sparsevectorc++\test.cpp
+	<iostream>
+	<sstream>
+	<cstdlib>
+	"vector.h"
+
+1383258016 d:\github\homework\cs525\sparsevectorc++\vector.h
+	<iostream>
+
+1383259602 source:d:\github\homework\cs525\sparsevectorc++\vector.cpp
+	"vector.h"
+

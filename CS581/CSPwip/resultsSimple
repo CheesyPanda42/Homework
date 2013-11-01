@@ -1,0 +1,1745 @@
+
+----IN SOLVEDFS LEVEL 0 -------
+Rec count: 1
+Temp: x  4
+Temp: y  4
+Temp: z  4
+xchosen.
+
+xassigned 0
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is x
+
+----IN SOLVEDFS LEVEL 1 -------
+Rec count: 2
+Temp: x  4
+Var reassigned: x  4
+Temp: y  4
+Var reassigned: y  4
+Temp: z  4
+ychosen.
+
+yassigned 0
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is y
+
+----IN SOLVEDFS LEVEL 2 -------
+Rec count: 3
+Temp: x  4
+Var reassigned: x  4
+Temp: y  4
+Var reassigned: y  4
+Temp: z  4
+Var reassigned: z  4
+zchosen.
+
+zassigned 0
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 4
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  4
+Var reassigned: x  4
+Temp: y  4
+Var reassigned: y  4
+Temp: z  3
+Var reassigned: z  3
+zchosen.
+
+zassigned 1
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 5
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  4
+Var reassigned: x  4
+Temp: y  4
+Var reassigned: y  4
+Temp: z  2
+Var reassigned: z  2
+zchosen.
+
+zassigned 2
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 6
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  4
+Var reassigned: x  4
+Temp: y  4
+Var reassigned: y  4
+Temp: z  1
+Var reassigned: z  1
+zchosen.
+
+zassigned 3
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 7
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  4
+Var reassigned: x  4
+Temp: y  4
+Var reassigned: y  4
+Temp: z  0
+Var reassigned: z  0
+zchosen.
+
+
+----EXITING SOLVEDFS LEVEL 2 -------
+I'm back!
+Current variable is y
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  4
+Var reassigned: x  4
+Temp: y  3
+Var reassigned: y  3
+Temp: z  4
+ychosen.
+
+yassigned 1
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is y
+
+----IN SOLVEDFS LEVEL 2 -------
+Rec count: 8
+Temp: x  4
+Var reassigned: x  4
+Temp: y  3
+Var reassigned: y  3
+Temp: z  4
+Var reassigned: z  4
+zchosen.
+
+zassigned 0
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 9
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  4
+Var reassigned: x  4
+Temp: y  3
+Var reassigned: y  3
+Temp: z  3
+Var reassigned: z  3
+zchosen.
+
+zassigned 1
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 10
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  4
+Var reassigned: x  4
+Temp: y  3
+Var reassigned: y  3
+Temp: z  2
+Var reassigned: z  2
+zchosen.
+
+zassigned 2
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 11
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  4
+Var reassigned: x  4
+Temp: y  3
+Var reassigned: y  3
+Temp: z  1
+Var reassigned: z  1
+zchosen.
+
+zassigned 3
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 12
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  4
+Var reassigned: x  4
+Temp: y  3
+Var reassigned: y  3
+Temp: z  0
+Var reassigned: z  0
+zchosen.
+
+
+----EXITING SOLVEDFS LEVEL 2 -------
+I'm back!
+Current variable is y
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  4
+Var reassigned: x  4
+Temp: y  2
+Var reassigned: y  2
+Temp: z  4
+ychosen.
+
+yassigned 2
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is y
+
+----IN SOLVEDFS LEVEL 2 -------
+Rec count: 13
+Temp: x  4
+Var reassigned: x  4
+Temp: y  2
+Var reassigned: y  2
+Temp: z  4
+Var reassigned: z  4
+zchosen.
+
+zassigned 0
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 14
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  4
+Var reassigned: x  4
+Temp: y  2
+Var reassigned: y  2
+Temp: z  3
+Var reassigned: z  3
+zchosen.
+
+zassigned 1
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 15
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  4
+Var reassigned: x  4
+Temp: y  2
+Var reassigned: y  2
+Temp: z  2
+Var reassigned: z  2
+zchosen.
+
+zassigned 2
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 16
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  4
+Var reassigned: x  4
+Temp: y  2
+Var reassigned: y  2
+Temp: z  1
+Var reassigned: z  1
+zchosen.
+
+zassigned 3
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 17
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  4
+Var reassigned: x  4
+Temp: y  2
+Var reassigned: y  2
+Temp: z  0
+Var reassigned: z  0
+zchosen.
+
+
+----EXITING SOLVEDFS LEVEL 2 -------
+I'm back!
+Current variable is y
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  4
+Var reassigned: x  4
+Temp: y  1
+Var reassigned: y  1
+Temp: z  4
+ychosen.
+
+yassigned 3
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is y
+
+----IN SOLVEDFS LEVEL 2 -------
+Rec count: 18
+Temp: x  4
+Var reassigned: x  4
+Temp: y  1
+Var reassigned: y  1
+Temp: z  4
+Var reassigned: z  4
+zchosen.
+
+zassigned 0
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 19
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  4
+Var reassigned: x  4
+Temp: y  1
+Var reassigned: y  1
+Temp: z  3
+Var reassigned: z  3
+zchosen.
+
+zassigned 1
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 20
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  4
+Var reassigned: x  4
+Temp: y  1
+Var reassigned: y  1
+Temp: z  2
+Var reassigned: z  2
+zchosen.
+
+zassigned 2
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 21
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  4
+Var reassigned: x  4
+Temp: y  1
+Var reassigned: y  1
+Temp: z  1
+Var reassigned: z  1
+zchosen.
+
+zassigned 3
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 22
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  4
+Var reassigned: x  4
+Temp: y  1
+Var reassigned: y  1
+Temp: z  0
+Var reassigned: z  0
+zchosen.
+
+
+----EXITING SOLVEDFS LEVEL 2 -------
+I'm back!
+Current variable is y
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  4
+Var reassigned: x  4
+Temp: y  0
+Var reassigned: y  0
+Temp: z  4
+ychosen.
+
+
+----EXITING SOLVEDFS LEVEL 1 -------
+I'm back!
+Current variable is x
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  3
+Temp: y  4
+Temp: z  4
+xchosen.
+
+xassigned 1
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is x
+
+----IN SOLVEDFS LEVEL 1 -------
+Rec count: 23
+Temp: x  3
+Var reassigned: x  3
+Temp: y  4
+Var reassigned: y  4
+Temp: z  4
+ychosen.
+
+yassigned 0
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is y
+
+----IN SOLVEDFS LEVEL 2 -------
+Rec count: 24
+Temp: x  3
+Var reassigned: x  3
+Temp: y  4
+Var reassigned: y  4
+Temp: z  4
+Var reassigned: z  4
+zchosen.
+
+zassigned 0
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 25
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  3
+Var reassigned: x  3
+Temp: y  4
+Var reassigned: y  4
+Temp: z  3
+Var reassigned: z  3
+zchosen.
+
+zassigned 1
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 26
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  3
+Var reassigned: x  3
+Temp: y  4
+Var reassigned: y  4
+Temp: z  2
+Var reassigned: z  2
+zchosen.
+
+zassigned 2
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 27
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  3
+Var reassigned: x  3
+Temp: y  4
+Var reassigned: y  4
+Temp: z  1
+Var reassigned: z  1
+zchosen.
+
+zassigned 3
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 28
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  3
+Var reassigned: x  3
+Temp: y  4
+Var reassigned: y  4
+Temp: z  0
+Var reassigned: z  0
+zchosen.
+
+
+----EXITING SOLVEDFS LEVEL 2 -------
+I'm back!
+Current variable is y
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  3
+Var reassigned: x  3
+Temp: y  3
+Var reassigned: y  3
+Temp: z  4
+ychosen.
+
+yassigned 1
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is y
+
+----IN SOLVEDFS LEVEL 2 -------
+Rec count: 29
+Temp: x  3
+Var reassigned: x  3
+Temp: y  3
+Var reassigned: y  3
+Temp: z  4
+Var reassigned: z  4
+zchosen.
+
+zassigned 0
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 30
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  3
+Var reassigned: x  3
+Temp: y  3
+Var reassigned: y  3
+Temp: z  3
+Var reassigned: z  3
+zchosen.
+
+zassigned 1
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 31
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  3
+Var reassigned: x  3
+Temp: y  3
+Var reassigned: y  3
+Temp: z  2
+Var reassigned: z  2
+zchosen.
+
+zassigned 2
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 32
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  3
+Var reassigned: x  3
+Temp: y  3
+Var reassigned: y  3
+Temp: z  1
+Var reassigned: z  1
+zchosen.
+
+zassigned 3
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 33
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  3
+Var reassigned: x  3
+Temp: y  3
+Var reassigned: y  3
+Temp: z  0
+Var reassigned: z  0
+zchosen.
+
+
+----EXITING SOLVEDFS LEVEL 2 -------
+I'm back!
+Current variable is y
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  3
+Var reassigned: x  3
+Temp: y  2
+Var reassigned: y  2
+Temp: z  4
+ychosen.
+
+yassigned 2
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is y
+
+----IN SOLVEDFS LEVEL 2 -------
+Rec count: 34
+Temp: x  3
+Var reassigned: x  3
+Temp: y  2
+Var reassigned: y  2
+Temp: z  4
+Var reassigned: z  4
+zchosen.
+
+zassigned 0
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 35
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  3
+Var reassigned: x  3
+Temp: y  2
+Var reassigned: y  2
+Temp: z  3
+Var reassigned: z  3
+zchosen.
+
+zassigned 1
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 36
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  3
+Var reassigned: x  3
+Temp: y  2
+Var reassigned: y  2
+Temp: z  2
+Var reassigned: z  2
+zchosen.
+
+zassigned 2
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 37
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  3
+Var reassigned: x  3
+Temp: y  2
+Var reassigned: y  2
+Temp: z  1
+Var reassigned: z  1
+zchosen.
+
+zassigned 3
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 38
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  3
+Var reassigned: x  3
+Temp: y  2
+Var reassigned: y  2
+Temp: z  0
+Var reassigned: z  0
+zchosen.
+
+
+----EXITING SOLVEDFS LEVEL 2 -------
+I'm back!
+Current variable is y
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  3
+Var reassigned: x  3
+Temp: y  1
+Var reassigned: y  1
+Temp: z  4
+ychosen.
+
+yassigned 3
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is y
+
+----IN SOLVEDFS LEVEL 2 -------
+Rec count: 39
+Temp: x  3
+Var reassigned: x  3
+Temp: y  1
+Var reassigned: y  1
+Temp: z  4
+Var reassigned: z  4
+zchosen.
+
+zassigned 0
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 40
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  3
+Var reassigned: x  3
+Temp: y  1
+Var reassigned: y  1
+Temp: z  3
+Var reassigned: z  3
+zchosen.
+
+zassigned 1
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 41
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  3
+Var reassigned: x  3
+Temp: y  1
+Var reassigned: y  1
+Temp: z  2
+Var reassigned: z  2
+zchosen.
+
+zassigned 2
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 42
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  3
+Var reassigned: x  3
+Temp: y  1
+Var reassigned: y  1
+Temp: z  1
+Var reassigned: z  1
+zchosen.
+
+zassigned 3
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 43
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  3
+Var reassigned: x  3
+Temp: y  1
+Var reassigned: y  1
+Temp: z  0
+Var reassigned: z  0
+zchosen.
+
+
+----EXITING SOLVEDFS LEVEL 2 -------
+I'm back!
+Current variable is y
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  3
+Var reassigned: x  3
+Temp: y  0
+Var reassigned: y  0
+Temp: z  4
+ychosen.
+
+
+----EXITING SOLVEDFS LEVEL 1 -------
+I'm back!
+Current variable is x
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  2
+Temp: y  4
+Temp: z  4
+xchosen.
+
+xassigned 2
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is x
+
+----IN SOLVEDFS LEVEL 1 -------
+Rec count: 44
+Temp: x  2
+Var reassigned: x  2
+Temp: y  4
+Var reassigned: y  4
+Temp: z  4
+ychosen.
+
+yassigned 0
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is y
+
+----IN SOLVEDFS LEVEL 2 -------
+Rec count: 45
+Temp: x  2
+Var reassigned: x  2
+Temp: y  4
+Var reassigned: y  4
+Temp: z  4
+Var reassigned: z  4
+zchosen.
+
+zassigned 0
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 46
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  2
+Var reassigned: x  2
+Temp: y  4
+Var reassigned: y  4
+Temp: z  3
+Var reassigned: z  3
+zchosen.
+
+zassigned 1
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 47
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  2
+Var reassigned: x  2
+Temp: y  4
+Var reassigned: y  4
+Temp: z  2
+Var reassigned: z  2
+zchosen.
+
+zassigned 2
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 48
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  2
+Var reassigned: x  2
+Temp: y  4
+Var reassigned: y  4
+Temp: z  1
+Var reassigned: z  1
+zchosen.
+
+zassigned 3
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 49
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  2
+Var reassigned: x  2
+Temp: y  4
+Var reassigned: y  4
+Temp: z  0
+Var reassigned: z  0
+zchosen.
+
+
+----EXITING SOLVEDFS LEVEL 2 -------
+I'm back!
+Current variable is y
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  2
+Var reassigned: x  2
+Temp: y  3
+Var reassigned: y  3
+Temp: z  4
+ychosen.
+
+yassigned 1
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is y
+
+----IN SOLVEDFS LEVEL 2 -------
+Rec count: 50
+Temp: x  2
+Var reassigned: x  2
+Temp: y  3
+Var reassigned: y  3
+Temp: z  4
+Var reassigned: z  4
+zchosen.
+
+zassigned 0
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 51
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  2
+Var reassigned: x  2
+Temp: y  3
+Var reassigned: y  3
+Temp: z  3
+Var reassigned: z  3
+zchosen.
+
+zassigned 1
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 52
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  2
+Var reassigned: x  2
+Temp: y  3
+Var reassigned: y  3
+Temp: z  2
+Var reassigned: z  2
+zchosen.
+
+zassigned 2
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 53
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  2
+Var reassigned: x  2
+Temp: y  3
+Var reassigned: y  3
+Temp: z  1
+Var reassigned: z  1
+zchosen.
+
+zassigned 3
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 54
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  2
+Var reassigned: x  2
+Temp: y  3
+Var reassigned: y  3
+Temp: z  0
+Var reassigned: z  0
+zchosen.
+
+
+----EXITING SOLVEDFS LEVEL 2 -------
+I'm back!
+Current variable is y
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  2
+Var reassigned: x  2
+Temp: y  2
+Var reassigned: y  2
+Temp: z  4
+ychosen.
+
+yassigned 2
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is y
+
+----IN SOLVEDFS LEVEL 2 -------
+Rec count: 55
+Temp: x  2
+Var reassigned: x  2
+Temp: y  2
+Var reassigned: y  2
+Temp: z  4
+Var reassigned: z  4
+zchosen.
+
+zassigned 0
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 56
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  2
+Var reassigned: x  2
+Temp: y  2
+Var reassigned: y  2
+Temp: z  3
+Var reassigned: z  3
+zchosen.
+
+zassigned 1
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 57
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  2
+Var reassigned: x  2
+Temp: y  2
+Var reassigned: y  2
+Temp: z  2
+Var reassigned: z  2
+zchosen.
+
+zassigned 2
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 58
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  2
+Var reassigned: x  2
+Temp: y  2
+Var reassigned: y  2
+Temp: z  1
+Var reassigned: z  1
+zchosen.
+
+zassigned 3
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 59
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  2
+Var reassigned: x  2
+Temp: y  2
+Var reassigned: y  2
+Temp: z  0
+Var reassigned: z  0
+zchosen.
+
+
+----EXITING SOLVEDFS LEVEL 2 -------
+I'm back!
+Current variable is y
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  2
+Var reassigned: x  2
+Temp: y  1
+Var reassigned: y  1
+Temp: z  4
+ychosen.
+
+yassigned 3
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is y
+
+----IN SOLVEDFS LEVEL 2 -------
+Rec count: 60
+Temp: x  2
+Var reassigned: x  2
+Temp: y  1
+Var reassigned: y  1
+Temp: z  4
+Var reassigned: z  4
+zchosen.
+
+zassigned 0
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 61
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  2
+Var reassigned: x  2
+Temp: y  1
+Var reassigned: y  1
+Temp: z  3
+Var reassigned: z  3
+zchosen.
+
+zassigned 1
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 62
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  2
+Var reassigned: x  2
+Temp: y  1
+Var reassigned: y  1
+Temp: z  2
+Var reassigned: z  2
+zchosen.
+
+zassigned 2
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 63
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint doesn't hold
+Temp: x  2
+Var reassigned: x  2
+Temp: y  1
+Var reassigned: y  1
+Temp: z  1
+Var reassigned: z  1
+zchosen.
+
+zassigned 3
+
+++STATE SAVED++
+Going to next DFS
+ Current variable is z
+
+----IN SOLVEDFS LEVEL 3 -------
+Rec count: 64
+
+----EXITING SOLVEDFS LEVEL 3 -------
+I'm back!
+Current variable is z
+
+++STATE LOADED++
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint holds
+
+Current constraint CONSTRAINT: sum of x z  is 5
+Checking constraint
+Constraint holds
+
+----EXITING SOLVEDFS LEVEL 2 -------
+I'm back!
+Current variable is y
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint holds
+
+----EXITING SOLVEDFS LEVEL 1 -------
+I'm back!
+Current variable is x
+
+Current constraint CONSTRAINT: sum of x y z  is 8
+Checking constraint
+Constraint holds
+
+Current constraint CONSTRAINT: sum of x z  is 5
+Checking constraint
+Constraint holds
+
+----EXITING SOLVEDFS LEVEL 0 -------
++------------------+
+|  ConstraintGraph |
++------------------+
+|-->Variables :
+|   Variable "x" available values: 2 3  
+assigned value 2
+|   Variable "y" available values: 3  
+assigned value 3
+|   Variable "z" available values: 3  
+assigned value 3
+|-->Constraints :
+|   CONSTRAINT: sum of x y z  is 8
+|   CONSTRAINT: sum of x z  is 5
++------------------+
+Time 0
+RecursiveCallCounter = 64
+IterationCounter     = 65

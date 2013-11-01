@@ -1,3 +1,28 @@
+/******************************************************************************/
+/*!
+\file   spvector.c
+\author Cory Prelerson (cory.prelerson)
+\par    email: cory.prelerson@digipen.edu
+\par    DigiPen login: cory.prelerson
+\par    Course: CS525
+\par    Assignment Sparse Vector
+\date   10/12/2013
+\brief
+  This is the implementation file for all the sparse vector program. It contains
+  the functions and struct definitions to run the sparse vector program.
+
+  Operations include:
+
+  - Insert an element into the vector
+  - Print the vector's elements
+  - Add two vectors
+  - Find the scalar product of two vectors
+  - Remove an element from a vector
+  - Free the memory used by a vector
+  - Matrix operations are defined but not implemented. Dummy functions are used to prevent warnings.
+*/
+/******************************************************************************/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include "spvector.h"
@@ -13,8 +38,11 @@
  * than field name "left".  Also see typedef in map.h
  */
 struct ElementNode {
+  /**< The value held at vector[pos] */
   int    data;
+  /**< The index value for the current element node */
   int    pos;
+  /**< The pointer to the next node in the list */
   struct ElementNode* next;
 };
 
@@ -27,6 +55,16 @@ struct RowNode {
 typedef struct ElementNode ElementNode;
 typedef struct RowNode RowNode;
 
+/** \brief Function for printing the current vector following a specific format.
+ *
+ * \param p_e
+            the vector to be printed
+ * \param *fmt
+            a string defining the formatting to be used
+ * \param dim
+ * \return
+ *
+ */
 
 /*print functions*/
 void printf_elements(ConstElementNode_handle p_e, char *fmt, int dim) {
@@ -39,6 +77,15 @@ void printf_elements(ConstElementNode_handle p_e, char *fmt, int dim) {
 	}
 	for (i=last_pos+1;i<dim;++i) { printf(fmt,0); }
 }
+
+
+/** \brief A function for simple printing of the vector.
+ *
+ * \param p_e
+        The vector to be printed
+ * \return
+ *
+ */
 
 void print_elements(ConstElementNode_handle p_e) {
 	while (p_e) {
@@ -75,14 +122,22 @@ void printf_rows(ConstRowNode_handle p_r, char *fmt, int dim) {
 }
 
 
+ /** \brief Inserts an element into the list. List is ordered by pos. If position
+  * pos is already occupied, the value is updated with val. If val = 0, the element
+  * is deleted.
+  *
+  * \param *p_e
+  *  A pointer to the vector being operated on
+  * \param pos
+            The position in the vector the new node is to go
+  * \param val
+            The value being inserted into the vector
+  * \return
+            Return 0 if successful
+            Return 1 if malloc fails
+  *
+  */
 
-/* insert an element into a list
- * list is ordered using pos
- * if position pos is already occupied, the value of the node
- * should be updated with val
- * if val=0, then the element should be deleted
- * return 0 if operation is succesfull
- *        1 if malloc failed */
 int insert_element(ElementNode_handle * p_e,int pos,int val)
 {
 	ElementNode * head_node;
@@ -97,7 +152,7 @@ int insert_element(ElementNode_handle * p_e,int pos,int val)
 	{
 		if (val != 0)
         {
-            head_node = (ElementNode*) malloc(sizeof(ElementNode));
+            if(!(head_node = (ElementNode*) malloc(sizeof(ElementNode)))) return 1;
             *p_e = head_node;
             head_node -> data = val;
             head_node -> pos = pos;
@@ -108,7 +163,7 @@ int insert_element(ElementNode_handle * p_e,int pos,int val)
 	{
 		head_node = *p_e;
 
-		pNode = (ElementNode*) malloc(sizeof(ElementNode));
+		if(!(pNode = (ElementNode*) malloc(sizeof(ElementNode)))) return 1;
 		pNode -> data = val;
 		pNode -> pos  = pos;
 		pNode -> next = 0;
@@ -155,6 +210,13 @@ int insert_element(ElementNode_handle * p_e,int pos,int val)
 
 /*
  * delete an element at position pos if it exists */
+/** \brief Delete an element at position pos if it exists
+ *
+ * \param p_e Pointer to vector
+ * \param pos Position of element to be deleted
+ * \return void
+ *
+ */
 void delete_element( ElementNode_handle *p_e,int pos )
 {
     ElementNode * curr;
@@ -199,9 +261,14 @@ void delete_element( ElementNode_handle *p_e,int pos )
 }
 
 
+/** \brief Add two vectors as lists
+ *
+ * \param p_e1 First vector to be added
+ * \param p_e2 Second vector to be added
+ * \return Returns ElementNode_handle for resulting vector
+ *
+ */
 
-/*
- * adds 2 lists as vectors, returns a new list */
 ElementNode_handle add( ConstElementNode_handle p_e1,ConstElementNode_handle p_e2 )
 {
     ConstElementNode_handle curr1;
@@ -214,7 +281,7 @@ ElementNode_handle add( ConstElementNode_handle p_e1,ConstElementNode_handle p_e
     /*result = (ElementNode*) malloc(sizeof(ElementNode));*/
 
 
-    while(curr1->next && curr2->next)
+    while(curr1 && curr2)
     {
         if(curr1->pos == curr2->pos)
         {
@@ -236,7 +303,7 @@ ElementNode_handle add( ConstElementNode_handle p_e1,ConstElementNode_handle p_e
     }
 
     /* finish up if one list is longer */
-    if (curr1-> data != 0)
+    if (curr1 && curr1-> data != 0)
     {
         while(curr1)
         {
@@ -244,7 +311,7 @@ ElementNode_handle add( ConstElementNode_handle p_e1,ConstElementNode_handle p_e
             curr1 = curr1->next;
         }
     }
-    else if(curr2->data !=0)
+    if(curr2 && curr2->data !=0)
     {
         while(curr2)
         {
@@ -259,11 +326,14 @@ ElementNode_handle add( ConstElementNode_handle p_e1,ConstElementNode_handle p_e
 
 
 
-
-/*
- * get the value at the given position,
- * p_e is the head pointer
+/** \brief Gets the value of the vector at position pos
+ *
+ * \param p_e The vector being searched
+ * \param pos The position of the node in question
+ * \return int Returns the value of the node if it exists, 0 if it doesn't
+ *
  */
+
 int  get( ConstElementNode_handle p_e, int pos )
 {
 	ConstElementNode_handle temp;
@@ -286,10 +356,14 @@ int  get( ConstElementNode_handle p_e, int pos )
 }
 
 
+/** \brief Performs dot product multiplication of two given vectors
+ *
+ * \param p_e1 The first vector in the operation
+ * \param p_e2 The second vector in the operation
+ * \return int Returns the scalar product of the two vectors
+ *
+ */
 
-/*
- * scalar product of 2 lists.
- * */
 int scalar_product( ConstElementNode_handle p_e1, ConstElementNode_handle p_e2 )
 {
     ConstElementNode_handle curr1;
@@ -335,6 +409,12 @@ int scalar_product( ConstElementNode_handle p_e1, ConstElementNode_handle p_e2 )
 
 
 
+/** \brief Deallocates a vector
+ *
+ * \param p_e The vector to be freed
+ * \return
+ *
+ */
 
 /*
  * deallocate a list */
