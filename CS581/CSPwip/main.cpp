@@ -14,7 +14,7 @@
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 
-//global function 
+//global function
 std::vector<int> getVector(int val, ...) {
 	std::vector<int> result;
 
@@ -48,18 +48,18 @@ int main () {
 	std::cout << y;
 	std::cout << z;
 
-	if ( c1.Satisfiable() ) std::cout << "c1 is Satisfiable\n"; 
+	if ( c1.Satisfiable() ) std::cout << "c1 is Satisfiable\n";
 	else std::cout << "c1 is not Satisfiable\n";
-	if ( c2.Satisfiable() ) std::cout << "c2 is Satisfiable\n"; 
+	if ( c2.Satisfiable() ) std::cout << "c2 is Satisfiable\n";
 	else std::cout << "c2 is not Satisfiable\n";
-	if ( c4.Satisfiable() ) std::cout << "c4 is Satisfiable\n"; 
+	if ( c4.Satisfiable() ) std::cout << "c4 is Satisfiable\n";
 	else std::cout << "c4 is not Satisfiable\n";
 
 	std::cout << "================\n";
 
 	AllDiff<Variable> c3(&x,&y,&z,NULL);
 	std::cout << c3;
-	if ( c3.Satisfiable() ) std::cout << "c3 is Satisfiable\n"; 
+	if ( c3.Satisfiable() ) std::cout << "c3 is Satisfiable\n";
 	else std::cout << "c3 is not Satisfiable\n";
 
 	std::cout << "Let's assign values to variables\n";
@@ -67,7 +67,7 @@ int main () {
 	y.Assign(2);
 	z.Assign(2);
 	std::cout << x << y << z;
-	if ( c3.Satisfiable() ) std::cout << "c3 is Satisfiable\n"; 
+	if ( c3.Satisfiable() ) std::cout << "c3 is Satisfiable\n";
 	else std::cout << "c3 is not Satisfiable\n";
 
 	std::vector<int> range01 = getVector(0,1,NULL);
@@ -81,11 +81,11 @@ int main () {
 	AllDiff<Variable> c6(&u,&v,&w2,NULL);
 	std::cout << c5 << u << v << w;
 
-	if ( c5.Satisfiable() ) std::cout << "c5 is Satisfiable\n"; 
+	if ( c5.Satisfiable() ) std::cout << "c5 is Satisfiable\n";
 	else std::cout << "c5 is not Satisfiable\n";
 
 	std::cout << c6 << u << v << w2;
-	if ( c6.Satisfiable() ) std::cout << "c6 is Satisfiable\n"; 
+	if ( c6.Satisfiable() ) std::cout << "c6 is Satisfiable\n";
 	else std::cout << "c6 is not Satisfiable\n";
 
 	try {
@@ -110,7 +110,7 @@ int main () {
 		CSP<ConstraintGraph<Constraint<Variable> > > csp( cg );
 
 #ifdef DFS
-		if ( 
+		if (
 				csp.SolveDFS(0)
 		   ) {
 			cg.Print();
@@ -149,15 +149,15 @@ int main () {
 
 	CSP<ConstraintGraph<Constraint<Variable> > > csp( cg );
 	clock_t start = std::clock();
-	if ( 
+	if (
 #ifdef ARC
-			csp.SolveARC(0) 
+			csp.SolveARC(0)
 #endif
 #ifdef FC
-			csp.SolveFC(0) 
+			csp.SolveFC(0)
 #endif
 #ifdef DFS
-			csp.SolveDFS(0) 
+			csp.SolveDFS(0)
 #endif
 	   ) {
 		cg.Print();
@@ -200,7 +200,7 @@ int main () try { //magic square SIZExSIZE
 	//all different as a set of binary constraints (same as QUEEN)
 	for (int i=0; i<NUM_VARIABLES-1; ++i) {
 		for (int j=i+1; j<NUM_VARIABLES; ++j) {
-			constraints[index] = 
+			constraints[index] =
 				new AllDiff2<Variable>( variables[i], variables[j] );
 			//constraints[index] = new AllDiff2<Variable>();
 			//constraints[index]->AddVariable( variables[ i ] );
@@ -224,15 +224,15 @@ int main () try { //magic square SIZExSIZE
 	}
 	//main diagonal
 	constraints[index] = new SumEqual<Variable,magic_constant>();
-	for (unsigned i=0;i<SIZE;++i) { 
-		constraints[index]->AddVariable( variables[ (SIZE+1)*i ] ); 
+	for (unsigned i=0;i<SIZE;++i) {
+		constraints[index]->AddVariable( variables[ (SIZE+1)*i ] );
 	}
 	cg.InsertConstraint( *constraints[index] );
 	++index;
 	//secondary diagonal
 	constraints[index] = new SumEqual<Variable,magic_constant>();
-	for (unsigned i=0;i<SIZE;++i) { 
-		constraints[index]->AddVariable( variables[ SIZE-1 + (SIZE-1)*i ] ); 
+	for (unsigned i=0;i<SIZE;++i) {
+		constraints[index]->AddVariable( variables[ SIZE-1 + (SIZE-1)*i ] );
 	}
 	cg.InsertConstraint( *constraints[index] );
 	++index;
@@ -245,15 +245,15 @@ int main () try { //magic square SIZExSIZE
 
 	CSP<ConstraintGraph<Constraint<Variable> > > csp( cg );
 	clock_t start = std::clock();
-	if ( 
+	if (
 #ifdef ARC
-			csp.SolveARC(0) 
+			csp.SolveARC(0)
 #endif
 #ifdef FC
-			csp.SolveFC(0) 
+			csp.SolveFC(0)
 #endif
 #ifdef DFS
-			csp.SolveDFS(0) 
+			csp.SolveDFS(0)
 #endif
 #ifdef DFScount
 			csp.SolveFC_count(0)
@@ -262,7 +262,7 @@ int main () try { //magic square SIZExSIZE
 		//cg.Print();
 		clock_t finish = std::clock();
 #ifdef DFScount
-			std::cout << "Solution counter = " 
+			std::cout << "Solution counter = "
 				<< csp.GetSolutionCounter() << std::endl;
 #else
 		std::cout << "Time " << static_cast<float>(finish-start)/CLOCKS_PER_SEC << std::endl;
@@ -325,23 +325,23 @@ int main () try {//magic square SIZExSIZE
 	}
 	//main diagonal
 	constraints[index] = new SumEqual<Variable,magic_constant>();
-	for (unsigned i=0;i<SIZE;++i) { 
-		constraints[index]->AddVariable( variables[ (SIZE+1)*i ] ); 
+	for (unsigned i=0;i<SIZE;++i) {
+		constraints[index]->AddVariable( variables[ (SIZE+1)*i ] );
 	}
 	cg.InsertConstraint( *constraints[index] );
 	++index;
 	//secondary diagonal
 	constraints[index] = new SumEqual<Variable,magic_constant>();
-	for (unsigned i=0;i<SIZE;++i) { 
-		constraints[index]->AddVariable( variables[ SIZE-1 + (SIZE-1)*i ] ); 
+	for (unsigned i=0;i<SIZE;++i) {
+		constraints[index]->AddVariable( variables[ SIZE-1 + (SIZE-1)*i ] );
 	}
 	cg.InsertConstraint( *constraints[index] );
 	++index;
 
 	//all different - single constraint
 	constraints[index] = new AllDiff<Variable>();
-	for (int j=0;j<NUM_VARIABLES;++j) { 
-		constraints[index]->AddVariable( variables[ j ] ); 
+	for (int j=0;j<NUM_VARIABLES;++j) {
+		constraints[index]->AddVariable( variables[ j ] );
 	}
 	cg.InsertConstraint( *constraints[index] );
 
@@ -354,15 +354,15 @@ int main () try {//magic square SIZExSIZE
 
 	CSP<ConstraintGraph<Constraint<Variable> > > csp( cg );
 	clock_t start = std::clock();
-	if ( 
+	if (
 #ifdef ARC
-			csp.SolveARC(0) 
+			csp.SolveARC(0)
 #endif
 #ifdef FC
-			csp.SolveFC(0) 
+			csp.SolveFC(0)
 #endif
 #ifdef DFS
-			csp.SolveDFS(0) 
+			csp.SolveDFS(0)
 #endif
 #ifdef DFScount
 			csp.SolveFC_count(0)
@@ -371,7 +371,7 @@ int main () try {//magic square SIZExSIZE
 		clock_t finish = std::clock();
 		//cg.Print();
 #ifdef DFScount
-		std::cout << "Solution counter = " 
+		std::cout << "Solution counter = "
 			<< csp.GetSolutionCounter() << std::endl;
 #else
 		std::cout << "Time " << static_cast<float>(finish-start)/CLOCKS_PER_SEC << std::endl;
@@ -423,12 +423,12 @@ int main () {
 		for (unsigned i=0;i<SIZE-1;++i) {
 			for (unsigned j=i+1;j<SIZE;++j) {
 				//|xi-xj| != |j-i|
-				array_of_constraints[index] = 
+				array_of_constraints[index] =
 					new DifferenceNotEqual<Variable>(j-i,array_of_variables[i],array_of_variables[j],NULL);
 				cg.InsertConstraint( *array_of_constraints[index] );
 				++index;
-				array_of_constraints[index] = 
-					new 
+				array_of_constraints[index] =
+					new
 					AllDiff2<Variable>(array_of_variables[i],array_of_variables[j]);
 				cg.InsertConstraint( *array_of_constraints[index] );
 				++index;
@@ -440,15 +440,15 @@ int main () {
 
 		CSP<ConstraintGraph<Constraint<Variable> > > csp( cg );
 		clock_t start = std::clock();
-		if ( 
+		if (
 #ifdef ARC
-				csp.SolveARC(0) 
+				csp.SolveARC(0)
 #endif
 #ifdef FC
-				csp.SolveFC(0) 
+				csp.SolveFC(0)
 #endif
 #ifdef DFS
-				csp.SolveDFS(0) 
+				csp.SolveDFS(0)
 #endif
 #ifdef DFScount
 				csp.SolveFC_count(0)
@@ -457,7 +457,7 @@ int main () {
 			//cg.Print();
 			clock_t finish = std::clock();
 #ifdef DFScount
-			std::cout << "Solution counter = " 
+			std::cout << "Solution counter = "
 				<< csp.GetSolutionCounter() << std::endl;
 #else
 
@@ -471,13 +471,24 @@ int main () {
 			std::cout << std::endl;
 #endif
 			std::cout << "Time " << static_cast<float>(finish-start)/CLOCKS_PER_SEC << std::endl;
-			std::cout << "RecursiveCallCounter = " 
+			std::cout << "RecursiveCallCounter = "
 				<< csp.GetRecursiveCallCounter() << std::endl;
-			std::cout << "IterationCounter     = " 
+			std::cout << "IterationCounter     = "
 				<< csp.GetIterationCounter() << std::endl;
 
 		}
-		else std::cout << "No solution found\n";
+		else
+        {
+            std::cout << "No solution found\n";
+            for (int i=0;i<SIZE;++i) {
+				for (int j=0;j<SIZE;++j) {
+					if ( j == array_of_variables[ i ]->GetValue() ) std::cout << " Q ";
+					else std::cout << " . ";
+				}
+				std::cout << std::endl;
+			}
+			std::cout << std::endl;
+        }
 
 		for (int i=0;i<SIZE*(SIZE-1);++i) delete array_of_constraints[i];
 

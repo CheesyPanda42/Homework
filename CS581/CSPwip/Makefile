@@ -35,6 +35,11 @@ simple:
 queen-4-dfs:
 	$(GCC) main.cpp -DQUEEN -DSIZE=4 -DDFS $(CYGWIN) $(OBJECTS0) $(GCCFLAGS) $(DEFINE) -o $@.exe #ARC,DFS	
 	
+queen-8-dfs:
+	$(GCC) main.cpp -DQUEEN -DSIZE=8 -DDFS $(CYGWIN) $(OBJECTS0) $(GCCFLAGS) $(DEFINE) -o $@.exe #ARC,DFS	
+queen-12-dfs:
+	$(GCC) main.cpp -DQUEEN -DSIZE=12 -DDFS $(CYGWIN) $(OBJECTS0) $(GCCFLAGS) $(DEFINE) -o $@.exe #ARC,DFS	
+	
 queen-28-dfs:
 	$(GCC) main.cpp -DQUEEN -DSIZE=28 -DDFS $(CYGWIN) $(OBJECTS0) $(GCCFLAGS) $(DEFINE) -o $@.exe #ARC,DFS
 queen-100-fc:

@@ -45,3 +45,24 @@ while (!cg.AllVariablesAssigned() && !var_to_assign->IsImpossible() ) { //Imposs
     }
     std::cout<<"*********Exiting DFS Level " << level << "****************\n";
     return true;
+	
+	
+	
+	
+	
+	
+	
+	        if(!temp->IsAssigned() && var->IsAssigned())
+        {
+            var = temp;
+            std::cout <<"Var reassigned: " << var->Name() << "  " << size_of_var << std::endl;
+
+        }
+        else
+        {
+           if(temp->SizeDomain() < size_of_var)
+            {
+                var = temp;
+                std::cout <<"Var reassigned: " << var->Name() << "  " << size_of_var << std::endl;
+            }
+        }

@@ -26,7 +26,10 @@ template <typename T>
 bool CSP<T>::SolveDFS(unsigned level) {
     std::cout << "\n----IN SOLVEDFS LEVEL " << level << " -------\n";
 	++recursive_call_counter;
-    std::cout << "Rec count: " << recursive_call_counter << std::endl;
+	if (recursive_call_counter % 1000000 == 0){
+        std::cout << "*******************\nRec count: " << recursive_call_counter;
+        std::cout << "\nIt count : " << iteration_counter   <<"\n*******************\n";
+	}
 
 
 
@@ -35,17 +38,18 @@ bool CSP<T>::SolveDFS(unsigned level) {
     // Variable declarations
     bool sol_found = false;
     bool con_holds = false;
-    //int num_var;
+   // int num_var;
     std::map<Variable*, std::set<typename Variable::Value> > prevState;
-    //const typename std::vector<Variable*>& all_var = cg.GetAllVariables();
-    //num_var = all_var.size();
-
-    // Not doing recursion corrctly :(
+   // const typename std::vector<Variable*>& all_var = cg.GetAllVariables();
+   // num_var = all_var.size();
 
 
-    while (!cg.AllVariablesAssigned()) //&& level < num_var+1)
+    Variable* var = MinRemVal();
+
+    while (!cg.AllVariablesAssigned())// && !var->IsImpossible())
     {
-        Variable* var = MinRemVal();
+
+        //Variable* var = MinRemVal();
 
         if(!var->IsImpossible())
         {
@@ -173,8 +177,8 @@ void CSP<T>::LoadState(
 		e_result = saved.end();
 
 	for ( ; b_result != e_result; ++b_result ) {
-		//std::cout << "loading state for "
-		//<< b_result->first->Name() << std::endl;
+		std::cout << "loading state for "
+		<< b_result->first->Name() << std::endl;
 		(*b_result).first->SetDomain( (*b_result).second );
 	}
 }
@@ -196,8 +200,7 @@ CSP<T>::SaveState(typename CSP<T>::Variable* x) const {
 		e_all_vars = all_vars.end();
 	for ( ; b_all_vars!=e_all_vars; ++b_all_vars) {
 		if ( !(*b_all_vars)->IsAssigned() && *b_all_vars!=x ) {
-			//std::cout << "saving state for "
-			//<< (*b_all_vars)->Name() << std::endl;
+			std::cout << "saving state for "<< (*b_all_vars)->Name() << std::endl;
 			result[ *b_all_vars ] = (*b_all_vars)->GetDomain();
 		}
 	}
@@ -210,7 +213,7 @@ INLINE
 bool CSP<T>::AssignmentIsConsistent( Variable* p_var ) const {
 
 
-
+return false;
 
 
 
@@ -288,12 +291,12 @@ typename CSP<T>::Variable* CSP<T>::MinRemVal() {
     Variable* var;
     Variable* temp;
     const std::vector <Variable*>& all_var = cg.GetAllVariables();
-    int size_of_var;
+   // int size_of_var;
 
     var = all_var.front();
-    size_of_var = var->SizeDomain();
+    //size_of_var = var->SizeDomain();
 
-    //std::cout << *var << "  " << size_of_var << std::endl;
+  //  std::cout << *var << "  " << size_of_var << std::endl;
 
     typename std::vector<Variable*>::const_iterator b_vars = all_var.begin();
     typename std::vector<Variable*>::const_iterator e_vars = all_var.end();
@@ -301,13 +304,23 @@ typename CSP<T>::Variable* CSP<T>::MinRemVal() {
     for ( ;b_vars!=e_vars;++b_vars)
     {
         temp = *b_vars;
-        std::cout << "Temp: " << temp->Name() <<"  " <<  temp->SizeDomain() << std::endl;
-        if(temp->SizeDomain() < size_of_var || var->IsAssigned())
+        std::cout << "Temp: " << temp->Name() <<"  " <<  temp->SizeDomain() << std::boolalpha << "  " << temp->IsAssigned();
+        if(temp->IsAssigned()) std::cout << "  curr value: " << temp->GetValue();
+        std::cout << std::endl;
+        if(var->IsAssigned())
         {
-            var = *b_vars;
-            size_of_var = var->SizeDomain();
-            std::cout <<"Var reassigned: " << var->Name() << "  " << size_of_var << std::endl;
+
+            var = temp;
         }
+        else
+        {
+            if(var->SizeDomain() > temp->SizeDomain())
+            {
+                var = temp;
+            }
+
+        }
+
     }
 
     std::cout << var->Name() << "chosen.\n\n";
