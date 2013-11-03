@@ -9,7 +9,7 @@ namespace CS225
         ElementNode* next;
     };
 
-
+    class ElementProxy;
 
     class SparseVector
     {
@@ -28,7 +28,11 @@ namespace CS225
             void InsertTail(int val);
             void Delete (long pos);
             void PrintRaw();
+
+            // Operators
             SparseVector operator+(const SparseVector& op2);
+            ElementProxy operator[](long pos);
+            int operator[](long pos)const;
             friend std::ostream& operator<<(std::ostream &out, const SparseVector &v);
 
 
@@ -38,4 +42,17 @@ namespace CS225
             long dimension;
 
     };
+
+
+    class ElementProxy
+    {
+    public:
+        ElementProxy(SparseVector& v, long pos): vect(v), position(pos) {}
+        operator int() const;
+
+    private:
+        SparseVector &vect;
+        long position;
+    };
+
 }

@@ -39,7 +39,7 @@ void test3() {
     }
     std::cout << "v1 = " << v1 << std::endl;
 }
-/*
+
 void test4() {
     CS225::SparseVector v1,v2;
     for (int i=0;i<10;++i) v1[i]=i+1;
@@ -283,7 +283,7 @@ void test18() {
 
 void test19();
 */
-void (*pTests[])() = { test0, test1, test2, test3
+void (*pTests[])() = { test0, test1, test2, test3, test4
                         //test4,test5,test6,test7,
                         // test8,test9,test10,test11,test12,test13,test14,test15,test16
                         //  ,test17,test18,test19
@@ -295,6 +295,6 @@ void test19() {
 }
 */
 int main (int argc, char ** argv) {
-    pTests[1]();
+    pTests[4]();
     return 0;
 }

@@ -18,6 +18,16 @@ std::ostream& operator<<(std::ostream &out, const SparseVector &v) {
 	return out;
 }
 
+
+ElementProxy SparseVector::operator[](long pos)
+{
+    ElementProxy value(*this,pos);
+
+    return value;
+}
+
+
+
 void SparseVector::Insert(int val, long pos)
 {
     bool found;
@@ -173,6 +183,10 @@ SparseVector SparseVector::operator+(const SparseVector& op2)
 }
 
 
+ElementProxy::operatorint()
+{
+
+}
 
 
 }
