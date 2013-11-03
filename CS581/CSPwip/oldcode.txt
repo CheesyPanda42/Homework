@@ -65,4 +65,154 @@ while (!cg.AllVariablesAssigned() && !var_to_assign->IsImpossible() ) { //Imposs
                 var = temp;
                 std::cout <<"Var reassigned: " << var->Name() << "  " << size_of_var << std::endl;
             }
+        }'
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		std::cout << "\n----IN SOLVEDFS LEVEL " << level << " -------\n";
+	++recursive_call_counter;
+	if (recursive_call_counter % 1000000 == 0){
+        std::cout << "*******************\nRec count: " << recursive_call_counter;
+        std::cout << "\nIt count : " << iteration_counter   <<"\n*******************\n";
+	}
+
+    // Variable declarations
+    bool sol_found = false;
+    bool con_holds = false;
+   // int num_var;
+    std::map<Variable*, std::set<typename Variable::Value> > prevState;
+    const typename std::vector<Variable*>& all_var = cg.GetAllVariables();
+   // num_var = all_var.size();
+
+
+    Variable* var = MinRemVal();
+
+    while (!cg.AllVariablesAssigned())// && !var->IsImpossible())
+    {
+
+        //Variable* var = MinRemVal();
+
+        //if(!var->IsImpossible())
+        //{
+            var->Assign();
+            prevState = SaveState(var);
+            std::cout << var->Name() << "assigned " << var->GetValue() << std::endl;
+
+            std::cout << "\n++STATE SAVED++\n";
+
+            std::cout << "Going to next DFS\n Current variable is " << var->Name() << std::endl;
+            sol_found = SolveDFS(level+1);
+            std::cout << "I'm back!\n" << "Current variable is " << var->Name() << std::endl;
+
+            if(!sol_found)
+            {
+                std::cout << "\n++STATE LOADED++\n";
+                LoadState(prevState);
+            }
+
+            // Get constraints for current variable
+            const std::vector<const Constraint*>& constraints = cg.GetConstraints(var);
+            Constraint const* curr_constraint;
+            // Iterators for constraint
+            typename std::vector<const Constraint*>::const_iterator b_con = constraints.begin();
+            typename std::vector<const Constraint*>::const_iterator e_con = constraints.end();
+
+            for(;b_con < e_con; ++b_con)
+            {
+                ++iteration_counter;
+                curr_constraint = *b_con;
+                std::cout << "\nCurrent constraint " << *curr_constraint << std::endl;
+                std::cout << "Checking constraint\n";
+                con_holds = curr_constraint->Check();
+                if(con_holds)
+                {
+                    std::cout << "Constraint holds\n";
+                    sol_found = true;
+                }
+                else
+                {
+                    std::cout << "Constraint doesn't hold\n";
+                    sol_found = false;
+                    var->RemoveValue(var->GetValue());
+                    var->UnAssign();
+                    break;
+                }
+
+            }
+        //}
+       // else break;
+    }
+
+
+    std::cout << "\n----EXITING SOLVEDFS LEVEL " << level << " -------\n";
+    return sol_found;
+	
+	
+	
+	
+	
+	
+	
+	while(!cg.AllVariablesAssigned())
+{
+    var->Assign();
+    sol_found = SolveDFS(level+1);
+
+
+    std::cout << "All variables assigned\n";
+    while(!sol_found && !var->IsImpossible())
+    {
+        std::cout << "Entered while loop\n";
+        if(!var->IsAssigned()) var->Assign();
+        std::cout << var->Name() << "  assigned  " << var->GetValue() << std::endl;
+        typename std::vector<const Constraint*>::const_iterator b_con = constraints.begin();
+        typename std::vector<const Constraint*>::const_iterator e_con = constraints.end();
+        for(;b_con < e_con; ++b_con)
+        {
+            curr_constraint = *b_con;
+            con_holds = curr_constraint->Satisfiable();
+            std::cout << "Checking constraint\n";
+            if(con_holds) sol_found = true;
+            else
+            {
+                std::cout << "Constraint failed\n";
+                sol_found = false;
+                var->RemoveValue(var->GetValue());
+                var->UnAssign();
+                break;
+            }
+            std::cout << "Constraint holds\n";
         }
+        std::cout << "Looping....\n";
+    }
+    std::cout << "Left while loop\n";
+}
+    LoadState(prevState);
+    std::cout << "\n----EXITING SOLVEDFS LEVEL " << level << " -------\n";
