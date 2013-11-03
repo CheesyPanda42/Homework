@@ -6,9 +6,9 @@
 #ifdef INLINE_CONSTRAINT
 	//#warning "INFO - inlining Constraint methods"
 	#define INLINE inline
-#else   
+#else
 	//#warning "INFO - NOT inlining Constraint methods"
-	#define INLINE 
+	#define INLINE
 #endif
 
 ////////////////////////////////////////////////////////////
@@ -23,7 +23,7 @@ Constraint<T>::Constraint(Variable* v1, va_list valist) : vars(), active(true) {
 }
 
 ////////////////////////////////////////////////////////////
-//decides whether the Constraint is active by counting unassigned variables
+//decides whether the Constraint is active by counting unassigned  variables
 //no unassigned variables - mark as inactive (safe)
 template <typename T>
 INLINE void Constraint<T>::SetActive() {
@@ -36,8 +36,8 @@ INLINE void Constraint<T>::SetActive() {
 	active = !all_assigned;
 }
 ////////////////////////////////////////////////////////////
-//returns true if 
-//1) all variables are assigned 
+//returns true if
+//1) all variables are assigned
 //2) constraint holds
 //used for debugging and as a final test
 //not used in CSP - may be used in grading
@@ -54,7 +54,7 @@ bool Constraint<T>::Check () const {
 ////////////////////////////////////////////////////////////
 template <typename T>
 std::ostream& operator<<(std::ostream& os, const Constraint<T>& c) {
-	c.Print(os); //virtual call 
+	c.Print(os); //virtual call
 	return os;
 }
 
@@ -65,7 +65,7 @@ std::ostream& operator<<(std::ostream& os, const Constraint<T>& c) {
 ////////////////////////////////////////////////////////////
 //constructor
 template <typename Variable, int SUM>
-SumEqual<Variable,SUM>* SumEqual<Variable,SUM>::clone () const 
+SumEqual<Variable,SUM>* SumEqual<Variable,SUM>::clone () const
 {
 	SumEqual<Variable,SUM>* copy = new SumEqual<Variable,SUM>();
 	typename std::vector<Variable*>::const_iterator b = this->vars.begin();
@@ -77,7 +77,7 @@ SumEqual<Variable,SUM>* SumEqual<Variable,SUM>::clone () const
 }
 ////////////////////////////////////////////////////////////
 //keeps track of minimum and maximum assignment of variables
-//in order for the constraint to be satisfiable 
+//in order for the constraint to be satisfiable
 //the SUM has to be between the 2 quantities above
 template <typename Variable, int SUM>
 INLINE bool SumEqual<Variable,SUM>::Satisfiable() const {
@@ -113,7 +113,7 @@ void SumEqual<Variable,SUM>::Print (std::ostream& os) const {
 ////////////////////////////////////////////////////////////
 //cloning method
 template <typename Variable>
-AllDiff<Variable>* AllDiff<Variable>::clone () const { 
+AllDiff<Variable>* AllDiff<Variable>::clone () const {
 	AllDiff<Variable>* copy = new AllDiff<Variable>();
 	typename std::vector<Variable*>::const_iterator b = this->vars.begin();
 	typename std::vector<Variable*>::const_iterator e = this->vars.end();
@@ -139,7 +139,7 @@ void AllDiff<Variable>::Print (std::ostream& os) const {
 }
 
 ////////////////////////////////////////////////////////////
-//constraint is true if all currently assigned variables have 
+//constraint is true if all currently assigned variables have
 //different values
 template <typename Variable>
 INLINE bool AllDiff<Variable>::Satisfiable() const {
@@ -165,8 +165,8 @@ INLINE bool AllDiff<Variable>::Satisfiable() const {
 ////////////////////////////////////////////////////////////
 //cloning itself
 template <typename Variable>
-AllDiff2<Variable>* AllDiff2<Variable>::clone () const { 
-	return new AllDiff2<Variable>(this->vars[0],this->vars[1]); 
+AllDiff2<Variable>* AllDiff2<Variable>::clone () const {
+	return new AllDiff2<Variable>(this->vars[0],this->vars[1]);
 }
 
 ////////////////////////////////////////////////////////////
@@ -177,12 +177,12 @@ void AllDiff2<Variable>::Print (std::ostream& os) const {
 }
 
 ////////////////////////////////////////////////////////////
-//constraint is true if all currently assigned variables have 
+//constraint is true if all currently assigned variables have
 //different values
 template <typename Variable>
 INLINE bool AllDiff2<Variable>::Satisfiable() const {
-	if ( !this->vars[0]->IsAssigned() || !this->vars[1]->IsAssigned() ) { return true; } 
-	else 
+	if ( !this->vars[0]->IsAssigned() || !this->vars[1]->IsAssigned() ) { return true; }
+	else
 		return this->vars[0]->GetValue() != this->vars[1]->GetValue();
 }
 
@@ -192,8 +192,8 @@ INLINE bool AllDiff2<Variable>::Satisfiable() const {
 
 ////////////////////////////////////////////////////////////
 template <typename Variable>
-DifferenceNotEqual<Variable>* 
-DifferenceNotEqual<Variable>::clone () const { 
+DifferenceNotEqual<Variable>*
+DifferenceNotEqual<Variable>::clone () const {
 	DifferenceNotEqual<Variable>* copy = new DifferenceNotEqual<Variable>();
 	typename std::vector<Variable*>::const_iterator b = this->vars.begin();
 	typename std::vector<Variable*>::const_iterator e = this->vars.end();
@@ -206,7 +206,7 @@ DifferenceNotEqual<Variable>::clone () const {
 
 ////////////////////////////////////////////////////////////
 template <typename Variable>
-DifferenceNotEqual<Variable>::DifferenceNotEqual(int c, Variable* v1, ...) 
+DifferenceNotEqual<Variable>::DifferenceNotEqual(int c, Variable* v1, ...)
 : Constraint<Variable>(v1, (va_start(valist, v1), valist ) ),
 	constant( c>0 ? c:-c )
 {
@@ -229,12 +229,12 @@ void DifferenceNotEqual<Variable>::Print (std::ostream& os) const {
 }
 
 ////////////////////////////////////////////////////////////
-//constraint is true if all currently assigned variables have 
+//constraint is true if all currently assigned variables have
 //different values
 template <typename Variable>
 INLINE bool DifferenceNotEqual<Variable>::Satisfiable() const {
-	if ( !this->vars[0]->IsAssigned() || !this->vars[1]->IsAssigned() ) { return true; } 
-	else 
+	if ( !this->vars[0]->IsAssigned() || !this->vars[1]->IsAssigned() ) { return true; }
+	else
 		return std::abs( this->vars[0]->GetValue() - this->vars[1]->GetValue() ) != constant;
 }
 #undef INLINE

@@ -23,82 +23,70 @@ CSP<T>::CSP(T &cg) :
 ////////////////////////////////////////////////////////////
 //CSP solver, brute force - no forward checking
 template <typename T>
-bool CSP<T>::SolveDFS(unsigned level) {
-    std::cout << "\n----IN SOLVEDFS LEVEL " << level << " -------\n";
-	++recursive_call_counter;
-    std::cout << "Rec count: " << recursive_call_counter << std::endl;
-
-
-
-
-
+bool CSP<T>::SolveDFS(unsigned level)
+{
+    //std::cout << "\n----IN SOLVEDFS LEVEL " << level << " -------\n";
+    ++recursive_call_counter;
+    if(recursive_call_counter % 500000 == 0)
+    {
+        std::cout << recursive_call_counter << std::endl;
+    }
     // Variable declarations
     bool sol_found = false;
     bool con_holds = false;
-    //int num_var;
+   // int num_var;
     std::map<Variable*, std::set<typename Variable::Value> > prevState;
-    //const typename std::vector<Variable*>& all_var = cg.GetAllVariables();
-    //num_var = all_var.size();
-
-    // Not doing recursion corrctly :(
+    const typename std::vector<Variable*>& all_var = cg.GetAllVariables();
+   // num_var = all_var.size();
 
 
-    while (!cg.AllVariablesAssigned()) //&& level < num_var+1)
+    Variable* var = MinRemVal();
+
+
+
+   // Get constraints for current variable
+    const std::vector<const Constraint*>& constraints = cg.GetConstraints(var);
+    Constraint const* curr_constraint;
+    // Iterators for constraint
+
+
+
+while(!sol_found)
+{
+    ++iteration_counter;
+    if(!var->IsAssigned()) var->Assign();
+    typename std::vector<const Constraint*>::const_iterator b_con = constraints.begin();
+    typename std::vector<const Constraint*>::const_iterator e_con = constraints.end();
+    for(;b_con < e_con; ++b_con)
     {
-        Variable* var = MinRemVal();
-
-        if(!var->IsImpossible())
+        curr_constraint = *b_con;
+        con_holds = curr_constraint->Satisfiable();
+        if(con_holds)
         {
-            var->Assign();
-            std::cout << var->Name() << "assigned " << var->GetValue() << std::endl;
-            prevState = SaveState(var);
-            std::cout << "\n++STATE SAVED++\n";
-
-            std::cout << "Going to next DFS\n Current variable is " << var->Name() << std::endl;
-            sol_found = SolveDFS(level+1);
-            std::cout << "I'm back!\n" << "Current variable is " << var->Name() << std::endl;
-
-            if(!sol_found)
-            {
-                std::cout << "\n++STATE LOADED++\n";
-                LoadState(prevState);
-            }
-
-            // Get constraints for current variable
-            const std::vector<const Constraint*>& constraints = cg.GetConstraints(var);
-            Constraint const* curr_constraint;
-            // Iterators for constraint
-            typename std::vector<const Constraint*>::const_iterator b_con = constraints.begin();
-            typename std::vector<const Constraint*>::const_iterator e_con = constraints.end();
-
-            for(;b_con < e_con; ++b_con)
-            {
-                ++iteration_counter;
-                curr_constraint = *b_con;
-                std::cout << "\nCurrent constraint " << *curr_constraint << std::endl;
-                std::cout << "Checking constraint\n";
-                con_holds = curr_constraint->Check();
-                if(con_holds)
-                {
-                    std::cout << "Constraint holds\n";
-                    sol_found = true;
-                }
-                else
-                {
-                    std::cout << "Constraint doesn't hold\n";
-                    sol_found = false;
-                    var->RemoveValue(var->GetValue());
-                    var->UnAssign();
-                    break;
-                }
-
-            }
+            sol_found = true;
         }
-        else break;
+        else
+        {
+            sol_found = false;
+            break;
+        }
+    }
+    if(sol_found && !cg.AllVariablesAssigned())
+    {
+        prevState = SaveState(var);
+        sol_found = SolveDFS(level+1);
+        LoadState(prevState);
+    }
+    if(!sol_found)
+    {
+        var->RemoveValue(var->GetValue());
+        var->UnAssign();
+        if(var->IsImpossible()) return false;
     }
 
+}
 
-    std::cout << "\n----EXITING SOLVEDFS LEVEL " << level << " -------\n";
+    //std::cout << "\n----EXITING SOLVEDFS LEVEL " << level << " -------\n";
     return sol_found;
 }
 
@@ -196,8 +184,7 @@ CSP<T>::SaveState(typename CSP<T>::Variable* x) const {
 		e_all_vars = all_vars.end();
 	for ( ; b_all_vars!=e_all_vars; ++b_all_vars) {
 		if ( !(*b_all_vars)->IsAssigned() && *b_all_vars!=x ) {
-			//std::cout << "saving state for "
-			//<< (*b_all_vars)->Name() << std::endl;
+			//std::cout << "saving state for "<< (*b_all_vars)->Name() << std::endl;
 			result[ *b_all_vars ] = (*b_all_vars)->GetDomain();
 		}
 	}
@@ -210,7 +197,7 @@ INLINE
 bool CSP<T>::AssignmentIsConsistent( Variable* p_var ) const {
 
 
-
+return false;
 
 
 
@@ -288,12 +275,12 @@ typename CSP<T>::Variable* CSP<T>::MinRemVal() {
     Variable* var;
     Variable* temp;
     const std::vector <Variable*>& all_var = cg.GetAllVariables();
-    int size_of_var;
+   // int size_of_var;
 
     var = all_var.front();
-    size_of_var = var->SizeDomain();
+    //size_of_var = var->SizeDomain();
 
-    //std::cout << *var << "  " << size_of_var << std::endl;
+  //  std::cout << *var << "  " << size_of_var << std::endl;
 
     typename std::vector<Variable*>::const_iterator b_vars = all_var.begin();
     typename std::vector<Variable*>::const_iterator e_vars = all_var.end();
@@ -301,16 +288,26 @@ typename CSP<T>::Variable* CSP<T>::MinRemVal() {
     for ( ;b_vars!=e_vars;++b_vars)
     {
         temp = *b_vars;
-        std::cout << "Temp: " << temp->Name() <<"  " <<  temp->SizeDomain() << std::endl;
-        if(temp->SizeDomain() < size_of_var || var->IsAssigned())
+        //std::cout << "Temp: " << temp->Name() <<"  " <<  temp->SizeDomain() << std::boolalpha << "  " << temp->IsAssigned();
+        //if(temp->IsAssigned()) std::cout << "  curr value: " << temp->GetValue();
+        //std::cout << std::endl;
+        if(var->IsAssigned())
         {
-            var = *b_vars;
-            size_of_var = var->SizeDomain();
-            std::cout <<"Var reassigned: " << var->Name() << "  " << size_of_var << std::endl;
+
+            var = temp;
         }
+        else
+        {
+            if(var->SizeDomain() > temp->SizeDomain())
+            {
+                var = temp;
+            }
+
+        }
+
     }
 
-    std::cout << var->Name() << "chosen.\n\n";
+    //std::cout << var->Name() << "chosen.\n\n";
     return var;
 
 }
