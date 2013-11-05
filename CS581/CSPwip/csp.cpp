@@ -36,20 +36,14 @@ bool CSP<T>::SolveDFS(unsigned level)
     bool con_holds = false;
    // int num_var;
     std::map<Variable*, std::set<typename Variable::Value> > prevState;
-    const typename std::vector<Variable*>& all_var = cg.GetAllVariables();
+    //const typename std::vector<Variable*>& all_var = cg.GetAllVariables();
    // num_var = all_var.size();
-
-
     Variable* var = MinRemVal();
-
-
 
    // Get constraints for current variable
     const std::vector<const Constraint*>& constraints = cg.GetConstraints(var);
     Constraint const* curr_constraint;
     // Iterators for constraint
-
-
 
 while(!sol_found)
 {
@@ -94,24 +88,25 @@ while(!sol_found)
 ////////////////////////////////////////////////////////////
 //CSP solver, uses forward checking
 template <typename T>
-bool CSP<T>::SolveFC(unsigned level) {
+bool CSP<T>::SolveFC(unsigned level)
+{
+    bool consistent = true;
+    bool sol_found = false;
+
+
+
 	++recursive_call_counter;
-	//std::cout << "entering SolveFC (level " << level << ")\n";
+	std::cout << "entering SolveFC (level " << level << ")\n";
+    Variable *var = MinRemVal();
 
-	/*
-
-    //choose a variable by MRV
-	Variable* var_to_assign = MinRemVal();
-	//Variable* var_to_assign = MaxDegreeHeuristic();
- {
-        ++iteration_counter;
+    var->Assign();
+    std::cout << "Forward checking " << var->Name() << std::endl;
+    consistent = ForwardChecking(var);
+    if(consistent) sol_found = SolveFC(level+1);
 
 
 
-    }
-
-*/
-return false;
+    return sol_found;
 }
 ////////////////////////////////////////////////////////////
 //CSP solver, uses arc consistency
@@ -121,31 +116,66 @@ bool CSP<T>::SolveARC(unsigned level) {
 	//std::cout << "entering SolveARC (level " << level << ")\n";
 
 return false;
-
-    /*
-
-    //choose a variable by MRV
-	Variable* var_to_assign = MinRemVal();
-
-
-     {
-        ++iteration_counter;
-
-
-
-    }
-
-
-*/
 }
 
 
 template <typename T>
 INLINE
-bool CSP<T>::ForwardChecking(Variable *x) {
+bool CSP<T>::ForwardChecking(Variable *x)
+{
+
+    bool consistent = true;
+
+    // Variables
+    const typename std::vector<Variable*>& vars = cg.GetAllVariables();
+    typename std::vector<Variable*>::const_iterator b_vars = vars.begin();
+    typename std::vector<Variable*>::const_iterator e_vars = vars.end();
+    Variable *y;
+
+    // Constraints
+    const std::vector<const Constraint*>& constraints = cg.GetConstraints(x);
+    Constraint const* curr_constraint;
 
 
-return false;
+
+    // For all varaibles, check all constraints
+    // For all constraints, check all values
+    // If a value breaks a constraint, remove it
+    // If a variable winds up impossible, consistent = false, stop, and return
+    for(;b_vars < e_vars; ++b_vars)
+    {
+        std::cout << "In first loop\n";
+        if(*b_vars != x) y = *b_vars;
+        else continue;
+        std::cout << "y : " << y->Name() << std::endl;
+        typename std::vector<const Constraint*>::const_iterator b_con = constraints.begin();
+        typename std::vector<const Constraint*>::const_iterator e_con = constraints.end();
+        for(;b_con < e_con; ++b_con)
+        {
+            curr_constraint = *b_con;
+            std::cout << "In 2nd loop\n";
+            std::cout << "Curr constraint: " << *curr_constraint << std::endl;
+            std::set<Value> y_domain = y->GetDomain();
+            typename std::set<Value>::iterator b_val = y_domain.begin();
+            for(; b_val!= y_domain.end() ; ++b_val)
+            {
+                std::cout << "In 3rd loop\n";
+                std::cout << "X has value" << x->GetValue() << std::endl;
+                std::cout << "Assigning " << y->Name() << " value " << *b_val << std::endl;
+                y->Assign(*b_val);
+                consistent = curr_constraint->Satisfiable();
+                std::cout <<"Consistent: "<<  std::boolalpha << consistent << std::endl;
+                if(!consistent)
+                {
+                    y->RemoveValue(y->GetValue());
+                    y->UnAssign();
+                }
+            }
+        }
+
+    }
+
+    return consistent;
 
 }
 ////////////////////////////////////////////////////////////
@@ -302,9 +332,7 @@ typename CSP<T>::Variable* CSP<T>::MinRemVal() {
             {
                 var = temp;
             }
-
         }
-
     }
 
     //std::cout << var->Name() << "chosen.\n\n";
@@ -315,19 +343,8 @@ typename CSP<T>::Variable* CSP<T>::MinRemVal() {
 //choose next variable for assignment
 //choose the one with max degree
 template <typename T>
-typename CSP<T>::Variable* CSP<T>::MaxDegreeHeuristic() {
-
-
-
-
-
-
-
-
-
-
-
-
+typename CSP<T>::Variable* CSP<T>::MaxDegreeHeuristic()
+{
 
 
 }

@@ -49,6 +49,8 @@ namespace CS225
     public:
         ElementProxy(SparseVector& v, long pos): vect(v), position(pos) {}
         operator int() const;
+        ElementProxy operator=(ElementProxy&);
+        ElementProxy operator=(int);
 
     private:
         SparseVector &vect;

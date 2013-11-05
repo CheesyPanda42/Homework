@@ -30,6 +30,7 @@ ElementProxy SparseVector::operator[](long pos)
 
 void SparseVector::Insert(int val, long pos)
 {
+    std::cout << "void SparseVector::Insert(int val, long pos)\n";
     bool found;
     ElementNode* curr;
     ElementNode* prev;
@@ -90,6 +91,7 @@ void SparseVector::Insert(int val, long pos)
 
 void SparseVector::Delete(long pos)
 {
+    std::cout << "void SparseVector::Delete(long pos)\n";
     ElementNode *curr;
     ElementNode *prev;
     ElementNode *pNode;
@@ -132,6 +134,7 @@ void SparseVector::Delete(long pos)
 
 SparseVector SparseVector::operator+(const SparseVector& op2)
 {
+    std::cout<<"SparseVector SparseVector::operator+(const SparseVector op2)\n";
     const ElementNode* curr1;
     const ElementNode* curr2;
     SparseVector result;
@@ -183,10 +186,22 @@ SparseVector SparseVector::operator+(const SparseVector& op2)
 }
 
 
-ElementProxy::operatorint()
+ElementProxy::operator int() const
 {
+    std::cout << "ElementProxy::operator int()" << std::endl;
 
 }
 
+ElementProxy ElementProxy::operator=(int value)
+{
+    std::cout << "ElementProxy ElementProxy::operator=(int)" << std::endl;
+    vect.Insert(value, position);
+}
+
+ElementProxy ElementProxy::operator=(ElementProxy& other)
+{
+    std::cout << "ElementProxy ElementProxy::operator=(ElementProxy&)\n";
+    this->vect = other.vect;
+}
 
 }
