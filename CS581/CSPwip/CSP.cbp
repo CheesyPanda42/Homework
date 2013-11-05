@@ -90,6 +90,19 @@
 					<SilentBuild command="$make -f $makefile $target &gt; $(CMD_NULL)" />
 				</MakeCommands>
 			</Target>
+			<Target title="queen-4-fc">
+				<Option output="queen-4-fc" prefix_auto="1" extension_auto="1" />
+				<Option type="1" />
+				<Option compiler="cygwin" />
+				<MakeCommands>
+					<Build command="$make -f $makefile $target" />
+					<CompileFile command="$make -f $makefile $file" />
+					<Clean command="$make -f $makefile clean" />
+					<DistClean command="$make -f $makefile distclean$target" />
+					<AskRebuildNeeded command="$make -q -f $makefile $target" />
+					<SilentBuild command="$make -f $makefile $target &gt; $(CMD_NULL)" />
+				</MakeCommands>
+			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />

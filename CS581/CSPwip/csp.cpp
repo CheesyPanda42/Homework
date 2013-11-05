@@ -168,8 +168,8 @@ bool CSP<T>::ForwardChecking(Variable *x)
                 if(!consistent)
                 {
                     y->RemoveValue(y->GetValue());
-                    y->UnAssign();
                 }
+                 y->UnAssign();
             }
         }
 
